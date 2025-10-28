@@ -238,6 +238,21 @@ export class StreamStorage {
     return channel.messages || [];
   }
 
+  async upsertUsers(): Promise<string> {
+    const id = generateChannelId();
+    await this.client.upsertUsers([
+      {
+        id,
+        role: "user",
+      },
+      {
+        id: this.botUserId,
+        role: "user",
+      },
+    ]);
+    return id;
+  }
+
   /**
    * Gets the Stream Chat client instance
    */
