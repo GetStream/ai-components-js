@@ -1,0 +1,45 @@
+{
+  "name": "@stream-io/ai-sdk-storage",
+  "version": "1.0.0",
+  "description": "AI SDK storage connector using Stream Chat infrastructure",
+  "main": "dist/index.js",
+  "private": true,
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "ai-sdk",
+    "stream-chat",
+    "storage",
+    "messaging",
+    "ai",
+    "chat"
+  ],
+  "author": "GetStream",
+  "license": "MIT",
+  "dependencies": {
+    "stream-chat": "^9.24.0"
+  },
+  "peerDependencies": {
+    "ai": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "typescript": "^5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GetStream/ai-sdk-storage.git"
+  },
+  "bugs": {
+    "url": "https://github.com/GetStream/ai-sdk-storage/issues"
+  },
+  "homepage": "https://github.com/GetStream/ai-sdk-storage#readme",
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
+}
