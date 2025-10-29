@@ -13,7 +13,7 @@
     "@ai-sdk/openai": "^2.0.53",
     "@ai-sdk/react": "^2.0.76",
     "@ai-sdk/xai": "^2.0.27",
-    "@stream-io/ai-sdk-storage": "file:.yalc/@stream-io/ai-sdk-storage",
+    "@stream-io/ai-sdk-storage": "workspace:^",
     "@tailwindcss/typography": "^0.5.19",
     "ai": "^5.0.76",
     "animate.css": "^4.1.1",
