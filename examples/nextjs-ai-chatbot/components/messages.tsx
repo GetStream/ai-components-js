@@ -7,7 +7,6 @@ import { useApp } from "@/contexts/app";
 import { useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
-import { GetToolOutput } from "@/utils/helpers";
 import ToolsOutput from "./tools";
 
 export default function Messages() {

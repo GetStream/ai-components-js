@@ -112,7 +112,11 @@ function AppProviderInner({ children }: { children: ReactNode }) {
         .then((data) => {
           const messages = data.map((message: any) => ({
             id: message.id,
-            role: message.user.id === "ai-bot" ? "assistant" : "user",
+            role:
+              message.user.id === "ai-bot" ||
+              message.message_type === "agent_response"
+                ? "assistant"
+                : "user",
             parts: [
               {
                 type: "text",
