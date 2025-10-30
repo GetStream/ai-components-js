@@ -266,8 +266,8 @@ export const MarkdownRichText = ({
    * =====================================================================
    */
 
-  // @ts-ignore
   return (
+    // @ts-ignore
     <Markdown rules={{ ...customRules, ...rules }}>{markdownText}</Markdown>
   );
 };
