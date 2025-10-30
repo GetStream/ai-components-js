@@ -1,11 +1,7 @@
 import truncate from 'lodash/truncate';
 
 import { find } from 'linkifyjs';
-
-interface LinkInfo {
-    raw: string;
-    url: string;
-}
+import type {LinkInfo} from "../index.tsx";
 
 export function escapeRegExp(text: string) {
     return text.replace(/[-[\]{}()*+?.,/\\^$|#]/g, '\\$&');
