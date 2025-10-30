@@ -22,8 +22,6 @@ import type { MarkdownOptions } from './index';
 type MarkdownStyleProp = TextStyle | ViewStyle;
 
 type MarkdownState = State & {
-  key: number | string;
-  inline?: boolean;
   withinText?: boolean;
   withinQuote?: boolean;
   withinHeading?: boolean;

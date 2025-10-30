@@ -19,9 +19,9 @@ type DefaultRules = typeof SimpleMarkdown.defaultRules;
 export type MarkdownRules = Partial<DefaultRules>;
 
 export type MarkdownProps = {
-  onLink: (url: string) => Promise<void>;
-  rules: MarkdownRules;
-  styles: MarkdownStyle;
+  onLink?: (url: string) => Promise<void>;
+  rules?: MarkdownRules;
+  styles?: MarkdownStyle;
 };
 
 export type MarkdownOptions = Partial<Pick<MarkdownProps, 'onLink'>>;
