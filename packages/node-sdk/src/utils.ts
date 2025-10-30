@@ -1,6 +1,6 @@
-import { StreamStorage } from "./storage";
-import { AISDKStreamStorage } from "./ai-sdk-helpers";
-import type { StreamStorageConfig } from "./types";
+import { StreamStorage } from './storage';
+import { AISDKStreamStorage } from './ai-sdk-helpers';
+import type { StreamStorageConfig } from './types';
 
 /**
  * Creates a Stream Storage client with the provided configuration
@@ -20,11 +20,11 @@ export function createStreamStorageClient(config: StreamStorageConfig) {
  */
 export function validateConfig(config: StreamStorageConfig): boolean {
   if (!config.apiKey) {
-    throw new Error("Stream API key is required");
+    throw new Error('Stream API key is required');
   }
 
   if (!config.apiSecret) {
-    throw new Error("Stream API secret is required");
+    throw new Error('Stream API secret is required');
   }
 
   return true;
@@ -39,15 +39,15 @@ export function createConfigFromEnv(): StreamStorageConfig {
 
   if (!apiKey || !apiSecret) {
     throw new Error(
-      "STREAM_API_KEY and STREAM_API_SECRET environment variables are required"
+      'STREAM_API_KEY and STREAM_API_SECRET environment variables are required',
     );
   }
 
   return {
     apiKey,
     apiSecret,
-    botUserId: process.env.STREAM_BOT_USER_ID || "ai-bot",
-    adminUserId: process.env.STREAM_ADMIN_USER_ID || "admin",
+    botUserId: process.env.STREAM_BOT_USER_ID || 'ai-bot',
+    adminUserId: process.env.STREAM_ADMIN_USER_ID || 'admin',
   };
 }
 

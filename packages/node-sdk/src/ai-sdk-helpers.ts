@@ -1,5 +1,5 @@
-import type { StreamStorage } from "./storage";
-import type { AISDKMessage, SendMessageOptions } from "./types";
+import type { StreamStorage } from './storage';
+import type { AISDKMessage, SendMessageOptions } from './types';
 
 /**
  * AI SDK integration helpers for Stream Storage
@@ -18,32 +18,32 @@ export class AISDKStreamStorage {
     channelId: string,
     messages: AISDKMessage[],
     userId: string,
-    onFinish: (responseMessage: any) => Promise<void>
+    onFinish: (responseMessage: any) => Promise<void>,
   ): Promise<{
     processUserMessage: () => Promise<void>;
     processAIResponse: (responseMessage: any) => Promise<void>;
   }> {
     const lastMessage = messages[messages.length - 1];
     const userMessageUserId =
-      lastMessage.role === "user" ? userId : this.streamStorage.getBotUserId();
+      lastMessage.role === 'user' ? userId : this.streamStorage.getBotUserId();
     const channel = await this.streamStorage.getOrCreateChannel({
       userId,
       channelId,
-      channelName: lastMessage.parts?.find((part) => part.type === "text")
+      channelName: lastMessage.parts?.find((part) => part.type === 'text')
         ?.text,
       members: [userId, this.streamStorage.getBotUserId()],
     });
     if (!channel) {
-      throw new Error("Failed to create channel");
+      throw new Error('Failed to create channel');
     }
     // Process user message with attachments
     const processUserMessage = async () => {
-      if (lastMessage.role === "user") {
+      if (lastMessage.role === 'user') {
         const { text, attachments } =
           await this.streamStorage.processMessageParts(
             channelId,
             lastMessage,
-            userMessageUserId
+            userMessageUserId,
           );
 
         if (text || attachments.length > 0) {
@@ -73,11 +73,11 @@ export class AISDKStreamStorage {
    */
   async processAIResponse(
     channelId: string,
-    responseMessage: any
+    responseMessage: any,
   ): Promise<void> {
     // Extract text content from AI response
     const textParts = responseMessage.parts?.filter((part: any) => {
-      return part.type === "text" && part.state === "done";
+      return part.type === 'text' && part.state === 'done';
     });
 
     if (textParts && textParts.length > 0) {
@@ -96,17 +96,17 @@ export class AISDKStreamStorage {
     // Extract tool outputs from AI response
     const toolParts = responseMessage.parts?.filter((part: any) => {
       return (
-        part.type?.startsWith("tool-") && part.state === "output-available"
+        part.type?.startsWith('tool-') && part.state === 'output-available'
       );
     });
 
     if (toolParts && toolParts.length > 0) {
       const toolOutput = toolParts[0].output;
       if (toolOutput) {
-        const toolName = toolParts[0].type.replace("tool-", "");
+        const toolName = toolParts[0].type.replace('tool-', '');
         await this.streamStorage.sendMessage(channelId, {
           text: `\`\`\`ai-tool-${toolName}\n${JSON.stringify(
-            toolOutput
+            toolOutput,
           )}\n\`\`\``,
           userId: this.streamStorage.getBotUserId(),
           metadata: {
@@ -123,7 +123,7 @@ export class AISDKStreamStorage {
   async createChannelForAI(
     userId: string,
     channelName?: string,
-    channelId?: string
+    channelId?: string,
   ) {
     return await this.streamStorage.getOrCreateChannel({
       userId,

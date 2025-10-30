@@ -1,28 +1,28 @@
 {
-	"name": "@stream-io/ai-components-js",
-	"private": true,
-	"description": "AI Components Monorepo",
-	"scripts": {
-		"packages:build:all": "pnpm -r --filter './packages/**' run build",
-		"packages:test:all": "pnpm -r --filter './packages/**' run test",
-		"examples:build:all": "pnpm -r --filter './examples/**' run build",
-		"ci:publish": "changeset publish",
-		"lint:all": "eslint"
-	},
-	"author": {
-		"name": "GetStream.io, Inc.",
-		"url": "https://getstream.io/team/"
-	},
-	"devDependencies": {
-		"@changesets/cli": "^2.29.7",
-		"@eslint/js": "^9.38.0",
-		"eslint": "^9.38.0",
-		"eslint-plugin-import": "^2.32.0",
-		"eslint-config-prettier": "^9.1.0",
-		"globals": "^16.4.0",
-		"prettier": "^3.6.2",
-		"typescript": "catalog:",
-		"typescript-eslint": "^8.46.2"
-	},
-	"packageManager": "pnpm@10.13.1"
+  "name": "@stream-io/ai-components-js",
+  "private": true,
+  "description": "AI Components Monorepo",
+  "scripts": {
+    "packages:build:all": "pnpm -r --filter './packages/**' run build",
+    "packages:test:all": "pnpm -r --filter './packages/**' run test",
+    "examples:build:all": "pnpm -r --filter './examples/**' run build",
+    "ci:publish": "changeset publish",
+    "lint:all": "eslint",
+    "prettier:all": "pnpm exec prettier --ignore-path .prettierignore --list-different ."
+  },
+  "author": {
+    "name": "GetStream.io, Inc.",
+    "url": "https://getstream.io/team/"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.7",
+    "@eslint/js": "^9.38.0",
+    "eslint": "^9.38.0",
+    "eslint-plugin-import": "^2.32.0",
+    "globals": "^16.4.0",
+    "prettier": "^3.6.2",
+    "typescript": "catalog:",
+    "typescript-eslint": "^8.46.2"
+  },
+  "packageManager": "pnpm@10.13.1"
 }
