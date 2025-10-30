@@ -21,13 +21,13 @@ npm install @stream-io/ai-sdk-storage
 ### 1. Basic Setup
 
 ```typescript
-import { createStreamStorageClient } from "@stream-io/ai-sdk-storage";
+import { createStreamStorageClient } from '@stream-io/ai-sdk-storage';
 
 const { streamStorage, aiSDKStreamStorage } = createStreamStorageClient({
-  apiKey: "your-stream-api-key",
-  apiSecret: "your-stream-api-secret",
-  botUserId: "ai-bot", // optional, defaults to 'ai-bot'
-  adminUserId: "admin", // optional, defaults to 'admin'
+  apiKey: 'your-stream-api-key',
+  apiSecret: 'your-stream-api-secret',
+  botUserId: 'ai-bot', // optional, defaults to 'ai-bot'
+  adminUserId: 'admin', // optional, defaults to 'admin'
 });
 ```
 
@@ -41,10 +41,10 @@ STREAM_ADMIN_USER_ID=admin # optional
 ```
 
 ```typescript
-import { createConfigFromEnv } from "@stream-io/ai-sdk-storage";
+import { createConfigFromEnv } from '@stream-io/ai-sdk-storage';
 
 const { streamStorage, aiSDKStreamStorage } = createStreamStorageClient(
-  createConfigFromEnv()
+  createConfigFromEnv(),
 );
 ```
 
@@ -55,33 +55,33 @@ const { streamStorage, aiSDKStreamStorage } = createStreamStorageClient(
 ```typescript
 // Create a new channel
 const channel = await streamStorage.getOrCreateChannel({
-  userId: "user123",
-  channelName: "Hi there",
-  channelId: "optional-custom-id", // optional
+  userId: 'user123',
+  channelName: 'Hi there',
+  channelId: 'optional-custom-id', // optional
 });
 
 // Get all channels for a user
-const channels = await streamStorage.getChannels("user123");
+const channels = await streamStorage.getChannels('user123');
 ```
 
 ### Sending Messages
 
 ```typescript
 // Send a simple text message
-await streamStorage.sendMessage("channel-id", {
-  text: "Hello, world!",
-  userId: "user123",
+await streamStorage.sendMessage('channel-id', {
+  text: 'Hello, world!',
+  userId: 'user123',
 });
 
 // Send a message with attachments
-await streamStorage.sendMessage("channel-id", {
-  text: "Check out this image!",
-  userId: "user123",
+await streamStorage.sendMessage('channel-id', {
+  text: 'Check out this image!',
+  userId: 'user123',
   attachments: [
     {
-      url: "https://example.com/image.jpg",
-      filename: "image.jpg",
-      type: "image/jpeg",
+      url: 'https://example.com/image.jpg',
+      filename: 'image.jpg',
+      type: 'image/jpeg',
     },
   ],
 });
@@ -90,8 +90,8 @@ await streamStorage.sendMessage("channel-id", {
 ### AI SDK Integration
 
 ```typescript
-import { streamText } from "ai";
-import { AISDKStreamStorage } from "@stream-io/ai-sdk-storage";
+import { streamText } from 'ai';
+import { AISDKStreamStorage } from '@stream-io/ai-sdk-storage';
 
 // Create AI SDK Stream Storage instance
 const aiSDKStorage = new AISDKStreamStorage(streamStorage);
@@ -102,18 +102,18 @@ const result = streamText({
   messages: convertToModelMessages(messages),
   onFinish: async (responseMessage) => {
     // Process AI response and send to Stream Chat
-    await aiSDKStorage.processAIResponse("channel-id", responseMessage);
+    await aiSDKStorage.processAIResponse('channel-id', responseMessage);
   },
 });
 
 // Process user message with attachments
 const { processUserMessage } = await aiSDKStorage.handleStreamText(
-  "channel-id",
+  'channel-id',
   messages,
   userId,
   async (responseMessage) => {
-    await aiSDKStorage.processAIResponse("channel-id", responseMessage);
-  }
+    await aiSDKStorage.processAIResponse('channel-id', responseMessage);
+  },
 );
 
 await processUserMessage();
@@ -122,18 +122,18 @@ await processUserMessage();
 ### Complete Next.js API Route Example
 
 ```typescript
-import { NextRequest, NextResponse } from "next/server";
-import { streamText } from "ai";
+import { NextRequest, NextResponse } from 'next/server';
+import { streamText } from 'ai';
 import {
   createStreamStorageClient,
   createConfigFromEnv,
-} from "@stream-io/ai-sdk-storage";
+} from '@stream-io/ai-sdk-storage';
 
 export async function POST(req: NextRequest) {
   const { messages, channelId, userId, channelName } = await req.json();
 
   const { streamStorage, aiSDKStreamStorage } = createStreamStorageClient(
-    createConfigFromEnv()
+    createConfigFromEnv(),
   );
 
   const { processUserMessage, processAIResponse } =
@@ -143,7 +143,7 @@ export async function POST(req: NextRequest) {
       user_id,
       async (responseMessage) => {
         await storage.aiSDKStreamStorage.processAIResponse(id, responseMessage);
-      }
+      },
     );
 
   await processUserMessage();
@@ -159,8 +159,8 @@ export async function POST(req: NextRequest) {
       await processAIResponse(responseMessage);
     },
     onError: (error) => {
-      console.error(error, "error");
-      return "Error: " + error;
+      console.error(error, 'error');
+      return 'Error: ' + error;
     },
   });
 }
@@ -214,10 +214,10 @@ interface CreateChannelOptions {
 
 interface AISDKMessage {
   id?: string;
-  role: "user" | "assistant" | "system";
+  role: 'user' | 'assistant' | 'system';
   content: string;
   parts?: Array<{
-    type: "text" | "file";
+    type: 'text' | 'file';
     text?: string;
     url?: string;
     filename?: string;
@@ -233,18 +233,18 @@ The library includes comprehensive error handling:
 ```typescript
 try {
   const channel = await streamStorage.getOrCreateChannel({
-    userId: "user123",
-    channelName: "Hi there",
+    userId: 'user123',
+    channelName: 'Hi there',
   });
 
   if (!channel) {
-    console.error("Failed to create channel");
+    console.error('Failed to create channel');
     return;
   }
 
   // Use channel...
 } catch (error) {
-  console.error("Error:", error);
+  console.error('Error:', error);
 }
 ```
 

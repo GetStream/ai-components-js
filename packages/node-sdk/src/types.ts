@@ -1,4 +1,4 @@
-import type { Channel, StreamChat } from "stream-chat";
+import type { Channel, StreamChat } from 'stream-chat';
 
 export interface StreamStorageConfig {
   apiKey: string;
@@ -30,10 +30,10 @@ export interface SendMessageOptions {
 
 export interface AISDKMessage {
   id?: string;
-  role: "user" | "assistant" | "system";
+  role: 'user' | 'assistant' | 'system';
   content: string;
   parts?: Array<{
-    type: "text" | "file";
+    type: 'text' | 'file';
     text?: string;
     url?: string;
     filename?: string;
