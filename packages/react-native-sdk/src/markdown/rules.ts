@@ -10,42 +10,19 @@ import type {
   Parser,
   ReactOutputRule,
   SingleASTNode,
-  State,
 } from '@khanacademy/simple-markdown';
 import SimpleMarkdown from '@khanacademy/simple-markdown';
 import { head, includes, map, noop, size, some } from 'lodash';
 
-import type { MarkdownStyle } from "./types";
-
-import type { MarkdownOptions } from './index';
-
-type MarkdownStyleProp = TextStyle | ViewStyle;
-
-type MarkdownState = State & {
-  withinText?: boolean;
-  withinQuote?: boolean;
-  withinHeading?: boolean;
-  withinLink?: boolean;
-  withinList?: boolean;
-  withinParagraphWithImage?: boolean;
-  style: MarkdownStyleProp;
-};
-
-type NodeWithContent = SingleASTNode & { content: SingleASTNode[] };
-type NodeWithStringContent = SingleASTNode & { content: string };
-type HeadingNode = SingleASTNode & { level: number; content: SingleASTNode[] };
-type ListNode = SingleASTNode & {
-  ordered: boolean;
-  items: SingleASTNode[] | SingleASTNode[][];
-};
-type TableNode = SingleASTNode & {
-  header: SingleASTNode[];
-  cells: SingleASTNode[][];
-};
-type TargetNode = SingleASTNode & { target: string };
-
-// Allow dynamic heading style access like styles["heading1"]
-type HeadingStyles = Record<string, MarkdownStyleProp>;
+import type {
+  HeadingNode, HeadingStyles, ListNode, MarkdownOptions,
+  MarkdownState,
+  MarkdownStyle,
+  NodeWithContent,
+  NodeWithStringContent, RuleRenderFunction, TableNode,
+  TargetNode
+} from "./types";
+import {renderBlockQuote} from "./components";
 
 export const getLocalRules = (
   styles: MarkdownStyle,
@@ -87,6 +64,8 @@ export const getLocalRules = (
     };
   };
 
+  const renderFunctionWithStyle = (render: RuleRenderFunction) => (node: SingleASTNode, output: Output<React.ReactNode>, { ...state }: MarkdownState) => render({ node, output, state, styles });
+
   return {
     autolink: {
       react(node: SingleASTNode, output: Output<React.ReactNode>, { ...state }: MarkdownState) {
@@ -105,33 +84,7 @@ export const getLocalRules = (
       },
     },
     blockQuote: {
-      react(node: SingleASTNode, output: Output<React.ReactNode>, { ...state }: MarkdownState) {
-        state.withinQuote = true;
-        const n = node as NodeWithContent;
-
-        const img = React.createElement(View, {
-          key: Number(state.key) - Number(state.key),
-          style: [styles.blockQuoteSectionBar, styles.blockQuoteBar],
-        });
-
-        const blockQuote = React.createElement(
-          Text,
-          {
-            key: state.key,
-            style: styles.blockQuoteText,
-          },
-          output(n.content, state),
-        );
-
-        return React.createElement(
-          View,
-          {
-            key: state.key,
-            style: [styles.blockQuoteSection, styles.blockQuoteText],
-          },
-          [img, blockQuote],
-        );
-      },
+      react: renderFunctionWithStyle(renderBlockQuote),
     },
     br: {
       react(_node: SingleASTNode, _output: Output<React.ReactNode>, { ...state }: MarkdownState) {

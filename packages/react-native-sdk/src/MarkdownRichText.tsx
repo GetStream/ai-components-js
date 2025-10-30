@@ -1,15 +1,18 @@
 import {type PropsWithChildren, type ReactNode, useCallback, useMemo} from "react";
-import {generateMarkdownText} from "./utils/generateMarkdownText";
-import {Markdown, type MarkdownRules} from "./markdown";
+import {
+    type BulletProps,
+    generateMarkdownText,
+    type MarkdownOutputProps,
+    type MarkdownTableRowProps,
+} from "./markdown";
+import {Markdown} from "./markdown";
 import styles from './markdown/styles.ts';
-import type {MarkdownStyle} from "./markdown/types.ts";
+import type {MarkdownRules, MarkdownStyle} from "./markdown";
 import {Linking, Text, type TextProps, View, type ViewProps} from "react-native";
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 import Animated, { clamp, scrollTo, useAnimatedRef, useSharedValue } from 'react-native-reanimated';
-import type {Output, SingleASTNode, State} from "@khanacademy/simple-markdown";
-
-type ReactOutput = Output<React.ReactNode>
+import type {SingleASTNode, State} from "@khanacademy/simple-markdown";
 
 export const MarkdownReactiveScrollView = ({ children }: { children: ReactNode }) => {
     const scrollViewRef = useAnimatedRef<Animated.ScrollView>();
@@ -194,22 +197,10 @@ export const MarkdownRichText = ({ text, paragraphNumberOfLines, rules, styles: 
         </MarkdownReactiveScrollView>
     );
 
-    // @ts-ignore
-    const blockQuoteReact = (node, output, { ...state }) => {
-        state.withinQuote = true;
-
-        return (
-          <View key={state.key} style={styles.blockQuoteSection}>
-              <View style={styles.blockQuoteSectionBar} />
-              <Text style={styles.blockQuoteText}>{output(node.content, state)}</Text>
-          </View>
-        )
-    };
-
     const customRules = {
-        blockQuote: {
-            react: blockQuoteReact,
-        },
+        // blockQuote: {
+        //     react: blockQuoteReact,
+        // },
         codeBlock: { react: codeBlockReact },
         // do not render images, we will scrape them out of the message and show on attachment card component
         image: { match: () => null },
@@ -231,13 +222,6 @@ export const MarkdownRichText = ({ text, paragraphNumberOfLines, rules, styles: 
     return <Markdown rules={{ ...customRules, ...rules }}>{markdownText}</Markdown>
 }
 
-export interface ListOutputProps {
-    node: SingleASTNode;
-    output: ReactOutput;
-    state: State;
-    styles?: Partial<MarkdownStyle>;
-}
-
 /**
  * For lists and sublists, the default behavior of the markdown library we use is
  * to always renumber any list, so all ordered lists start from 1.
@@ -245,7 +229,7 @@ export interface ListOutputProps {
  * This custom rule overrides this behavior both for top level lists and sublists,
  * in order to start the numbering from the number of the first list item provided.
  */
-export const ListOutput = ({ node, output, state, styles }: ListOutputProps) => {
+export const ListOutput = ({ node, output, state, styles }: MarkdownOutputProps) => {
     let isSublist = state.withinList;
     const parentTypes = ['text', 'paragraph', 'strong'];
 
@@ -285,10 +269,6 @@ export const ListOutput = ({ node, output, state, styles }: ListOutputProps) => 
     );
 };
 
-interface BulletProps extends TextProps {
-    index?: number;
-}
-
 const Bullet = ({ index, style }: BulletProps) => (
     <Text key={0} style={style}>
         {index ? `${index}. ` : '\u2022 '}
@@ -303,26 +283,20 @@ const ListItem = ({ children, style }: PropsWithChildren<TextProps>) => (
     <Text style={style}>{children}</Text>
 );
 
-export type MarkdownTableProps = {
-    node: SingleASTNode;
-    output: ReactOutput;
-    state: State;
-    styles: Partial<MarkdownStyle>;
-};
-
 const transpose = (matrix: SingleASTNode[][]) =>
     // TS gets confused because it considers the matrix to be potentially ragged,
     // while the markdown parser can never output a ragged matrix of AST nodes
     // when parsing a table. Hence, we use the forced type coercion.
     (matrix[0] ?? []).map((_, colIndex) => matrix.map((row) => row[colIndex]!));
 
-const MarkdownTable = ({ node, output, state, styles }: MarkdownTableProps) => {
+const MarkdownTable = ({ node, output, state, styles }: MarkdownOutputProps) => {
     const content = useMemo(() => {
         const nodeContent = [node?.header, ...(node?.cells ?? [])];
         return transpose(nodeContent);
     }, [node?.cells, node?.header]);
     const columns = content?.map((column, idx) => (
         <MarkdownTableColumn
+            node={node}
             items={column}
             key={`column-${idx}`}
             output={output}
@@ -336,13 +310,6 @@ const MarkdownTable = ({ node, output, state, styles }: MarkdownTableProps) => {
             {columns}
         </View>
     );
-};
-
-export type MarkdownTableRowProps = {
-    items: SingleASTNode[];
-    output: ReactOutput;
-    state: State;
-    styles: Partial<MarkdownStyle>;
 };
 
 const MarkdownTableColumn = ({ items, output, state, styles }: MarkdownTableRowProps) => {
