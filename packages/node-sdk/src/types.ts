@@ -1,4 +1,4 @@
-import { Channel, StreamChat } from "stream-chat";
+import type { Channel, StreamChat } from "stream-chat";
 
 export interface StreamStorageConfig {
   apiKey: string;

@@ -1,6 +1,6 @@
 import { StreamStorage } from "./storage";
 import { AISDKStreamStorage } from "./ai-sdk-helpers";
-import { StreamStorageConfig } from "./types";
+import type { StreamStorageConfig } from "./types";
 
 /**
  * Creates a Stream Storage client with the provided configuration
