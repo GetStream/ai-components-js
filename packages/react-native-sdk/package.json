@@ -8,7 +8,7 @@
 	"exports": {
 		".": {
 			"react-native": {
-				"import": "./dist/module/index.js",
+				"import": "./src/index.ts",
 				"require": "./dist/commonjs/index.js"
 			},
 			"default": "./dist/module/index.js",
@@ -66,9 +66,6 @@
 		"react-native-gesture-handler": ">=2.18.0",
 		"react-native-reanimated": ">=3.16.0",
 		"react-native-svg": ">=15.8.0"
-	},
-	"pnpm": {
-		"publicHoistPattern": ["react", "@types/react"]
 	},
 	"peerDependenciesMeta": {
 		"expo": {

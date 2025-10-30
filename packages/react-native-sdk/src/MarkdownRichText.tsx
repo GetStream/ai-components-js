@@ -400,9 +400,6 @@ export const MarkdownRichText = ({ text, paragraphNumberOfLines, rules, styles: 
      * =====================================================================
      */
 
-    console.log('RULES: ', customRules)
-
-
     // @ts-ignore
     return <Markdown rules={{ ...customRules /*, ...rules */ }} styles={styles}>{markdownText}</Markdown>
 }
