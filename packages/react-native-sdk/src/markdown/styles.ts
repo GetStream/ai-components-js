@@ -1,8 +1,45 @@
 import { Dimensions, Platform, StyleSheet } from 'react-native';
 
+export const colors = {
+  accent_blue: '#005FFF',
+  accent_dark_blue: '#005DFF',
+  accent_error: '#FF3842',
+  accent_green: '#20E070',
+  accent_info: '#1FE06F',
+  accent_red: '#FF3742',
+  bg_gradient_end: '#F7F7F7',
+  bg_gradient_start: '#FCFCFC',
+  bg_user: '#F7F7F8',
+  black: '#000000',
+  blue_alice: '#E9F2FF',
+  border: '#00000014',
+  code_block: '#DDDDDD',
+  disabled: '#B4BBBA',
+  grey: '#7A7A7A',
+  grey_dark: '#72767E',
+  grey_gainsboro: '#DBDBDB',
+  grey_whisper: '#ECEBEB',
+  icon_background: '#FFFFFF',
+  label_bg_transparent: '#00000033',
+  light_blue: '#E0F0FF',
+  light_gray: '#E9EAED',
+  modal_shadow: '#00000099',
+  overlay: '#000000CC',
+  shadow_icon: '#00000040',
+  static_black: '#000000',
+  static_white: '#ffffff',
+  targetedMessageBackground: '#FBF4DD',
+  text_high_emphasis: '#080707',
+  text_low_emphasis: '#7E828B',
+  transparent: 'transparent',
+  white: '#FFFFFF',
+  white_smoke: '#F2F2F2',
+  white_snow: '#FCFCFC',
+};
+
 export default StyleSheet.create({
   autolink: {
-    color: 'blue',
+    color: colors.accent_blue,
   },
   bgImage: {
     bottom: 0,
@@ -18,20 +55,24 @@ export default StyleSheet.create({
   },
   blockQuoteSection: {
     flexDirection: 'row',
+    padding: 8,
   },
   blockQuoteSectionBar: {
-    backgroundColor: '#DDDDDD',
+    backgroundColor: colors.grey_gainsboro,
     height: null,
-    marginRight: 15,
-    width: 3,
+    marginRight: 8,
+    width: 2,
   },
   blockQuoteText: {
-    color: 'grey',
+    color: colors.grey_dark,
   },
   codeBlock: {
-    backgroundColor: '#DDDDDD',
+    backgroundColor: colors.code_block,
     fontFamily: Platform.OS === 'ios' ? 'Courier' : 'Monospace',
     fontWeight: '500',
+    marginVertical: 8,
+    color: colors.black,
+    padding: 8,
   },
   del: {
     textDecorationLine: 'line-through',
@@ -62,7 +103,7 @@ export default StyleSheet.create({
     fontSize: 11,
   },
   hr: {
-    backgroundColor: '#cccccc',
+    backgroundColor: colors.grey_gainsboro,
     height: 1,
   },
   image: {
@@ -76,14 +117,21 @@ export default StyleSheet.create({
     resizeMode: 'cover',
   },
   inlineCode: {
-    backgroundColor: '#eeeeee',
-    borderColor: '#dddddd',
+    backgroundColor: colors.white_smoke,
+    borderColor: colors.grey_gainsboro,
     borderRadius: 3,
     borderWidth: 1,
+    color: colors.accent_red,
     fontFamily: Platform.OS === 'ios' ? 'Courier' : 'Monospace',
-    fontWeight: 'bold',
+    fontWeight: '500',
+    fontSize: 13,
+    padding: 3,
+    paddingHorizontal: 5,
   },
-  list: {},
+  list: {
+    marginBottom: 8,
+    marginTop: 8,
+  },
   listItem: {
     flexDirection: 'row',
   },
@@ -92,13 +140,17 @@ export default StyleSheet.create({
     lineHeight: 20,
   },
   listItemNumber: {
-    fontWeight: 'normal',
+    fontWeight: '500',
   },
   listItemText: {
-    flex: 1,
+    flex: 0,
   },
   listRow: {
     flexDirection: 'row',
+  },
+  mentions: {
+    color: colors.accent_blue,
+    fontWeight: '700',
   },
   noMargin: {
     marginBottom: 0,
@@ -109,24 +161,24 @@ export default StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
-    marginBottom: 10,
-    marginTop: 10,
+    marginBottom: 8,
+    marginTop: 8,
   },
   paragraphCenter: {
     alignItems: 'flex-start',
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    marginBottom: 10,
-    marginTop: 10,
+    marginBottom: 8,
+    marginTop: 8,
     textAlign: 'center',
   },
   paragraphWithImage: {
     alignItems: 'flex-start',
     flex: 1,
     justifyContent: 'flex-start',
-    marginBottom: 10,
-    marginTop: 10,
+    marginBottom: 8,
+    marginTop: 8,
   },
   strong: {
     fontWeight: 'bold',
@@ -136,40 +188,46 @@ export default StyleSheet.create({
     width: Dimensions.get('window').width - 60,
   },
   table: {
-    borderColor: '#222222',
+    borderColor: colors.grey_dark,
     borderRadius: 3,
     borderWidth: 1,
+    flex: 1,
+    flexDirection: 'row',
+    marginVertical: 8,
   },
   tableHeader: {
-    backgroundColor: '#222222',
+    backgroundColor: colors.grey,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
   tableHeaderCell: {
-    color: '#ffffff',
-    fontWeight: 'bold',
+    color: colors.white,
+    fontWeight: '500',
     padding: 5,
   },
   tableRow: {
-    borderColor: '#222222',
+    alignItems: 'center',
+    borderColor: colors.grey_dark,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
   tableRowCell: {
+    borderColor: colors.grey_dark,
+    flex: 1,
     padding: 5,
   },
   tableRowLast: {
     borderColor: 'transparent',
   },
   text: {
-    color: '#222222',
+    color: colors.black,
   },
   textRow: {
     flexDirection: 'row',
   },
   u: {
     borderBottomWidth: 1,
-    borderColor: '#222222',
+    borderColor: colors.grey_dark,
   },
   view: {
     alignSelf: 'stretch',

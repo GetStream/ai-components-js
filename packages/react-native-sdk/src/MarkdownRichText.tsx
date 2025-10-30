@@ -1,8 +1,9 @@
 import {type PropsWithChildren, type ReactNode, useCallback, useMemo} from "react";
 import {generateMarkdownText} from "./utils/generateMarkdownText";
 import {Markdown, type MarkdownRules} from "./markdown";
+import styles from './markdown/styles.ts';
 import type {MarkdownStyle} from "./markdown/types.ts";
-import {type GestureResponderEvent, Linking, Platform, Text, type TextProps, View, type ViewProps} from "react-native";
+import {Linking, Text, type TextProps, View, type ViewProps} from "react-native";
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 import Animated, { clamp, scrollTo, useAnimatedRef, useSharedValue } from 'react-native-reanimated';
@@ -62,190 +63,12 @@ export const MarkdownReactiveScrollView = ({ children }: { children: ReactNode }
     );
 };
 
-const defaultMarkdownStyles: MarkdownStyle = {
-    codeBlock: {
-        fontFamily: Platform.OS === 'ios' ? 'Courier' : 'Monospace',
-        fontWeight: '500',
-        marginVertical: 8,
-    },
-    inlineCode: {
-        fontSize: 13,
-        padding: 3,
-        paddingHorizontal: 5,
-    },
-    list: {
-        marginBottom: 8,
-        marginTop: 8,
-    },
-    listItemNumber: {
-        fontWeight: 'bold',
-    },
-    listItemText: {
-        flex: 0,
-    },
-    listRow: {
-        flexDirection: 'row',
-    },
-    mentions: {
-        fontWeight: '700',
-    },
-    paragraph: {
-        marginBottom: 8,
-        marginTop: 8,
-    },
-    paragraphCenter: {
-        marginBottom: 8,
-        marginTop: 8,
-    },
-    paragraphWithImage: {
-        marginBottom: 8,
-        marginTop: 8,
-    },
-    table: {
-        borderRadius: 3,
-        borderWidth: 1,
-        flex: 1,
-        flexDirection: 'row',
-    },
-    tableHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-    },
-    tableHeaderCell: {
-        fontWeight: '500',
-    },
-    tableRow: {
-        alignItems: 'center',
-        justifyContent: 'space-around',
-    },
-    tableRowCell: {
-        flex: 1,
-    },
-};
-
-export const colors = {
-    accent_blue: '#005FFF',
-    accent_dark_blue: '#005DFF',
-    accent_error: '#FF3842',
-    accent_green: '#20E070',
-    accent_info: '#1FE06F',
-    accent_red: '#FF3742',
-    bg_gradient_end: '#F7F7F7',
-    bg_gradient_start: '#FCFCFC',
-    bg_user: '#F7F7F8',
-    black: '#000000',
-    blue_alice: '#E9F2FF',
-    border: '#00000014',
-    code_block: '#DDDDDD',
-    disabled: '#B4BBBA',
-    grey: '#7A7A7A',
-    grey_dark: '#72767E',
-    grey_gainsboro: '#DBDBDB',
-    grey_whisper: '#ECEBEB',
-    icon_background: '#FFFFFF',
-    label_bg_transparent: '#00000033',
-    light_blue: '#E0F0FF',
-    light_gray: '#E9EAED',
-    modal_shadow: '#00000099',
-    overlay: '#000000CC',
-    shadow_icon: '#00000040',
-    static_black: '#000000',
-    static_white: '#ffffff',
-    targetedMessageBackground: '#FBF4DD',
-    text_high_emphasis: '#080707',
-    text_low_emphasis: '#7E828B',
-    transparent: 'transparent',
-    white: '#FFFFFF',
-    white_smoke: '#F2F2F2',
-    white_snow: '#FCFCFC',
-};
-
 export const MarkdownRichText = ({ text, paragraphNumberOfLines, rules, styles: markdownStyles, onLink: onLinkParam }: { text: string, paragraphNumberOfLines?: number, rules?: MarkdownRules, styles?: MarkdownStyle, onLink?: (url: string) => void }) => {
     const markdownText = useMemo(() => generateMarkdownText(text), [text]);
 
     /**
      * =====================================================================
      */
-
-    const styles: MarkdownStyle = {
-        ...defaultMarkdownStyles,
-        ...markdownStyles,
-        autolink: {
-            ...defaultMarkdownStyles.autolink,
-            color: colors.accent_blue,
-            ...markdownStyles?.autolink,
-        },
-        blockQuoteSection: {
-            ...defaultMarkdownStyles.blockQuoteSection,
-            flexDirection: 'row',
-            padding: 8,
-            ...markdownStyles?.blockQuoteSection,
-        },
-        blockQuoteSectionBar: {
-            ...defaultMarkdownStyles.blockQuoteSectionBar,
-            backgroundColor: colors.grey_gainsboro,
-            marginRight: 8,
-            width: 2,
-            ...markdownStyles?.blockQuoteSectionBar,
-        },
-        blockQuoteText: {
-            ...defaultMarkdownStyles.blockQuoteText,
-            ...markdownStyles?.blockQuoteText,
-        },
-        codeBlock: {
-            ...defaultMarkdownStyles.codeBlock,
-            backgroundColor: colors.code_block,
-            color: colors.black,
-            padding: 8,
-            ...markdownStyles?.codeBlock,
-        },
-        inlineCode: {
-            ...defaultMarkdownStyles.inlineCode,
-            backgroundColor: colors.white_smoke,
-            borderColor: colors.grey_gainsboro,
-            color: colors.accent_red,
-            ...markdownStyles?.inlineCode,
-        },
-        mentions: {
-            ...defaultMarkdownStyles.mentions,
-            color: colors.accent_blue,
-            ...markdownStyles?.mentions,
-        },
-        table: {
-            ...defaultMarkdownStyles.table,
-            borderColor: colors.grey_dark,
-            marginVertical: 8,
-            ...markdownStyles?.table,
-        },
-        tableHeader: {
-            ...defaultMarkdownStyles.tableHeader,
-            backgroundColor: colors.grey,
-            ...markdownStyles?.tableHeader,
-        },
-        tableHeaderCell: {
-            ...defaultMarkdownStyles.tableHeaderCell,
-            padding: 5,
-            ...markdownStyles?.tableHeaderCell,
-        },
-        tableRow: {
-            ...defaultMarkdownStyles.tableRow,
-            ...markdownStyles?.tableRow,
-        },
-        tableRowCell: {
-            ...defaultMarkdownStyles.tableRowCell,
-            borderColor: colors.grey_dark,
-            padding: 5,
-            ...markdownStyles?.tableRowCell,
-        },
-        tableRowLast: {
-            ...markdownStyles?.tableRowLast,
-        },
-        text: {
-            ...defaultMarkdownStyles.text,
-            color: colors.black,
-            ...markdownStyles?.text,
-        },
-    };
 
     const onLink = (url: string) =>
         onLinkParam
@@ -372,12 +195,16 @@ export const MarkdownRichText = ({ text, paragraphNumberOfLines, rules, styles: 
     );
 
     // @ts-ignore
-    const blockQuoteReact = (node, output, state) => (
-        <View key={state.key} style={styles.blockQuoteSection}>
-            <View style={styles.blockQuoteSectionBar} />
-            <View style={styles.blockQuoteText}>{output(node.content, state)}</View>
-        </View>
-    );
+    const blockQuoteReact = (node, output, { ...state }) => {
+        state.withinQuote = true;
+
+        return (
+          <View key={state.key} style={styles.blockQuoteSection}>
+              <View style={styles.blockQuoteSectionBar} />
+              <Text style={styles.blockQuoteText}>{output(node.content, state)}</Text>
+          </View>
+        )
+    };
 
     const customRules = {
         blockQuote: {
@@ -401,7 +228,7 @@ export const MarkdownRichText = ({ text, paragraphNumberOfLines, rules, styles: 
      */
 
     // @ts-ignore
-    return <Markdown rules={{ ...customRules /*, ...rules */ }} styles={styles}>{markdownText}</Markdown>
+    return <Markdown rules={{ ...customRules, ...rules }}>{markdownText}</Markdown>
 }
 
 export interface ListOutputProps {
