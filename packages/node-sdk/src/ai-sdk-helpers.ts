@@ -1,5 +1,5 @@
-import { StreamStorage } from "./storage";
-import { AISDKMessage, SendMessageOptions } from "./types";
+import type { StreamStorage } from "./storage";
+import type { AISDKMessage, SendMessageOptions } from "./types";
 
 /**
  * AI SDK integration helpers for Stream Storage
