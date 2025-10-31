@@ -1,18 +1,11 @@
 import { Text } from 'react-native';
 import type { MarkdownComponentProps, RuleRenderFunction } from '../types.ts';
 
-export const Link = ({ children, styles, onPress }: MarkdownComponentProps) => {
-  console.log('RENDERING THIS !: ', onPress);
-  return (
-    <Text
-      style={styles.autolink}
-      onPress={onPress}
-      suppressHighlighting={false}
-    >
-      {children}
-    </Text>
-  );
-};
+export const Link = ({ children, styles, onPress }: MarkdownComponentProps) => (
+  <Text style={styles.autolink} onPress={onPress} suppressHighlighting={false}>
+    {children}
+  </Text>
+);
 
 export const renderLink: RuleRenderFunction = ({
   node,
