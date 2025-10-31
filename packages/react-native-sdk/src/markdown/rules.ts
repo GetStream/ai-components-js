@@ -31,6 +31,7 @@ import type {
 import { renderBlockQuote } from './components';
 import { renderAutolink } from './components/Autolink.tsx';
 import { renderUrl } from './components/Url.tsx';
+import { renderLink } from './components/Link.tsx';
 
 const LINK_INSIDE = '(?:\\[(?:\\\\.|[^\\\\\\[\\]])*\\]|\\\\.|[^\\[\\]\\\\])*';
 /**
@@ -54,6 +55,7 @@ export const getLocalRules = (
   opts: MarkdownOptions = {},
 ): OutputRules<ReactOutputRule> => {
   const openLinkHandler = (target: string) => {
+    console.log('OPEN LINK HANDLER: ', opts, target);
     if (opts.onLink) {
       // user-supplied handler may be async; we keep your behavior
       Promise.resolve(opts.onLink(target)).catch((error: unknown) => {
@@ -248,26 +250,9 @@ export const getLocalRules = (
     },
     link: {
       match: SimpleMarkdown.inlineRegex(LINK_REGEX) as MatchFunction,
-      react(
-        node: SingleASTNode,
-        output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        state.withinLink = true;
-        const n = node as NodeWithContent & TargetNode;
-        const onPress = () => openLinkHandler(n.target);
-        const link = React.createElement(
-          Text,
-          {
-            key: state.key,
-            onPress,
-            style: styles.autolink,
-          },
-          output(n.content, state),
-        );
-        state.withinLink = false;
-        return link;
-      },
+      react: enrichedRenderFunction(renderLink, {
+        onLink: openLinkHandler,
+      }),
     },
     list: {
       react(
