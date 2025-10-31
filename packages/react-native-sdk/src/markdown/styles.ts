@@ -229,6 +229,9 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: colors.grey_dark,
   },
+  url: {
+    color: colors.accent_blue,
+  },
   view: {
     alignSelf: 'stretch',
   },
