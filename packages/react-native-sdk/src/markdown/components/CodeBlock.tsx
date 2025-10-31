@@ -7,7 +7,7 @@ export const CodeBlock = ({
   styles,
   state,
 }: MarkdownComponentProps) => (
-  <MarkdownReactiveScrollView key={state.key}>
+  <MarkdownReactiveScrollView>
     <Text style={styles.codeBlock}>{children}</Text>
   </MarkdownReactiveScrollView>
 );
@@ -17,16 +17,14 @@ export const renderCodeBlock: RuleRenderFunction = ({
   output,
   state,
   styles,
-}) => {
-  return (
-    <CodeBlock
-      key={state.key}
-      node={node}
-      output={output}
-      state={state}
-      styles={styles}
-    >
-      {node.content?.trim()}
-    </CodeBlock>
-  );
-};
+}) => (
+  <CodeBlock
+    key={state.key}
+    node={node}
+    output={output}
+    state={state}
+    styles={styles}
+  >
+    {node.content?.trim()}
+  </CodeBlock>
+);

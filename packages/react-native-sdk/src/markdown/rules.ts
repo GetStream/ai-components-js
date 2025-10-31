@@ -1,6 +1,4 @@
-import React from 'react';
-import type { TextStyle, ViewStyle } from 'react-native';
-import { Text, View } from 'react-native';
+import type React from 'react';
 
 import type {
   MatchFunction,
@@ -12,18 +10,13 @@ import type {
   SingleASTNode,
 } from '@khanacademy/simple-markdown';
 import SimpleMarkdown from '@khanacademy/simple-markdown';
-import { head, includes, map } from 'lodash';
 
 import type {
-  ListNode,
   MarkdownOptions,
   MarkdownState,
   MarkdownStyle,
-  NodeWithContent,
-  NodeWithStringContent,
   RuleRenderFunction,
   RuleRenderFunctionEnrichedProps,
-  TableNode,
 } from './types';
 import { renderBlockQuote } from './components';
 import { renderAutolink } from './components/Autolink.tsx';
@@ -42,6 +35,7 @@ import { renderText } from './components/Text.tsx';
 import { renderList } from './components/List.tsx';
 import { renderCodeBlock } from './components/CodeBlock.tsx';
 import { renderInlineCode } from './components/InlineCode.tsx';
+import { renderTable } from './components/Table.tsx';
 
 const LINK_INSIDE = '(?:\\[(?:\\\\.|[^\\\\\\[\\]])*\\]|\\\\.|[^\\[\\]\\\\])*';
 /**
@@ -67,7 +61,7 @@ export const getLocalRules = (
   const { onLink, paragraphNumberOfLines } = opts;
   const openLinkHandler = (target: string) => {
     if (onLink) {
-      // user-supplied handler may be async; we keep your behavior
+      // user-supplied handler may be async; we keep the behavior
       Promise.resolve(onLink(target)).catch((error: unknown) => {
         const msg =
           error && typeof error === 'object' && 'toString' in error
@@ -175,56 +169,7 @@ export const getLocalRules = (
       react: enrichedRenderFunction(renderList),
     },
     table: {
-      react(
-        node: SingleASTNode,
-        output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        const n = node as TableNode;
-
-        const headers = map(n.header, (content, i) =>
-          React.createElement(
-            Text,
-            {
-              key: i,
-              style: styles.tableHeaderCell,
-            },
-            output(content, state),
-          ),
-        );
-
-        const header = React.createElement(
-          View,
-          { key: -1, style: styles.tableHeader },
-          headers,
-        );
-
-        const rows = map(n.cells, (row, r) => {
-          const cells = map(row, (content, c) =>
-            React.createElement(
-              View,
-              {
-                key: c,
-                style: styles.tableRowCell,
-              },
-              output(content, state),
-            ),
-          );
-          const rowStyles: (TextStyle | ViewStyle | undefined)[] = [
-            styles.tableRow,
-          ];
-          if (n.cells.length - 1 === r) {
-            rowStyles.push(styles.tableRowLast);
-          }
-          return React.createElement(View, { key: r, style: rowStyles }, cells);
-        });
-
-        return React.createElement(
-          View,
-          { key: state.key, style: styles.table },
-          [header, rows],
-        );
-      },
+      react: enrichedRenderFunction(renderTable),
     },
     text: {
       react: enrichedRenderFunction(renderText),

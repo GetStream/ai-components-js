@@ -84,13 +84,6 @@ export const MarkdownRichText = ({
   // };
 
   // @ts-ignore
-  const codeBlockReact = (node, _, state) => (
-    <MarkdownReactiveScrollView key={state.key}>
-      <Text style={styles.codeBlock}>{node?.content?.trim()}</Text>
-    </MarkdownReactiveScrollView>
-  );
-
-  // @ts-ignore
   const tableReact = (node, output, state) => (
     <MarkdownReactiveScrollView key={state.key}>
       <MarkdownTable
@@ -109,7 +102,7 @@ export const MarkdownRichText = ({
     // Truncate long text content in the message overlay
     // paragraph: paragraphNumberOfLines ? { react: paragraphTextReact } : {},
     // sublist: { react: listReact },
-    table: { react: tableReact },
+    // table: { react: tableReact },
   };
 
   /**
