@@ -61,10 +61,11 @@ export const getLocalRules = (
   styles: MarkdownStyle,
   opts: MarkdownOptions = {},
 ): OutputRules<ReactOutputRule> => {
+  const { onLink, paragraphNumberOfLines } = opts;
   const openLinkHandler = (target: string) => {
-    if (opts.onLink) {
+    if (onLink) {
       // user-supplied handler may be async; we keep your behavior
-      Promise.resolve(opts.onLink(target)).catch((error: unknown) => {
+      Promise.resolve(onLink(target)).catch((error: unknown) => {
         const msg =
           error && typeof error === 'object' && 'toString' in error
             ? String(error)
@@ -269,7 +270,9 @@ export const getLocalRules = (
       react: enrichedRenderFunction(renderNewLine),
     },
     paragraph: {
-      react: enrichedRenderFunction(renderParagraph),
+      react: enrichedRenderFunction(renderParagraph, {
+        paragraphNumberOfLines,
+      }),
     },
     strong: {
       react: enrichedRenderFunction(renderBold),

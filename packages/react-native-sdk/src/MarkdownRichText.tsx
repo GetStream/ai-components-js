@@ -224,7 +224,7 @@ export const MarkdownRichText = ({
     // do not render images, we will scrape them out of the message and show on attachment card component
     list: { react: listReact },
     // Truncate long text content in the message overlay
-    paragraph: paragraphNumberOfLines ? { react: paragraphTextReact } : {},
+    // paragraph: paragraphNumberOfLines ? { react: paragraphTextReact } : {},
     sublist: { react: listReact },
     table: { react: tableReact },
   };
@@ -239,6 +239,7 @@ export const MarkdownRichText = ({
       rules={{ ...customRules, ...rules }}
       styles={markdownStyles}
       onLink={onLink}
+      paragraphNumberOfLines={paragraphNumberOfLines}
     >
       {markdownText}
     </Markdown>

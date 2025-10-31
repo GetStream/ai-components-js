@@ -8,6 +8,7 @@ export const Paragraph = ({
   styles,
   node,
   state,
+  paragraphNumberOfLines,
 }: MarkdownComponentProps) => {
   const paragraphStyle = useMemo(() => {
     let style: TextStyle | (TextStyle | undefined)[] | undefined =
@@ -28,7 +29,11 @@ export const Paragraph = ({
     styles.noMargin,
   ]);
 
-  return <Text style={paragraphStyle}>{children}</Text>;
+  return (
+    <Text style={paragraphStyle} numberOfLines={paragraphNumberOfLines}>
+      {children}
+    </Text>
+  );
 };
 
 export const ParagraphWithImage = ({
@@ -43,6 +48,7 @@ export const renderParagraph: RuleRenderFunction = ({
   output,
   state,
   styles,
+  paragraphNumberOfLines,
 }) => {
   if (some(node.content, { type: 'image' })) {
     state.withinParagraphWithImage = true;
@@ -67,6 +73,7 @@ export const renderParagraph: RuleRenderFunction = ({
       output={output}
       state={state}
       styles={styles}
+      paragraphNumberOfLines={paragraphNumberOfLines}
     >
       {output(node.content, state)}
     </Paragraph>
