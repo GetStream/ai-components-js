@@ -12,7 +12,7 @@ import type {
   SingleASTNode,
 } from '@khanacademy/simple-markdown';
 import SimpleMarkdown from '@khanacademy/simple-markdown';
-import { head, includes, map, noop, size, some } from 'lodash';
+import { head, includes, map } from 'lodash';
 
 import type {
   ListNode,
@@ -37,6 +37,8 @@ import { renderBold } from './components/Bold.tsx';
 import { renderHorizontalRule } from './components/HorizontalRule.tsx';
 import { renderNewLine } from './components/NewLine.tsx';
 import { renderMailto } from './components/Mailto.tsx';
+import { renderParagraph } from './components/Paragraph.tsx';
+import { renderText } from './components/Text.tsx';
 
 const LINK_INSIDE = '(?:\\[(?:\\\\.|[^\\\\\\[\\]])*\\]|\\\\.|[^\\[\\]\\\\])*';
 /**
@@ -267,44 +269,7 @@ export const getLocalRules = (
       react: enrichedRenderFunction(renderNewLine),
     },
     paragraph: {
-      react(
-        node: SingleASTNode,
-        output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        const n = node as NodeWithContent;
-        let paragraphStyle: TextStyle | (TextStyle | undefined)[] | undefined =
-          styles.paragraph;
-
-        // Allow image to drop in next line within the paragraph
-        if (some(n.content, { type: 'image' })) {
-          state.withinParagraphWithImage = true;
-          const paragraph = React.createElement(
-            View,
-            {
-              key: state.key,
-              style: styles.paragraphWithImage,
-            },
-            output(n.content, state),
-          );
-          state.withinParagraphWithImage = false;
-          return paragraph;
-        } else if (size(n.content) < 3 && some(n.content, { type: 'strong' })) {
-          // center for Strong-only content
-          paragraphStyle = styles.paragraphCenter;
-        }
-        if (state.withinList) {
-          paragraphStyle = [paragraphStyle, styles.noMargin];
-        }
-        return React.createElement(
-          Text,
-          {
-            key: state.key,
-            style: paragraphStyle,
-          },
-          output(n.content, state),
-        );
-      },
+      react: enrichedRenderFunction(renderParagraph),
     },
     strong: {
       react: enrichedRenderFunction(renderBold),
@@ -428,34 +393,7 @@ export const getLocalRules = (
       },
     },
     text: {
-      react(
-        node: SingleASTNode,
-        _output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        const n = node as NodeWithStringContent;
-        let textStyle: TextStyle | (TextStyle | ViewStyle | undefined)[] = {
-          ...styles.text,
-          ...(state.style || {}),
-        };
-
-        if (state.withinLink) {
-          textStyle = [styles.text, styles.autolink];
-        }
-
-        if (state.withinQuote) {
-          textStyle = [styles.text, styles.blockQuoteText];
-        }
-
-        return React.createElement(
-          Text,
-          {
-            key: state.key,
-            style: textStyle,
-          },
-          n.content,
-        );
-      },
+      react: enrichedRenderFunction(renderText),
     },
     u: {
       // no support for underlines yet
