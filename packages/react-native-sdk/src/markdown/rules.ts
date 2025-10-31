@@ -18,24 +18,26 @@ import type {
   RuleRenderFunction,
   RuleRenderFunctionEnrichedProps,
 } from './types';
-import { renderBlockQuote } from './components';
-import { renderAutolink } from './components/Autolink.tsx';
-import { renderUrl } from './components/Url.tsx';
-import { renderLink } from './components/Link.tsx';
-import { renderLineBreak } from './components/LineBreak.tsx';
-import { renderStrikethrough } from './components/Strikethrough.tsx';
-import { renderEmphasis } from './components/Emphasis.tsx';
-import { renderHeading } from './components/Heading.tsx';
-import { renderBold } from './components/Bold.tsx';
-import { renderHorizontalRule } from './components/HorizontalRule.tsx';
-import { renderNewLine } from './components/NewLine.tsx';
-import { renderMailto } from './components/Mailto.tsx';
-import { renderParagraph } from './components/Paragraph.tsx';
-import { renderText } from './components/Text.tsx';
-import { renderList } from './components/List.tsx';
-import { renderCodeBlock } from './components/CodeBlock.tsx';
-import { renderInlineCode } from './components/InlineCode.tsx';
-import { renderTable } from './components/Table.tsx';
+import {
+  renderAutolink,
+  renderBlockQuote,
+  renderBold,
+  renderCodeBlock,
+  renderEmphasis,
+  renderHeading,
+  renderHorizontalRule,
+  renderInlineCode,
+  renderLineBreak,
+  renderLink,
+  renderList,
+  renderMailto,
+  renderNewLine,
+  renderParagraph,
+  renderStrikethrough,
+  renderTable,
+  renderText,
+  renderUrl,
+} from './components';
 
 const LINK_INSIDE = '(?:\\[(?:\\\\.|[^\\\\\\[\\]])*\\]|\\\\.|[^\\[\\]\\\\])*';
 /**
