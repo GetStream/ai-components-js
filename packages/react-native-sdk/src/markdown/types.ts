@@ -1,4 +1,10 @@
-import type { ImageStyle, TextProps, TextStyle, ViewStyle } from 'react-native';
+import type {
+  GestureResponderEvent,
+  ImageStyle,
+  TextProps,
+  TextStyle,
+  ViewStyle,
+} from 'react-native';
 import type { JSX } from 'react';
 import type React from 'react';
 import { type PropsWithChildren } from 'react';
@@ -99,6 +105,7 @@ export type MarkdownStyle = Partial<{
   tableRowLast: ViewStyle;
   text: TextStyle;
   u: TextStyle;
+  url: TextStyle;
   view: ViewStyle;
 }>;
 
@@ -109,7 +116,7 @@ export interface MarkdownOutputProps {
   styles: Partial<MarkdownStyle>;
 }
 
-export type MarkdownComponentProps = PropsWithChildren<MarkdownOutputProps>;
+export type MarkdownComponentProps = PropsWithChildren<RuleRenderFunctionProps>;
 
 export interface MarkdownTableRowProps extends MarkdownOutputProps {
   items: SingleASTNode[];
@@ -119,9 +126,22 @@ export interface BulletProps extends TextProps {
   index?: number;
 }
 
-export type RuleRenderFunction = (props: {
+export type RuleOutputProps = {
   node: SingleASTNode;
-  output: Output<React.ReactNode>;
+  output: ReactOutput;
   state: MarkdownState;
+};
+
+export type RuleRenderFunctionEnrichedProps = {
   styles: MarkdownStyle;
-}) => JSX.Element;
+  onPress?: (event: GestureResponderEvent) => void;
+  onLongPress?: (event: GestureResponderEvent) => void;
+  onLink?: (url: string) => void;
+};
+
+export type RuleRenderFunctionProps = RuleOutputProps &
+  RuleRenderFunctionEnrichedProps;
+
+export type RuleRenderFunction = (
+  props: RuleRenderFunctionProps,
+) => JSX.Element;

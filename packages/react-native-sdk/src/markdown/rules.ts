@@ -24,10 +24,13 @@ import type {
   NodeWithContent,
   NodeWithStringContent,
   RuleRenderFunction,
+  RuleRenderFunctionEnrichedProps,
   TableNode,
   TargetNode,
 } from './types';
 import { renderBlockQuote } from './components';
+import { renderAutolink } from './components/Autolink.tsx';
+import { renderUrl } from './components/Url.tsx';
 
 const LINK_INSIDE = '(?:\\[(?:\\\\.|[^\\\\\\[\\]])*\\]|\\\\.|[^\\[\\]\\\\])*';
 /**
@@ -50,7 +53,7 @@ export const getLocalRules = (
   styles: MarkdownStyle,
   opts: MarkdownOptions = {},
 ): OutputRules<ReactOutputRule> => {
-  const pressHandler = (target: string) => {
+  const openLinkHandler = (target: string) => {
     if (opts.onLink) {
       // user-supplied handler may be async; we keep your behavior
       Promise.resolve(opts.onLink(target)).catch((error: unknown) => {
@@ -83,38 +86,26 @@ export const getLocalRules = (
     };
   };
 
-  const renderFunctionWithStyle =
-    (render: RuleRenderFunction) =>
+  const enrichedRenderFunction =
+    (
+      render: RuleRenderFunction,
+      options: Partial<RuleRenderFunctionEnrichedProps> = {},
+    ) =>
     (
       node: SingleASTNode,
       output: Output<React.ReactNode>,
       { ...state }: MarkdownState,
     ) =>
-      render({ node, output, state, styles });
+      render({ node, output, state, styles, ...options });
 
   return {
     autolink: {
-      react(
-        node: SingleASTNode,
-        output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        state.withinText = true;
-        const n = node as NodeWithContent & TargetNode;
-        const onPress = () => pressHandler(n.target);
-        return React.createElement(
-          Text,
-          {
-            key: state.key,
-            onPress,
-            style: styles.autolink,
-          },
-          output(n.content, state),
-        );
-      },
+      react: enrichedRenderFunction(renderAutolink, {
+        onLink: openLinkHandler,
+      }),
     },
     blockQuote: {
-      react: renderFunctionWithStyle(renderBlockQuote),
+      react: enrichedRenderFunction(renderBlockQuote),
     },
     br: {
       react(
@@ -264,7 +255,7 @@ export const getLocalRules = (
       ) {
         state.withinLink = true;
         const n = node as NodeWithContent & TargetNode;
-        const onPress = () => pressHandler(n.target);
+        const onPress = () => openLinkHandler(n.target);
         const link = React.createElement(
           Text,
           {
@@ -629,24 +620,9 @@ export const getLocalRules = (
       },
     },
     url: {
-      react(
-        node: SingleASTNode,
-        output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        state.withinText = true;
-        const n = node as NodeWithContent & TargetNode;
-        const onPress = () => pressHandler(n.target);
-        return React.createElement(
-          Text,
-          {
-            key: state.key,
-            onPress,
-            style: styles.autolink,
-          },
-          output(n.content, state),
-        );
-      },
+      react: enrichedRenderFunction(renderUrl, {
+        onLink: openLinkHandler,
+      }),
     },
     reflink: { match: () => null },
   } as unknown as OutputRules<ReactOutputRule>;

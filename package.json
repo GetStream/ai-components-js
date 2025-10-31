@@ -8,7 +8,8 @@
     "examples:build:all": "pnpm -r --filter './examples/**' run build",
     "ci:publish": "changeset publish",
     "lint:all": "eslint",
-    "prettier:all": "pnpm exec prettier --ignore-path .prettierignore --list-different ."
+    "prettier:all": "pnpm exec prettier --ignore-path .prettierignore --list-different .",
+    "prettier:fix-all": "pnpm exec prettier --write --ignore-path .prettierignore --list-different ."
   },
   "author": {
     "name": "GetStream.io, Inc.",
