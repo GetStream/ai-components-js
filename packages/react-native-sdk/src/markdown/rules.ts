@@ -29,14 +29,27 @@ import type {
 } from './types';
 import { renderBlockQuote } from './components';
 
+const LINK_INSIDE = '(?:\\[(?:\\\\.|[^\\\\\\[\\]])*\\]|\\\\.|[^\\[\\]\\\\])*';
+/**
+ * Href + optional title (escape-aware). Group 1 === href (angle or bare).
+ * The title is in groups 2, 3 or 4.
+ */
+const LINK_HREF_AND_TITLE =
+  '\\s*<?([^\\s>]*?)>?\\s*' + // 1: href
+  '(?:' +
+  '\\\\"((?:\\\\.|[^"\\\\])*)\\\\"' + // 2: "title"
+  "|\\\\'((?:\\\\.|[^'\\\\])*)\\\\'" + // 3: 'title'
+  '|\\(((?:\\\\.|[^)\\\\])*)\\)' + // 4: (title)
+  ')?\\s*';
+
+const LINK_REGEX = new RegExp(
+  '^\\[(' + LINK_INSIDE + ')\\]\\(' + LINK_HREF_AND_TITLE + '\\)',
+);
+
 export const getLocalRules = (
   styles: MarkdownStyle,
   opts: MarkdownOptions = {},
 ): OutputRules<ReactOutputRule> => {
-  const LINK_INSIDE = '(?:\\[[^\\]]*\\]|[^\\]]|\\](?=[^\\[]*\\]))*';
-  const LINK_HREF_AND_TITLE =
-    '\\s*<?([^\\s]*?)>?(?:\\s+[\'"]([\\s\\S]*?)[\'"])?\\s*';
-
   const pressHandler = (target: string) => {
     if (opts.onLink) {
       // user-supplied handler may be async; we keep your behavior
@@ -243,11 +256,7 @@ export const getLocalRules = (
       },
     },
     link: {
-      match: SimpleMarkdown.inlineRegex(
-        new RegExp(
-          '^\\[(' + LINK_INSIDE + ')\\]\\(' + LINK_HREF_AND_TITLE + '\\)',
-        ),
-      ) as MatchFunction,
+      match: SimpleMarkdown.inlineRegex(LINK_REGEX) as MatchFunction,
       react(
         node: SingleASTNode,
         output: Output<React.ReactNode>,

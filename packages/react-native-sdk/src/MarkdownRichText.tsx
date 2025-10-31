@@ -268,7 +268,9 @@ export const MarkdownRichText = ({
 
   return (
     // @ts-ignore
-    <Markdown rules={{ ...customRules, ...rules }}>{markdownText}</Markdown>
+    <Markdown rules={{ ...customRules, ...rules }} styles={markdownStyles}>
+      {markdownText}
+    </Markdown>
   );
 };
 
