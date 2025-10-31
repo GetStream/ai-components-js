@@ -11,7 +11,13 @@ import { getLocalRules } from '../rules.ts';
 import { View } from 'react-native';
 
 const UnmemoizedMarkdown = (props: PropsWithChildren<MarkdownProps>) => {
-  const { onLink, rules: rulesProp, styles: stylesProp, children } = props;
+  const {
+    onLink,
+    rules: rulesProp,
+    styles: stylesProp,
+    paragraphNumberOfLines,
+    children,
+  } = props;
 
   const mergedStyles = useMemo(
     () => merge({}, styles, stylesProp),
@@ -22,10 +28,10 @@ const UnmemoizedMarkdown = (props: PropsWithChildren<MarkdownProps>) => {
       merge(
         {},
         SimpleMarkdown.defaultRules,
-        getLocalRules(mergedStyles, { onLink }),
+        getLocalRules(mergedStyles, { onLink, paragraphNumberOfLines }),
         rulesProp,
       ) as unknown as ParserRules,
-    [mergedStyles, onLink, rulesProp],
+    [mergedStyles, onLink, rulesProp, paragraphNumberOfLines],
   );
 
   const parser = useMemo(

@@ -27,9 +27,12 @@ export type MarkdownProps = {
   onLink?: (url: string) => void | Promise<void>;
   rules?: MarkdownRules;
   styles?: MarkdownStyle;
+  paragraphNumberOfLines?: number;
 };
 
-export type MarkdownOptions = Partial<Pick<MarkdownProps, 'onLink'>>;
+export type MarkdownOptions = Partial<
+  Pick<MarkdownProps, 'onLink' | 'paragraphNumberOfLines'>
+>;
 
 export type MarkdownStyleProp = TextStyle | ViewStyle;
 
@@ -138,6 +141,7 @@ export type RuleRenderFunctionEnrichedProps = {
   onPress?: (event: GestureResponderEvent) => void;
   onLongPress?: (event: GestureResponderEvent) => void;
   onLink?: (url: string) => void;
+  paragraphNumberOfLines?: number;
 };
 
 export type RuleRenderFunctionProps = RuleOutputProps &
