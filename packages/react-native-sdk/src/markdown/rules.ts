@@ -40,6 +40,8 @@ import { renderMailto } from './components/Mailto.tsx';
 import { renderParagraph } from './components/Paragraph.tsx';
 import { renderText } from './components/Text.tsx';
 import { renderList } from './components/List.tsx';
+import { renderCodeBlock } from './components/CodeBlock.tsx';
+import { renderInlineCode } from './components/InlineCode.tsx';
 
 const LINK_INSIDE = '(?:\\[(?:\\\\.|[^\\\\\\[\\]])*\\]|\\\\.|[^\\[\\]\\\\])*';
 /**
@@ -121,22 +123,7 @@ export const getLocalRules = (
       react: enrichedRenderFunction(renderLineBreak),
     },
     codeBlock: {
-      react(
-        node: SingleASTNode,
-        _output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        state.withinText = true;
-        const n = node as NodeWithStringContent;
-        return React.createElement(
-          Text,
-          {
-            key: state.key,
-            style: styles.codeBlock,
-          },
-          n.content,
-        );
-      },
+      react: enrichedRenderFunction(renderCodeBlock),
     },
     del: {
       react: enrichedRenderFunction(renderStrikethrough),
@@ -157,22 +144,7 @@ export const getLocalRules = (
     },
     inlineCode: {
       parse: parseCaptureInline,
-      react(
-        node: SingleASTNode,
-        output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        state.withinText = true;
-        const n = node as NodeWithContent;
-        return React.createElement(
-          Text,
-          {
-            key: state.key,
-            style: styles.inlineCode,
-          },
-          output(n.content, state),
-        );
-      },
+      react: enrichedRenderFunction(renderInlineCode),
     },
     link: {
       match: SimpleMarkdown.inlineRegex(LINK_REGEX) as MatchFunction,
