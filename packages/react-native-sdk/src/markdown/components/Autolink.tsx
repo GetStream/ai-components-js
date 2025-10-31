@@ -16,10 +16,10 @@ export const renderAutolink: RuleRenderFunction = ({
   output,
   state,
   styles,
-  onPress,
+  onLink,
 }) => {
-  state.withinText = true;
-  const onLinkPress = () => onPress && onPress(node.target);
+  state.withinLink = true;
+  const onLinkPress = () => onLink && onLink(node.target);
   return (
     <Autolink
       key={state.key}

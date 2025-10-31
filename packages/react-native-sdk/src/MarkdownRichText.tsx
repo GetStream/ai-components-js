@@ -248,7 +248,7 @@ export const MarkdownRichText = ({
   const customRules = {
     codeBlock: { react: codeBlockReact },
     // do not render images, we will scrape them out of the message and show on attachment card component
-    link: { react: linkReact },
+    // link: { react: linkReact },
     list: { react: listReact },
     // Truncate long text content in the message overlay
     paragraph: paragraphNumberOfLines ? { react: paragraphTextReact } : {},
@@ -261,8 +261,12 @@ export const MarkdownRichText = ({
    */
 
   return (
-    // @ts-ignore
-    <Markdown rules={{ ...customRules, ...rules }} styles={markdownStyles}>
+    <Markdown
+      // @ts-ignore
+      rules={{ ...customRules, ...rules }}
+      styles={markdownStyles}
+      onLink={onLink}
+    >
       {markdownText}
     </Markdown>
   );
