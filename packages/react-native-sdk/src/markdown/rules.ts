@@ -33,6 +33,10 @@ import { renderLineBreak } from './components/LineBreak.tsx';
 import { renderStrikethrough } from './components/Strikethrough.tsx';
 import { renderEmphasis } from './components/Emphasis.tsx';
 import { renderHeading } from './components/Heading.tsx';
+import { renderBold } from './components/Bold.tsx';
+import { renderHorizontalRule } from './components/HorizontalRule.tsx';
+import { renderNewLine } from './components/NewLine.tsx';
+import { renderMailto } from './components/Mailto.tsx';
 
 const LINK_INSIDE = '(?:\\[(?:\\\\.|[^\\\\\\[\\]])*\\]|\\\\.|[^\\[\\]\\\\])*';
 /**
@@ -141,13 +145,7 @@ export const getLocalRules = (
       react: enrichedRenderFunction(renderHeading),
     },
     hr: {
-      react(
-        _node: SingleASTNode,
-        _output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        return React.createElement(View, { key: state.key, style: styles.hr });
-      },
+      react: enrichedRenderFunction(renderHorizontalRule),
     },
     image: {
       // We intentionally disable parsing images; keep the shape
@@ -261,39 +259,12 @@ export const getLocalRules = (
       },
     },
     mailto: {
-      react(
-        node: SingleASTNode,
-        output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        state.withinText = true;
-        const n = node as NodeWithContent;
-        return React.createElement(
-          Text,
-          {
-            key: state.key,
-            onPress: noop,
-            style: styles.autolink,
-          },
-          output(n.content, state),
-        );
-      },
+      react: enrichedRenderFunction(renderMailto, {
+        onLink: openLinkHandler,
+      }),
     },
     newline: {
-      react(
-        _node: SingleASTNode,
-        _output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        return React.createElement(
-          Text,
-          {
-            key: state.key,
-            style: styles.newline,
-          },
-          '\n',
-        );
-      },
+      react: enrichedRenderFunction(renderNewLine),
     },
     paragraph: {
       react(
@@ -336,26 +307,7 @@ export const getLocalRules = (
       },
     },
     strong: {
-      react(
-        node: SingleASTNode,
-        output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        state.withinText = true;
-        state.style = {
-          ...(state.style || {}),
-          ...styles.strong,
-        };
-        const n = node as NodeWithContent;
-        return React.createElement(
-          Text,
-          {
-            key: state.key,
-            style: state.style,
-          },
-          output(n.content, state),
-        );
-      },
+      react: enrichedRenderFunction(renderBold),
     },
     sublist: {
       react(
@@ -506,33 +458,15 @@ export const getLocalRules = (
       },
     },
     u: {
-      // u will do the same as strong, to avoid the View nested inside text problem
-      react(
-        node: SingleASTNode,
-        output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        state.withinText = true;
-        state.style = {
-          ...(state.style || {}),
-          ...styles.u,
-        };
-        const n = node as NodeWithContent;
-        return React.createElement(
-          Text,
-          {
-            key: state.key,
-            style: styles.strong,
-          },
-          output(n.content, state),
-        );
-      },
+      // no support for underlines yet
+      match: () => null,
     },
     url: {
       react: enrichedRenderFunction(renderUrl, {
         onLink: openLinkHandler,
       }),
     },
+    // no support for reflinks
     reflink: { match: () => null },
   } as unknown as OutputRules<ReactOutputRule>;
 };
