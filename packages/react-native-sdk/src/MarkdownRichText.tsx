@@ -246,18 +246,12 @@ export const MarkdownRichText = ({
   );
 
   const customRules = {
-    // blockQuote: {
-    //     react: blockQuoteReact,
-    // },
     codeBlock: { react: codeBlockReact },
     // do not render images, we will scrape them out of the message and show on attachment card component
-    image: { match: () => null },
     link: { react: linkReact },
     list: { react: listReact },
     // Truncate long text content in the message overlay
     paragraph: paragraphNumberOfLines ? { react: paragraphTextReact } : {},
-    // we have no react rendering support for reflinks
-    reflink: { match: () => null },
     sublist: { react: listReact },
     table: { react: tableReact },
   };
