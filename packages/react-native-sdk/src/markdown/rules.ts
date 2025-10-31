@@ -55,7 +55,6 @@ export const getLocalRules = (
   opts: MarkdownOptions = {},
 ): OutputRules<ReactOutputRule> => {
   const openLinkHandler = (target: string) => {
-    console.log('OPEN LINK HANDLER: ', opts, target);
     if (opts.onLink) {
       // user-supplied handler may be async; we keep your behavior
       Promise.resolve(opts.onLink(target)).catch((error: unknown) => {
