@@ -92,15 +92,30 @@ export const generateMarkdownText = (text?: string) => {
   );
 
   // Remove whitespaces that come directly after newlines except in code blocks where we deem this allowed.
-  // resultText = resultText.replace(
-  //   /(```[\s\S]*?```|`.*?`)|\n[ ]{2,}/g,
-  //   (_, code) => {
-  //     if (code) {
-  //       return code;
-  //     }
-  //     return '\n';
-  //   },
-  // );
+  // A line starts a (possibly quoted) list item if, after indentation, it has
+  //   - unordered bullet: -, *, +
+  //   - or ordered marker: 1. 2. 10.
+  // and at least one space after the marker.
+  const LIST_START_RE =
+    /^[ \t]*(?:> ?)*?(?:[*+-]|\d+\.)(?: |\t)(?:\[(?: |x|X)\] )?/;
+
+  resultText = resultText.replace(
+    // 1) fenced code blocks (``` <some code here> ```)
+    // 2) inline code (`…`)
+    // 3) newline + 2 + spaces/tabs
+    /(```[\s\S]*?```|`[^`]*?`)|\n([ \t]{2,})/g,
+    (match, code, spaces, offset, full) => {
+      // Preserve code spans / fences exactly as they are
+      if (code) return code;
+
+      // Peek what follows this newline + the indent on the same line
+      const after = full.slice(offset + match.length);
+
+      // If that line begins with a list item (any nesting depth, optional > quotes),
+      // keep the indentation; otherwise collapse to a single newline.
+      return LIST_START_RE.test(after) ? `\n${spaces}` : '\n';
+    },
+  );
 
   // Always replace \n``` with \n\n``` to force the markdown state machine to treat it as a separate block. Otherwise, code blocks inside of list
   // items for example were broken. We clean up the code block closing state within the rendering itself.
