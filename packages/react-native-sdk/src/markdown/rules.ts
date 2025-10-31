@@ -233,8 +233,8 @@ export const getLocalRules = (
       },
     },
     image: {
-      // You intentionally disable parsing images; keep the shape
-      match: (() => null) as unknown as MatchFunction,
+      // We intentionally disable parsing images; keep the shape
+      match: () => null,
     },
     inlineCode: {
       parse: parseCaptureInline,
@@ -648,5 +648,6 @@ export const getLocalRules = (
         );
       },
     },
+    reflink: { match: () => null },
   } as unknown as OutputRules<ReactOutputRule>;
 };
