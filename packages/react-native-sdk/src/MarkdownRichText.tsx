@@ -117,32 +117,6 @@ export const MarkdownRichText = ({
           (canOpenUrl) => canOpenUrl && Linking.openURL(url),
         );
 
-  let previousLink: string | undefined;
-  // @ts-ignore
-  const linkReact = (node, output, { ...state }) => {
-    let url: string;
-    // Some long URLs with `&` separated parameters are trimmed and the url only until first param is taken.
-    // This is done because of internal link been taken from the original URL in react-native-markdown-package. So, we check for `withinLink` and take the previous full URL.
-    if (state?.withinLink && previousLink) {
-      url = previousLink;
-    } else {
-      url = node.target;
-      previousLink = node.target;
-    }
-    const onPress = () => onLink(url);
-
-    return (
-      <Text
-        key={state.key}
-        onPress={onPress}
-        style={styles.autolink}
-        suppressHighlighting={true}
-      >
-        {output(node.content, { ...state, withinLink: true })}
-      </Text>
-    );
-  };
-
   // @ts-ignore
   const paragraphTextReact = (node, output, { ...state }) => {
     if (paragraphNumberOfLines !== undefined) {
@@ -248,7 +222,6 @@ export const MarkdownRichText = ({
   const customRules = {
     codeBlock: { react: codeBlockReact },
     // do not render images, we will scrape them out of the message and show on attachment card component
-    // link: { react: linkReact },
     list: { react: listReact },
     // Truncate long text content in the message overlay
     paragraph: paragraphNumberOfLines ? { react: paragraphTextReact } : {},
