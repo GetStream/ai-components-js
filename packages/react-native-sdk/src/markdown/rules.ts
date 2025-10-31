@@ -39,6 +39,7 @@ import { renderNewLine } from './components/NewLine.tsx';
 import { renderMailto } from './components/Mailto.tsx';
 import { renderParagraph } from './components/Paragraph.tsx';
 import { renderText } from './components/Text.tsx';
+import { renderList } from './components/List.tsx';
 
 const LINK_INSIDE = '(?:\\[(?:\\\\.|[^\\\\\\[\\]])*\\]|\\\\.|[^\\[\\]\\\\])*';
 /**
@@ -180,86 +181,7 @@ export const getLocalRules = (
       }),
     },
     list: {
-      react(
-        node: SingleASTNode,
-        output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        let numberIndex = 1;
-        const n = node as ListNode;
-
-        const items = map(n.items as SingleASTNode[][], (item, i) => {
-          let bullet: React.ReactNode;
-          state.withinList = false;
-
-          if (n.ordered) {
-            bullet = React.createElement(
-              Text,
-              { key: 0, style: [styles.text, styles.listItemNumber] },
-              numberIndex + '. ',
-            );
-          } else {
-            bullet = React.createElement(
-              Text,
-              { key: 0, style: [styles.text, styles.listItemBullet] },
-              '\u2022 ',
-            );
-          }
-
-          if ((item as SingleASTNode[]).length > 1) {
-            if ((item as SingleASTNode[])[1]?.type === 'list') {
-              state.withinList = true;
-            }
-          }
-
-          const content = output(item as unknown as SingleASTNode[], state);
-
-          let listItem: React.ReactNode;
-          if (
-            includes(
-              ['text', 'paragraph', 'strong'],
-              (head(item) || {}).type,
-            ) &&
-            state.withinList === false
-          ) {
-            state.withinList = true;
-            listItem = React.createElement(
-              Text,
-              {
-                key: 1,
-                style: [styles.listItemText, { marginBottom: 0 }],
-              },
-              content,
-            );
-          } else {
-            listItem = React.createElement(
-              View,
-              {
-                key: 1,
-                style: styles.listItemText,
-              },
-              content,
-            );
-          }
-          state.withinList = false;
-          numberIndex++;
-
-          return React.createElement(
-            View,
-            {
-              key: i,
-              style: styles.listRow,
-            },
-            [bullet, listItem],
-          );
-        });
-
-        return React.createElement(
-          View,
-          { key: state.key, style: styles.list },
-          items,
-        );
-      },
+      react: enrichedRenderFunction(renderList),
     },
     mailto: {
       react: enrichedRenderFunction(renderMailto, {
@@ -278,70 +200,7 @@ export const getLocalRules = (
       react: enrichedRenderFunction(renderBold),
     },
     sublist: {
-      react(
-        node: SingleASTNode,
-        output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        const n = node as ListNode;
-
-        const items = map(n.items as SingleASTNode[][], (item, i) => {
-          let bullet: React.ReactNode;
-          if (n.ordered) {
-            bullet = React.createElement(
-              Text,
-              { key: 0, style: [styles.text, styles.listItemNumber] },
-              i + 1 + '. ',
-            );
-          } else {
-            bullet = React.createElement(
-              Text,
-              { key: 0, style: [styles.text, styles.listItemBullet] },
-              '\u2022 ',
-            );
-          }
-
-          const content = output(item as unknown as SingleASTNode[], state);
-          let listItem: React.ReactNode;
-          state.withinList = true;
-          if (
-            includes(['text', 'paragraph', 'strong'], (head(item) || {}).type)
-          ) {
-            listItem = React.createElement(
-              Text,
-              {
-                key: 1,
-                style: styles.listItemText,
-              },
-              content,
-            );
-          } else {
-            listItem = React.createElement(
-              View,
-              {
-                key: 1,
-                style: styles.listItem,
-              },
-              content,
-            );
-          }
-          state.withinList = false;
-          return React.createElement(
-            View,
-            {
-              key: i,
-              style: styles.listRow,
-            },
-            [bullet, listItem],
-          );
-        });
-
-        return React.createElement(
-          View,
-          { key: state.key, style: styles.sublist },
-          items,
-        );
-      },
+      react: enrichedRenderFunction(renderList),
     },
     table: {
       react(

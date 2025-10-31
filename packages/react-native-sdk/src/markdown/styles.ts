@@ -184,7 +184,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
   sublist: {
-    paddingLeft: 20,
+    paddingLeft: 10,
     width: Dimensions.get('window').width - 60,
   },
   table: {
