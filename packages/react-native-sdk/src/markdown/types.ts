@@ -40,6 +40,7 @@ export type MarkdownState = State & {
   withinLink?: boolean;
   withinList?: boolean;
   withinParagraphWithImage?: boolean;
+  parentLink?: string;
   style: MarkdownStyleProp;
 };
 
@@ -60,7 +61,7 @@ export type TableNode = SingleASTNode & {
 export type TargetNode = SingleASTNode & { target: string };
 
 // Allow dynamic heading style access like styles["heading1"]
-export type HeadingStyles = Record<string, MarkdownStyleProp>;
+export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6 | undefined;
 
 export type MarkdownStyle = Partial<{
   autolink: TextStyle;

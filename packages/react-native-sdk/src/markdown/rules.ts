@@ -15,8 +15,6 @@ import SimpleMarkdown from '@khanacademy/simple-markdown';
 import { head, includes, map, noop, size, some } from 'lodash';
 
 import type {
-  HeadingNode,
-  HeadingStyles,
   ListNode,
   MarkdownOptions,
   MarkdownState,
@@ -26,12 +24,15 @@ import type {
   RuleRenderFunction,
   RuleRenderFunctionEnrichedProps,
   TableNode,
-  TargetNode,
 } from './types';
 import { renderBlockQuote } from './components';
 import { renderAutolink } from './components/Autolink.tsx';
 import { renderUrl } from './components/Url.tsx';
 import { renderLink } from './components/Link.tsx';
+import { renderLineBreak } from './components/LineBreak.tsx';
+import { renderStrikethrough } from './components/Strikethrough.tsx';
+import { renderEmphasis } from './components/Emphasis.tsx';
+import { renderHeading } from './components/Heading.tsx';
 
 const LINK_INSIDE = '(?:\\[(?:\\\\.|[^\\\\\\[\\]])*\\]|\\\\.|[^\\[\\]\\\\])*';
 /**
@@ -109,20 +110,7 @@ export const getLocalRules = (
       react: enrichedRenderFunction(renderBlockQuote),
     },
     br: {
-      react(
-        _node: SingleASTNode,
-        _output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        return React.createElement(
-          Text,
-          {
-            key: state.key,
-            style: styles.br,
-          },
-          '\n\n',
-        );
-      },
+      react: enrichedRenderFunction(renderLineBreak),
     },
     codeBlock: {
       react(
@@ -143,77 +131,14 @@ export const getLocalRules = (
       },
     },
     del: {
-      react(
-        node: SingleASTNode,
-        output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        state.withinText = true;
-        const n = node as NodeWithContent;
-        return React.createElement(
-          Text,
-          {
-            key: state.key,
-            style: styles.del,
-          },
-          output(n.content, state),
-        );
-      },
+      react: enrichedRenderFunction(renderStrikethrough),
     },
     em: {
-      react(
-        node: SingleASTNode,
-        output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        state.withinText = true;
-        state.style = {
-          ...(state.style || {}),
-          ...styles.em,
-        };
-        const n = node as NodeWithContent;
-        return React.createElement(
-          Text,
-          {
-            key: state.key,
-            style: styles.em,
-          },
-          output(n.content, state),
-        );
-      },
+      react: enrichedRenderFunction(renderEmphasis),
     },
     heading: {
-      match: SimpleMarkdown.blockRegex(
-        /^ *(#{1,6}) *([^\n]+?) *#* *(?:\n *)+/,
-      ) as MatchFunction,
-      react(
-        node: SingleASTNode,
-        output: Output<React.ReactNode>,
-        { ...state }: MarkdownState,
-      ) {
-        state.withinText = true;
-        state.withinHeading = true;
-
-        const n = node as HeadingNode;
-        const dynHeadingStyle = (styles as unknown as HeadingStyles)[
-          `heading${n.level}`
-        ];
-
-        state.style = {
-          ...(state.style || {}),
-          ...dynHeadingStyle,
-        };
-
-        const ret = React.createElement(
-          Text,
-          {
-            key: state.key,
-            style: state.style,
-          },
-          output(n.content, state),
-        );
-        return ret;
-      },
+      match: SimpleMarkdown.blockRegex(/^ *(#{1,6}) *([^\n]+?) *#* *(?:\n *)+/),
+      react: enrichedRenderFunction(renderHeading),
     },
     hr: {
       react(
