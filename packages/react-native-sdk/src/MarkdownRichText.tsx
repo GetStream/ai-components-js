@@ -117,33 +117,6 @@ export const MarkdownRichText = ({
           (canOpenUrl) => canOpenUrl && Linking.openURL(url),
         );
 
-  // @ts-ignore
-  const paragraphTextReact = (node, output, { ...state }) => {
-    if (paragraphNumberOfLines !== undefined) {
-      // If we want to truncate the message text, lets only truncate the first paragraph
-      // and simply not render rest of the paragraphs.
-      if (state.key === '0' || state.key === 0) {
-        return (
-          <Text
-            key={state.key}
-            numberOfLines={paragraphNumberOfLines}
-            style={styles.paragraph}
-          >
-            {output(node.content, state)}
-          </Text>
-        );
-      } else {
-        return null;
-      }
-    }
-
-    return (
-      <Text key={state.key} style={styles.paragraph}>
-        {output(node.content, state)}
-      </Text>
-    );
-  };
-
   // take the @ mentions and turn them into markdown?
   // translate links
   // const { mentioned_users } = message;
@@ -190,17 +163,6 @@ export const MarkdownRichText = ({
   // };
 
   // @ts-ignore
-  const listReact = (node, output, state) => (
-    <ListOutput
-      key={`list-${state.key}`}
-      node={node}
-      output={output}
-      state={state}
-      styles={styles}
-    />
-  );
-
-  // @ts-ignore
   const codeBlockReact = (node, _, state) => (
     <MarkdownReactiveScrollView key={state.key}>
       <Text style={styles.codeBlock}>{node?.content?.trim()}</Text>
@@ -222,10 +184,10 @@ export const MarkdownRichText = ({
   const customRules = {
     codeBlock: { react: codeBlockReact },
     // do not render images, we will scrape them out of the message and show on attachment card component
-    list: { react: listReact },
+    // list: { react: listReact },
     // Truncate long text content in the message overlay
     // paragraph: paragraphNumberOfLines ? { react: paragraphTextReact } : {},
-    sublist: { react: listReact },
+    // sublist: { react: listReact },
     table: { react: tableReact },
   };
 
@@ -245,77 +207,6 @@ export const MarkdownRichText = ({
     </Markdown>
   );
 };
-
-/**
- * For lists and sublists, the default behavior of the markdown library we use is
- * to always renumber any list, so all ordered lists start from 1.
- *
- * This custom rule overrides this behavior both for top level lists and sublists,
- * in order to start the numbering from the number of the first list item provided.
- */
-export const ListOutput = ({
-  node,
-  output,
-  state,
-  styles,
-}: MarkdownOutputProps) => {
-  let isSublist = state.withinList;
-  const parentTypes = ['text', 'paragraph', 'strong'];
-
-  return (
-    <View key={state.key} style={isSublist ? styles?.sublist : styles?.list}>
-      {node.items.map((item: SingleASTNode, index: number) => {
-        const indexAfterStart = node.start + index;
-
-        if (item === null) {
-          return (
-            <ListRow key={index} style={styles?.listRow} testID="list-item">
-              <Bullet
-                index={node.ordered && indexAfterStart}
-                style={
-                  node.ordered ? styles?.listItemNumber : styles?.listItemBullet
-                }
-              />
-            </ListRow>
-          );
-        }
-
-        isSublist = item.length > 1 && item[1].type === 'list';
-        const isSublistWithinText =
-          parentTypes.includes((item[0] ?? {}).type) && isSublist;
-        const style = isSublistWithinText ? { marginBottom: 0 } : {};
-
-        return (
-          <ListRow key={index} style={styles?.listRow} testID="list-item">
-            <Bullet
-              index={node.ordered && indexAfterStart}
-              style={
-                node.ordered ? styles?.listItemNumber : styles?.listItemBullet
-              }
-            />
-            <ListItem key={1} style={[styles?.listItemText, style]}>
-              {output(item, state)}
-            </ListItem>
-          </ListRow>
-        );
-      })}
-    </View>
-  );
-};
-
-const Bullet = ({ index, style }: BulletProps) => (
-  <Text key={0} style={style}>
-    {index ? `${index}. ` : '\u2022 '}
-  </Text>
-);
-
-const ListRow = ({ children, style }: PropsWithChildren<ViewProps>) => (
-  <View style={style}>{children}</View>
-);
-
-const ListItem = ({ children, style }: PropsWithChildren<TextProps>) => (
-  <Text style={style}>{children}</Text>
-);
 
 const transpose = (matrix: SingleASTNode[][]) =>
   // TS gets confused because it considers the matrix to be potentially ragged,

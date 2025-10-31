@@ -55,7 +55,7 @@ export const generateMarkdownText = (text?: string) => {
   }
 
   // Trim the extra spaces from the text.
-  let resultText = text.trim();
+  let resultText = text;
 
   // List of all the links present in the text.
   const linkInfos = parseLinksFromText(resultText);
@@ -92,15 +92,15 @@ export const generateMarkdownText = (text?: string) => {
   );
 
   // Remove whitespaces that come directly after newlines except in code blocks where we deem this allowed.
-  resultText = resultText.replace(
-    /(```[\s\S]*?```|`.*?`)|\n[ ]{2,}/g,
-    (_, code) => {
-      if (code) {
-        return code;
-      }
-      return '\n';
-    },
-  );
+  // resultText = resultText.replace(
+  //   /(```[\s\S]*?```|`.*?`)|\n[ ]{2,}/g,
+  //   (_, code) => {
+  //     if (code) {
+  //       return code;
+  //     }
+  //     return '\n';
+  //   },
+  // );
 
   // Always replace \n``` with \n\n``` to force the markdown state machine to treat it as a separate block. Otherwise, code blocks inside of list
   // items for example were broken. We clean up the code block closing state within the rendering itself.
