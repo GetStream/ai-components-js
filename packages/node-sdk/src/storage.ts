@@ -1,13 +1,14 @@
-import { StreamChat, Channel, Message, MessageResponse } from "stream-chat";
-import {
-  StreamStorageConfig,
-  CreateChannelOptions,
-  SendMessageOptions,
+import type { Channel, MessageResponse } from 'stream-chat';
+import { StreamChat } from 'stream-chat';
+import type {
   AISDKMessage,
   ChannelData,
-} from "./types";
-import { Readable } from "node:stream";
-import { generateChannelId } from "./utils";
+  CreateChannelOptions,
+  SendMessageOptions,
+  StreamStorageConfig,
+} from './types';
+import { Readable } from 'node:stream';
+import { generateChannelId } from './utils';
 
 export class StreamStorage {
   private client: StreamChat;
@@ -16,21 +17,21 @@ export class StreamStorage {
 
   constructor(config: StreamStorageConfig) {
     this.client = StreamChat.getInstance(config.apiKey, config.apiSecret);
-    this.botUserId = config.botUserId || "ai-bot";
-    this.adminUserId = config.adminUserId || "admin";
+    this.botUserId = config.botUserId || 'ai-bot';
+    this.adminUserId = config.adminUserId || 'admin';
   }
 
   /**
    * Gets or creates a channel for AI conversations
    */
   async getOrCreateChannel(
-    options: CreateChannelOptions
+    options: CreateChannelOptions,
   ): Promise<Channel | null> {
     try {
       const channelId = options.channelId || generateChannelId();
       const members = options.members || [options.userId || this.botUserId];
 
-      const channel = this.client.channel("messaging", channelId, {
+      const channel = this.client.channel('messaging', channelId, {
         members,
         created_by_id: this.adminUserId,
         ...(options.channelName && { name: options.channelName }),
@@ -40,7 +41,7 @@ export class StreamStorage {
       await channel.create();
       return channel;
     } catch (error) {
-      console.error("Error creating channel:", error);
+      console.error('Error creating channel:', error);
       return null;
     }
   }
@@ -55,7 +56,7 @@ export class StreamStorage {
       });
       return channels;
     } catch (error) {
-      console.error("Error fetching channels:", error);
+      console.error('Error fetching channels:', error);
       return null;
     }
   }
@@ -65,10 +66,10 @@ export class StreamStorage {
    */
   async sendMessage(
     channelId: string,
-    options: SendMessageOptions
+    options: SendMessageOptions,
   ): Promise<any> {
     try {
-      const channel = this.client.channel("messaging", channelId);
+      const channel = this.client.channel('messaging', channelId);
 
       const messageData: any = {
         text: options.text,
@@ -82,7 +83,7 @@ export class StreamStorage {
 
       return await channel.sendMessage(messageData, { skip_enrich_url: true });
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error('Error sending message:', error);
       throw error;
     }
   }
@@ -95,15 +96,15 @@ export class StreamStorage {
     imageStream: Readable,
     filename: string,
     mediaType: string,
-    userId: string
+    userId: string,
   ): Promise<any> {
     try {
-      const channel = this.client.channel("messaging", channelId);
+      const channel = this.client.channel('messaging', channelId);
       return await channel.sendImage(imageStream as any, filename, mediaType, {
         id: userId,
       });
     } catch (error) {
-      console.error("Error sending image:", error);
+      console.error('Error sending image:', error);
       throw error;
     }
   }
@@ -125,7 +126,7 @@ export class StreamStorage {
   async processMessageParts(
     channelId: string,
     message: AISDKMessage,
-    userId: string
+    userId: string,
   ): Promise<{
     text: string;
     attachments: any[];
@@ -135,7 +136,7 @@ export class StreamStorage {
       type: string;
     }>;
   }> {
-    let text = "";
+    let text = '';
     const attachmentPromises: Array<{
       promise: Promise<any>;
       filename: string;
@@ -144,12 +145,12 @@ export class StreamStorage {
 
     if (message.parts) {
       for (const part of message.parts) {
-        if (part.type === "text") {
-          text = part.text || "";
+        if (part.type === 'text') {
+          text = part.text || '';
         }
 
         if (
-          part.type === "file" &&
+          part.type === 'file' &&
           part.url &&
           part.filename &&
           part.mediaType
@@ -164,7 +165,7 @@ export class StreamStorage {
               readableStream,
               part.filename,
               part.mediaType,
-              userId
+              userId,
             ),
             filename: part.filename,
             type: part.mediaType,
@@ -177,7 +178,7 @@ export class StreamStorage {
 
     // Wait for all attachment uploads to complete
     const uploadedAttachments = await Promise.all(
-      attachmentPromises.map((attachment) => attachment.promise)
+      attachmentPromises.map((attachment) => attachment.promise),
     );
 
     // Map uploaded attachments to the correct format
@@ -186,7 +187,7 @@ export class StreamStorage {
         url: attachment.file,
         filename: attachmentPromises[index].filename,
         type: attachmentPromises[index].type,
-      })
+      }),
     );
 
     return {
@@ -200,14 +201,14 @@ export class StreamStorage {
    * Converts data URL to readable stream
    */
   private dataUrlToReadable(dataUrl: string): Readable {
-    const [meta, data] = dataUrl.split(",");
-    if (!meta || !data) throw new Error("Invalid data URL");
+    const [meta, data] = dataUrl.split(',');
+    if (!meta || !data) throw new Error('Invalid data URL');
 
-    const isBase64 = meta.includes(";base64");
+    const isBase64 = meta.includes(';base64');
 
     const buffer = isBase64
-      ? Buffer.from(data, "base64")
-      : Buffer.from(decodeURIComponent(data), "utf8");
+      ? Buffer.from(data, 'base64')
+      : Buffer.from(decodeURIComponent(data), 'utf8');
 
     return Readable.from(buffer);
   }
@@ -218,12 +219,12 @@ export class StreamStorage {
   getChannelData(channel: Channel): ChannelData {
     const data = channel.data || {};
     return {
-      id: channel.id || "",
+      id: channel.id || '',
       name: (data as any).name,
       created_at: (data as any).created_at,
       updated_at: (data as any).updated_at,
       members: (data as any).members?.map(
-        (member: any) => member.user_id || member.id
+        (member: any) => member.user_id || member.id,
       ),
       metadata: data,
     };
@@ -233,7 +234,7 @@ export class StreamStorage {
    * Retreives channel messages by channel id
    */
   async getChannelMessages(channelId: string): Promise<MessageResponse[]> {
-    const channel = await this.client.channel("messaging", channelId).query();
+    const channel = await this.client.channel('messaging', channelId).query();
 
     return channel.messages || [];
   }
@@ -243,11 +244,11 @@ export class StreamStorage {
     await this.client.upsertUsers([
       {
         id,
-        role: "user",
+        role: 'user',
       },
       {
         id: this.botUserId,
-        role: "user",
+        role: 'user',
       },
     ]);
     return id;

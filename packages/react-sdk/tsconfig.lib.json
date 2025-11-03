@@ -1,12 +1,12 @@
 {
-	"extends": "../../tsconfig.root.json",
-	"compilerOptions": {
-		"rootDir": "./src",
-		"outDir": "./dist/types",
-		"emitDeclarationOnly": true,
-		"declarationMap": true,
-		"verbatimModuleSyntax": false
-	},
-	"include": ["src"],
-	"exclude": ["src/**/*.test.{ts,tsx}"]
+  "extends": "../../tsconfig.root.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist/types",
+    "emitDeclarationOnly": true,
+    "declarationMap": true,
+    "verbatimModuleSyntax": false
+  },
+  "include": ["src"],
+  "exclude": ["src/**/*.test.{ts,tsx}"]
 }

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { MODELS } from "@/utils/models";
+import { MODELS } from '@/utils/models';
 import {
   ArrowUpIcon,
   ImageIcon,
@@ -10,15 +10,15 @@ import {
   Paperclip,
   SpeakerIcon,
   XIcon,
-} from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { useApp } from "@/contexts/app";
-import { useTranscriber } from "@/hooks/usetranscribe";
+} from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { useApp } from '@/contexts/app';
+import { useTranscriber } from '@/hooks/usetranscribe';
 
 export default function Composer() {
   const [isActive, setIsActive] = useState(false);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const [files, setFiles] = useState<FileList[] | undefined>(undefined);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { isListening, transcript, start, stop } = useTranscriber();
@@ -43,10 +43,10 @@ export default function Composer() {
       }
       sendMessage({ text, files });
 
-      setInput("");
+      setInput('');
       setFiles(undefined);
       if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+        fileInputRef.current.value = '';
       }
     }
   };
@@ -71,8 +71,8 @@ export default function Composer() {
       <label
         className={`bg-base-200 p-5 block rounded-xl border-none  transition-all ${
           isActive
-            ? "outline outline-2 outline-offset-2 outline-base-300"
-            : "outline-transparent"
+            ? 'outline outline-2 outline-offset-2 outline-base-300'
+            : 'outline-transparent'
         }`}
       >
         {[...(files || [])]?.map((file: any, index) => (
@@ -148,8 +148,8 @@ export default function Composer() {
               }}
               className={`btn btn-circle ${
                 isListening
-                  ? "bg-red-500 text-white hover:bg-red-500/70"
-                  : "bg-white text-black hover:bg-white/70"
+                  ? 'bg-red-500 text-white hover:bg-red-500/70'
+                  : 'bg-white text-black hover:bg-white/70'
               } transition-all`}
             >
               {isListening ? (

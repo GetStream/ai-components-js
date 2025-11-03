@@ -1,22 +1,22 @@
 {
-	"compilerOptions": {
-		"allowImportingTsExtensions": true,
-		"declaration": true,
-		"declarationMap": true,
-		"esModuleInterop": true,
-		"isolatedModules": true,
-		"lib": ["es2022", "dom"],
-		"module": "es2020",
-		"moduleDetection": "force",
-		"moduleResolution": "node",
-		"noImplicitOverride": true,
-		"noUncheckedIndexedAccess": true,
-		"resolveJsonModule": true,
-		"rewriteRelativeImportExtensions": true,
-		"skipLibCheck": true,
-		"sourceMap": true,
-		"strict": true,
-		"target": "es2020",
-		"verbatimModuleSyntax": true
-	}
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "lib": ["es2022", "dom"],
+    "module": "es2020",
+    "moduleDetection": "force",
+    "moduleResolution": "node",
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
+    "rewriteRelativeImportExtensions": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2020",
+    "verbatimModuleSyntax": true
+  }
 }

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import Messages from "@/components/messages";
+import Messages from '@/components/messages';
 
 export default function Home() {
   return <Messages />;

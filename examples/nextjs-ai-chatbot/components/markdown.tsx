@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import Weather from "./tools/weather";
+import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import Weather from './tools/weather';
 
 export const NonMemoizedMarkdown = ({ children }: { children: string }) => {
   const components = {
@@ -14,13 +14,13 @@ export const NonMemoizedMarkdown = ({ children }: { children: string }) => {
     },
     pre: ({ children, ...props }: any) => {
       const codeElement = React.Children.only(children);
-      if (codeElement?.props?.className?.includes("language-ai-tool-weather")) {
+      if (codeElement?.props?.className?.includes('language-ai-tool-weather')) {
         return <Weather data={codeElement.props.children} />;
       }
       return <pre {...props}>{children}</pre>;
     },
     code: ({ node, inline, className, children, ...props }: any) => {
-      const match = /language-(\w+)/.exec(className || "");
+      const match = /language-(\w+)/.exec(className || '');
       return !inline && match ? (
         <SyntaxHighlighter language={match[1]} style={dark}>
           {children}
@@ -63,5 +63,5 @@ export const NonMemoizedMarkdown = ({ children }: { children: string }) => {
 
 export const Markdown = React.memo(
   NonMemoizedMarkdown,
-  (prevProps, nextProps) => prevProps.children === nextProps.children
+  (prevProps, nextProps) => prevProps.children === nextProps.children,
 );

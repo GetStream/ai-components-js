@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useApp } from "@/contexts/app";
-import { Dot, MessageSquarePlus, MessageSquareText } from "lucide-react";
-import Link from "next/link";
-import { Chat as ChatType } from "@/types";
-import { useParams } from "next/navigation";
+import { useApp } from '@/contexts/app';
+import { Dot, MessageSquarePlus, MessageSquareText } from 'lucide-react';
+import Link from 'next/link';
+import { Chat as ChatType } from '@/types';
+import { useParams } from 'next/navigation';
 
-export default function Sidebar({ title = "Chats" }) {
+export default function Sidebar({ title = 'Chats' }) {
   const { chats } = useApp();
   const { id } = useParams();
   return (
@@ -22,7 +22,7 @@ export default function Sidebar({ title = "Chats" }) {
               href={`/${chat.id}`}
               title={chat.name}
               className={`mb-2 ml-[-10px] no-underline hover:underline block ${
-                id === chat.id ? "text-primary" : ""
+                id === chat.id ? 'text-primary' : ''
               }`}
             >
               <div className="flex items-center gap-1 min-w-0">

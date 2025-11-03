@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-type Status = "idle" | "listening" | "processing";
+type Status = 'idle' | 'listening' | 'processing';
 type Options = {
   silenceMs?: number;
   threshold?: number;
@@ -15,7 +15,7 @@ export function useTranscriber(options: Options = {}) {
   const {
     silenceMs = 700,
     threshold = 0.05,
-    transcribeUrl = "/api/transcribe",
+    transcribeUrl = '/api/transcribe',
     minAudioDuration = 500,
     shouldTranscribe = (blob, duration) => {
       return duration >= minAudioDuration && blob.size > 25000;
@@ -24,9 +24,9 @@ export function useTranscriber(options: Options = {}) {
 
   const [isListening, setIsListening] = useState(false);
 
-  const [status, setStatus] = useState<Status>("idle");
-  const [transcript, setTranscript] = useState("");
-  const [reply, setReply] = useState("");
+  const [status, setStatus] = useState<Status>('idle');
+  const [transcript, setTranscript] = useState('');
+  const [reply, setReply] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -67,10 +67,10 @@ export function useTranscriber(options: Options = {}) {
   }, [cleanupAudio]);
 
   const handleStop = useCallback(async () => {
-    setStatus("processing");
+    setStatus('processing');
     try {
       const blob = new Blob(chunksRef.current, {
-        type: mediaRecorderRef.current?.mimeType || "audio/webm",
+        type: mediaRecorderRef.current?.mimeType || 'audio/webm',
       });
       const duration = recordingStartedAtRef.current
         ? performance.now() - recordingStartedAtRef.current
@@ -82,15 +82,15 @@ export function useTranscriber(options: Options = {}) {
       if (shouldTranscribe(blob, duration)) {
         const fd = new FormData();
         fd.append(
-          "audio",
+          'audio',
           blob,
-          `clip.${blob.type.includes("mp4") ? "mp4" : "webm"}`
+          `clip.${blob.type.includes('mp4') ? 'mp4' : 'webm'}`,
         );
 
-        const tRes = await fetch(transcribeUrl, { method: "POST", body: fd });
+        const tRes = await fetch(transcribeUrl, { method: 'POST', body: fd });
         if (!tRes.ok) throw new Error(`Transcription failed (${tRes.status})`);
         const tJson = await tRes.json();
-        const text: string = (tJson?.text || "").trim();
+        const text: string = (tJson?.text || '').trim();
 
         setTranscript(text);
       }
@@ -99,7 +99,7 @@ export function useTranscriber(options: Options = {}) {
       if (isListeningRef.current && streamRef.current) {
         // Start new recording immediately
         const mr = new MediaRecorder(streamRef.current, {
-          mimeType: mediaRecorderRef.current?.mimeType || "audio/webm",
+          mimeType: mediaRecorderRef.current?.mimeType || 'audio/webm',
         });
         mediaRecorderRef.current = mr;
         chunksRef.current = [];
@@ -113,10 +113,10 @@ export function useTranscriber(options: Options = {}) {
         mr.start(250);
       }
     } catch (e: any) {
-      setError(e?.message || "Something went wrong");
+      setError(e?.message || 'Something went wrong');
       console.error(e);
     } finally {
-      setStatus("listening");
+      setStatus('listening');
     }
   }, [transcribeUrl, shouldTranscribe, isListening]);
 
@@ -126,7 +126,7 @@ export function useTranscriber(options: Options = {}) {
     if (!analyser) return;
 
     // Check if audio context is suspended
-    if (audioCtxRef.current?.state === "suspended") {
+    if (audioCtxRef.current?.state === 'suspended') {
       audioCtxRef.current.resume();
     }
 
@@ -165,17 +165,17 @@ export function useTranscriber(options: Options = {}) {
   }, [silenceMs, threshold, minAudioDuration]);
 
   const start = useCallback(async () => {
-    setTranscript("");
-    setReply("");
+    setTranscript('');
+    setReply('');
     setError(null);
 
     if (!navigator.mediaDevices?.getUserMedia) {
-      setError("getUserMedia is not supported in this browser");
+      setError('getUserMedia is not supported in this browser');
       return;
     }
 
     try {
-      setStatus("listening");
+      setStatus('listening');
       setIsListening(true);
       isListeningRef.current = true;
 
@@ -195,11 +195,11 @@ export function useTranscriber(options: Options = {}) {
       analyserRef.current = analyser;
       source.connect(analyser);
 
-      const mime = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
-        ? "audio/webm;codecs=opus"
-        : MediaRecorder.isTypeSupported("audio/mp4")
-        ? "audio/mp4"
-        : "audio/webm";
+      const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : MediaRecorder.isTypeSupported('audio/mp4')
+          ? 'audio/mp4'
+          : 'audio/webm';
 
       const mr = new MediaRecorder(stream, { mimeType: mime });
       mediaRecorderRef.current = mr;
@@ -215,11 +215,11 @@ export function useTranscriber(options: Options = {}) {
 
       rafRef.current = requestAnimationFrame(checkSilence);
     } catch (e: any) {
-      setError(e?.message || "Mic access failed");
+      setError(e?.message || 'Mic access failed');
       console.error(e);
       setIsListening(false);
       isListeningRef.current = false;
-      setStatus("idle");
+      setStatus('idle');
       cleanupAudio();
     }
   }, [checkSilence, cleanupAudio, handleStop]);

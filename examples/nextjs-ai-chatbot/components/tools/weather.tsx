@@ -1,5 +1,5 @@
-import { WeatherToolResponse } from "@/types";
-import { MapPinIcon, CloudSunIcon } from "lucide-react";
+import { WeatherToolResponse } from '@/types';
+import { MapPinIcon, CloudSunIcon } from 'lucide-react';
 
 export default function Weather({ data }: { data: string }) {
   const weather: WeatherToolResponse = JSON.parse(data);
@@ -7,7 +7,7 @@ export default function Weather({ data }: { data: string }) {
     <div className="bg-base-200 p-4 pb-8 rounded-lg relative overflow-hidden min-w-sm">
       <div className="text-lg font-bold flex items-center gap-2">
         <MapPinIcon className="w-4 h-4" />
-        {weather.location?.name || "Unknown"}
+        {weather.location?.name || 'Unknown'}
       </div>
       <div className="grid grid-cols-[1fr_2fr] gap-4 items-center justify-center my-4 font-bold">
         <div>
