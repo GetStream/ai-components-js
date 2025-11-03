@@ -1,8 +1,8 @@
 import {
   createConfigFromEnv,
   createStreamStorageClient,
-} from "@stream-io/ai-sdk-storage/dist/utils";
-import { NextResponse } from "next/server";
+} from '@stream-io/ai-sdk-storage/dist/utils';
+import { NextResponse } from 'next/server';
 
 const storage = createStreamStorageClient(createConfigFromEnv());
 

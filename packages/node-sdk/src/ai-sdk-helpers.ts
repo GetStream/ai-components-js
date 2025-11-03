@@ -87,7 +87,7 @@ export class AISDKStreamStorage {
           text,
           userId: this.streamStorage.getBotUserId(),
           metadata: {
-            message_type: "agent_response",
+            message_type: 'agent_response',
           },
         });
       }
@@ -110,7 +110,7 @@ export class AISDKStreamStorage {
           )}\n\`\`\``,
           userId: this.streamStorage.getBotUserId(),
           metadata: {
-            message_type: "agent_response",
+            message_type: 'agent_response',
           },
         });
       }

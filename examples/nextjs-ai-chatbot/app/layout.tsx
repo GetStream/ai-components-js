@@ -1,25 +1,25 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "animate.css";
-import "./globals.css";
-import Sidebar from "@/components/sidebar";
-import Composer from "@/components/composer";
-import { LayoutProps } from "@/types";
-import { AppProvider } from "@/contexts/app";
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import 'animate.css';
+import './globals.css';
+import Sidebar from '@/components/sidebar';
+import Composer from '@/components/composer';
+import { LayoutProps } from '@/types';
+import { AppProvider } from '@/contexts/app';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "AI SDK with Stream as Persistent Storage Demo",
-  description: "A demo of the AI SDK with Stream as persistent storage",
+  title: 'AI SDK with Stream as Persistent Storage Demo',
+  description: 'A demo of the AI SDK with Stream as persistent storage',
 };
 
 export default function RootLayout({ children }: LayoutProps) {

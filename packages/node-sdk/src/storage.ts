@@ -244,11 +244,11 @@ export class StreamStorage {
     await this.client.upsertUsers([
       {
         id,
-        role: "user",
+        role: 'user',
       },
       {
         id: this.botUserId,
-        role: "user",
+        role: 'user',
       },
     ]);
     return id;

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   createContext,
@@ -8,13 +8,13 @@ import {
   useState,
   useEffect,
   useRef,
-} from "react";
-import { useParams, usePathname } from "next/navigation";
-import { UIMessage, Chat, useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
-import { Chat as ChatType } from "@/types";
-import { MODELS } from "@/utils/models";
-import { generateChannelId } from "@stream-io/ai-sdk-storage/dist/utils";
+} from 'react';
+import { useParams, usePathname } from 'next/navigation';
+import { UIMessage, Chat, useChat } from '@ai-sdk/react';
+import { DefaultChatTransport } from 'ai';
+import { Chat as ChatType } from '@/types';
+import { MODELS } from '@/utils/models';
+import { generateChannelId } from '@stream-io/ai-sdk-storage/dist/utils';
 
 const AppContext = createContext<any>(undefined);
 type AppContextType = {
@@ -51,14 +51,14 @@ function AppProviderInner({ children }: { children: ReactNode }) {
   const chat = useMemo(() => {
     return new Chat({
       transport: new DefaultChatTransport({
-        api: "/api/chats",
+        api: '/api/chats',
         prepareSendMessagesRequest({ messages }) {
           return {
             body: {
               messages,
               model: modelRef.current,
               id: chatID,
-              user_id: localStorage.getItem("stream-user"),
+              user_id: localStorage.getItem('stream-user'),
             },
           };
         },
@@ -77,18 +77,18 @@ function AppProviderInner({ children }: { children: ReactNode }) {
   useEffect(() => {
     const initializeUser = async () => {
       try {
-        const userId = localStorage.getItem("stream-user");
+        const userId = localStorage.getItem('stream-user');
 
         if (!userId) {
-          const response = await fetch("/api/users", { method: "POST" });
+          const response = await fetch('/api/users', { method: 'POST' });
           const userData = await response.json();
-          localStorage.setItem("stream-user", userData.id);
+          localStorage.setItem('stream-user', userData.id);
           setUserId(userData.id);
         } else {
           setUserId(userId);
         }
       } catch (error) {
-        console.error("Error initializing user:", error);
+        console.error('Error initializing user:', error);
       }
     };
 
@@ -113,19 +113,19 @@ function AppProviderInner({ children }: { children: ReactNode }) {
           const messages = data.map((message: any) => ({
             id: message.id,
             role:
-              message.user.id === "ai-bot" ||
-              message.message_type === "agent_response"
-                ? "assistant"
-                : "user",
+              message.user.id === 'ai-bot' ||
+              message.message_type === 'agent_response'
+                ? 'assistant'
+                : 'user',
             parts: [
               {
-                type: "text",
+                type: 'text',
                 text: message.text,
               },
               //if message.attachemnts is not empty, add it to the parts
               ...(message.attachments?.length > 0
                 ? message.attachments.map((attachemnt: any) => ({
-                    type: "file",
+                    type: 'file',
                     url: attachemnt.url,
                     filename: attachemnt.filename,
                     mediaType: attachemnt.type,
@@ -137,7 +137,7 @@ function AppProviderInner({ children }: { children: ReactNode }) {
           setMessagesLoaded(true);
         })
         .catch((error) => {
-          console.error("Error loading messages:", error);
+          console.error('Error loading messages:', error);
           setMessagesLoaded(true);
         })
         .finally(() => {
@@ -152,7 +152,7 @@ function AppProviderInner({ children }: { children: ReactNode }) {
     id: chatID,
     chat,
     onError: (error) => {
-      console.error("Chat error for chatID:", chatID, error);
+      console.error('Chat error for chatID:', chatID, error);
     },
   });
 
@@ -195,7 +195,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 export function useApp() {
   const context = useContext(AppContext);
   if (context === undefined) {
-    throw new Error("useApp must be used within an AppProvider");
+    throw new Error('useApp must be used within an AppProvider');
   }
   return context;
 }
