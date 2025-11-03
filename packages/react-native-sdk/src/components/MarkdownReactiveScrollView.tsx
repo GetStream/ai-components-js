@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { type ReactNode, useRef } from 'react';
 import Animated, {
   clamp,
   scrollTo,
@@ -17,9 +17,28 @@ export const MarkdownReactiveScrollView = ({
   const contentWidth = useSharedValue(0);
   const visibleContentWidth = useSharedValue(0);
   const offsetBeforeScroll = useSharedValue(0);
+  const touchStart = useSharedValue<{ x: number; y: number } | null>(null);
 
   const panGesture = Gesture.Pan()
-    .activeOffsetX([-5, 5])
+    .onBegin((event) => {
+      touchStart.value = { x: event.x, y: event.y };
+    })
+    .onTouchesMove((event, state) => {
+      if (!touchStart.value || !event.changedTouches.length) {
+        state.fail();
+        return;
+      }
+
+      const xDiff = Math.abs(event.changedTouches[0]!.x - touchStart.value.x);
+      const yDiff = Math.abs(event.changedTouches[0]!.y - touchStart.value.y);
+      const isHorizontalPanning = xDiff > yDiff;
+
+      if (isHorizontalPanning) {
+        state.activate();
+      } else {
+        state.fail();
+      }
+    })
     .onUpdate((event) => {
       const { translationX } = event;
 
