@@ -119,7 +119,7 @@ export const generateMarkdownText = (text?: string) => {
 
   // Always replace \n``` with \n\n``` to force the markdown state machine to treat it as a separate block. Otherwise, code blocks inside of list
   // items for example were broken. We clean up the code block closing state within the rendering itself.
-  resultText = resultText.replace(/\n```/g, '\n\n```');
+  resultText = resultText.replace(/\n```/g, '\n\n```\n');
 
   return resultText;
 };
