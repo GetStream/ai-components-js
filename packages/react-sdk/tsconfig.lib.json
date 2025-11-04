@@ -1,13 +1,13 @@
 {
-	"extends": "../../tsconfig.root.json",
-	"compilerOptions": {
-		"jsx": "react-jsx",
-		"rootDir": "./src",
-		"outDir": "./dist/types",
-		"emitDeclarationOnly": true,
-		"declarationMap": true,
-		"verbatimModuleSyntax": true,
-	},
-	"include": ["src"],
-	"exclude": ["src/**/*.test.{ts,tsx}"]
+  "extends": "../../tsconfig.root.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "rootDir": "./src",
+    "outDir": "./dist/types",
+    "emitDeclarationOnly": true,
+    "declarationMap": true,
+    "verbatimModuleSyntax": true
+  },
+  "include": ["src"],
+  "exclude": ["src/**/*.test.{ts,tsx}"]
 }
