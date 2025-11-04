@@ -1,62 +1,69 @@
 {
-  "name": "@stream-io/ai-components-react",
-  "version": "1.0.0",
-  "private": true,
-  "description": "React SDK for AI Components",
-  "main": "./dist/cjs/index.js",
-  "types": "./dist/types/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/types/index.d.ts",
-      "browser": {
-        "import": "./dist/esm/index.mjs",
-        "require": "./dist/cjs/index.js"
-      },
-      "default": "./dist/cjs/index.js"
-    },
-    "./stream": {
-      "types": "./dist/types/stream/index.d.ts",
-      "browser": {
-        "import": "./dist/esm/stream/index.mjs",
-        "require": "./dist/cjs/stream/index.js"
-      },
-      "default": "./dist/cjs/stream/index.js"
-    }
-  },
-  "files": [
-    "dist",
-    "src",
-    "!src/*.test.ts"
-  ],
-  "scripts": {
-    "build": "rimraf ./dist && concurrently 'vite build' 'tsc -p ./tsconfig.lib.json'",
-    "prepare": "pnpm run build",
-    "test": "vitest"
-  },
-  "keywords": [
-    "ai",
-    "react",
-    "components",
-    "sdk"
-  ],
-  "author": {
-    "name": "GetStream.io, Inc.",
-    "url": "https://getstream.io/team/"
-  },
-  "license": "SEE LICENSE IN LICENSE",
-  "packageManager": "pnpm@10.13.1",
-  "peerDependencies": {
-    "react": "^17 || ^18 || ^19",
-    "react-dom": "^17 || ^18 || ^19"
-  },
-  "devDependencies": {
-    "@types/react": "^17",
-    "@types/react-dom": "^17",
-    "@types/node": "^24",
-    "concurrently": "catalog:",
-    "vite": "catalog:",
-    "rimraf": "^6.0.1",
-    "typescript": "catalog:",
-    "vitest": "catalog:"
-  }
+	"name": "@stream-io/ai-components-react",
+	"version": "1.0.0",
+	"private": true,
+	"description": "React SDK for AI Components",
+	"main": "./dist/cjs/index.js",
+	"types": "./dist/types/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/types/index.d.ts",
+			"browser": {
+				"import": "./dist/es/index.mjs",
+				"require": "./dist/cjs/index.js"
+			},
+			"default": "./dist/cjs/index.js"
+		},
+		"./stream": {
+			"types": "./dist/types/stream/index.d.ts",
+			"browser": {
+				"import": "./dist/es/stream/index.mjs",
+				"require": "./dist/cjs/stream/index.js"
+			},
+			"default": "./dist/cjs/stream/index.js"
+		}
+	},
+	"files": [
+		"dist",
+		"src",
+		"!src/*.test.ts"
+	],
+	"scripts": {
+		"build": "rimraf ./dist && concurrently 'vite build' 'tsc -p ./tsconfig.lib.json'",
+		"dev": "concurrently 'vite build --watch' 'tsc -p ./tsconfig.lib.json' --watch",
+		"prepare": "pnpm run build",
+		"test": ""
+	},
+	"keywords": [
+		"ai",
+		"react",
+		"components",
+		"sdk"
+	],
+	"author": {
+		"name": "GetStream.io, Inc.",
+		"url": "https://getstream.io/team/"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"packageManager": "pnpm@10.13.1",
+	"peerDependencies": {
+		"react": "^17 || ^18 || ^19",
+		"react-dom": "^17 || ^18 || ^19"
+	},
+	"devDependencies": {
+		"@types/node": "^24",
+		"@types/react": "^18.3.26",
+		"@types/react-dom": "^18.3.7",
+		"@types/react-syntax-highlighter": "^15.5.13",
+		"concurrently": "catalog:",
+		"rimraf": "^6.0.1",
+		"typescript": "catalog:",
+		"vite": "catalog:"
+	},
+	"dependencies": {
+		"clsx": "^2.1.1",
+		"react-markdown": "^10.1.0",
+		"react-syntax-highlighter": "15.5.0",
+		"remark-gfm": "^4.0.1"
+	}
 }
