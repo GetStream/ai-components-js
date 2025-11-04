@@ -1,38 +1,29 @@
-@import 'tailwindcss';
+@import url("./rsh-dark.css") layer(syntax-highlighter);
+@import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @plugin "daisyui" {
-  themes: dim;
+	themes: dim;
 }
 
 :root {
-  --primary: blue;
+	--primary: blue;
 }
 
 .overflow-y-auto {
-  scrollbar-gutter: stable;
-}
-
-pre {
-  display: block !important;
-}
-
-pre pre {
-  border: none !important;
-  background-color: transparent !important;
-  box-shadow: none !important;
+	scrollbar-gutter: stable;
 }
 
 .ai-thinking {
-  background: linear-gradient(90deg, #00ffe0, #0072ff, #00ffe0);
-  background-size: 200% auto;
-  color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
-  animation: shimmer 2s linear infinite;
+	background: linear-gradient(90deg, #00ffe0, #0072ff, #00ffe0);
+	background-size: 200% auto;
+	color: transparent;
+	background-clip: text;
+	-webkit-background-clip: text;
+	animation: shimmer 2s linear infinite;
 }
 
 @keyframes shimmer {
-  to {
-    background-position: 200% center;
-  }
+	to {
+		background-position: 200% center;
+	}
 }
