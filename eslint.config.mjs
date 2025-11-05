@@ -3,21 +3,23 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 import importPlugin from 'eslint-plugin-import';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
 
 export default tseslint.config(
   {
-    ignores: ['dist'],
+    ignores: ['**/node_modules/**', '**/build/**', '**/dist/**'],
   },
   {
     name: 'default',
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    files: ['packages/**/src/**/*.ts'],
+    files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
     },
     plugins: {
       import: importPlugin,
+      'react-hooks': reactHooksPlugin,
     },
     settings: {
       react: {
@@ -93,6 +95,8 @@ export default tseslint.config(
       '@typescript-eslint/no-empty-object-type': 'off',
       '@typescript-eslint/no-empty-generator-function': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'error',
     },
   },
 );

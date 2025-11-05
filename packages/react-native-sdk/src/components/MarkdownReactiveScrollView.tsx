@@ -71,7 +71,13 @@ export const MarkdownReactiveScrollView = ({
 
           scrollTo(scrollViewRef, finalPosition, 0, true);
         }),
-    [],
+    [
+      contentWidth,
+      offsetBeforeScroll,
+      scrollViewRef,
+      touchStart,
+      visibleContentWidth,
+    ],
   );
 
   const onContentSizeChange = useStableCallback((width: number) => {

@@ -1,18 +1,20 @@
 'use client';
 
+import type {
+  ReactNode} from 'react';
 import {
   createContext,
   useContext,
-  ReactNode,
-  useMemo,
-  useState,
   useEffect,
+  useMemo,
   useRef,
+  useState,
 } from 'react';
 import { useParams, usePathname } from 'next/navigation';
-import { UIMessage, Chat, useChat } from '@ai-sdk/react';
+import type { UIMessage} from '@ai-sdk/react';
+import { Chat, useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
-import { Chat as ChatType } from '@/types';
+import type { Chat as ChatType } from '@/types';
 import { MODELS } from '@/utils/models';
 import { generateChannelId } from '@stream-io/ai-sdk-storage/dist/utils';
 

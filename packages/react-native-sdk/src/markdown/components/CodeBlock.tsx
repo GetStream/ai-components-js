@@ -1,7 +1,7 @@
 import { Pressable, type PressableProps, Text, View } from 'react-native';
 import type { MarkdownComponentProps, RuleRenderFunction } from '../types.ts';
 import { MarkdownReactiveScrollView } from '../../components';
-// @ts-ignore
+// @ts-expect-error need to check what's up with the lib
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
 import { type PropsWithChildren, useCallback, useMemo } from 'react';
 
@@ -38,7 +38,7 @@ export const CodeBlock = ({ styles, node }: MarkdownComponentProps) => {
         <Text style={styles.codeBlock}>{children}</Text>
       </View>
     ),
-    [styles, node.lang],
+    [styles, lineNumbers],
   );
 
   const CodeBlockHeader = useCallback(
@@ -58,7 +58,7 @@ export const CodeBlock = ({ styles, node }: MarkdownComponentProps) => {
         <MarkdownReactiveScrollView>{children}</MarkdownReactiveScrollView>
       </View>
     ),
-    [styles],
+    [CodeBlockHeader, styles.codeBlockWrapper],
   );
 
   return (

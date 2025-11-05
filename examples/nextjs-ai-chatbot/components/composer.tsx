@@ -76,36 +76,36 @@ export default function Composer() {
         }`}
       >
         {[...(files || [])]?.map((file: any, index) => (
-          <div key={`attachment-${index}`} className="badge badge-sm mb-2">
-            <ImageIcon className="w-3 h-3" />
-            <span className="truncate w-20">{file?.name}</span>
+          <div key={`attachment-${index}`} className='badge badge-sm mb-2'>
+            <ImageIcon className='w-3 h-3' />
+            <span className='truncate w-20'>{file?.name}</span>
             <XIcon
-              className="w-3 h-3 cursor-pointer"
+              className='w-3 h-3 cursor-pointer'
               onClick={() => handleRemoveFile(index)}
             />
           </div>
         ))}
         <div>
           <input
-            id="input"
-            type="text"
-            className="w-full h-full outline-none"
-            placeholder="Ask anything..."
+            id='input'
+            type='text'
+            className='w-full h-full outline-none'
+            placeholder='Ask anything...'
             onFocus={() => setIsActive(true)}
             onBlur={() => setIsActive(false)}
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
         </div>
-        <div className="flex justify-between items-center mt-5">
-          <div className="flex items-center gap-2">
-            <button className="btn bg-base-100 hover:bg-base-100/70 border-none btn-circle relative">
-              <Paperclip className="w-4 h-4" />
+        <div className='flex justify-between items-center mt-5'>
+          <div className='flex items-center gap-2'>
+            <button className='btn bg-base-100 hover:bg-base-100/70 border-none btn-circle relative'>
+              <Paperclip className='w-4 h-4' />
               <input
-                type="file"
+                type='file'
                 multiple
-                className="absolute indent-[-99999px] cursor-pointer"
-                accept="image/*"
+                className='absolute indent-[-99999px] cursor-pointer'
+                accept='image/*'
                 ref={fileInputRef}
                 onChange={(e) => {
                   if (e.target.files) {
@@ -116,8 +116,8 @@ export default function Composer() {
               />
             </button>
             <select
-              className="select select-neutral bg-base-100 hover:bg-base-100/70 border-none rounded-xl w-auto cursor-pointer"
-              aria-placeholder="Select a model"
+              className='select select-neutral bg-base-100 hover:bg-base-100/70 border-none rounded-xl w-auto cursor-pointer'
+              aria-placeholder='Select a model'
               value={defaultModel}
               onChange={(e) => setDefaultModel(e.target.value)}
             >
@@ -130,15 +130,15 @@ export default function Composer() {
           </div>
           {input.length > 0 ? (
             <button
-              type="submit"
+              type='submit'
               disabled={input.trim().length === 0}
-              className="btn btn-circle btn-primary transition-all border-none bg-white text-black hover:bg-white/70"
+              className='btn btn-circle btn-primary transition-all border-none bg-white text-black hover:bg-white/70'
             >
-              <ArrowUpIcon className="w-5 h-5" />
+              <ArrowUpIcon className='w-5 h-5' />
             </button>
           ) : (
             <button
-              type="button"
+              type='button'
               onClick={() => {
                 if (isListening) {
                   stop();
@@ -153,9 +153,9 @@ export default function Composer() {
               } transition-all`}
             >
               {isListening ? (
-                <MicOffIcon className="w-5 h-5" />
+                <MicOffIcon className='w-5 h-5' />
               ) : (
-                <MicIcon className="w-5 h-5" />
+                <MicIcon className='w-5 h-5' />
               )}
             </button>
           )}
