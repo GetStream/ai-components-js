@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import { type ReactNode, useMemo } from 'react';
 import Animated, {
   clamp,
   scrollTo,
@@ -6,7 +6,8 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { View } from 'react-native';
+import { type LayoutChangeEvent, StyleSheet, View } from 'react-native';
+import { useStableCallback } from '../internal/hooks/useStableCallback.ts';
 
 export const MarkdownReactiveScrollView = ({
   children,
@@ -19,65 +20,77 @@ export const MarkdownReactiveScrollView = ({
   const offsetBeforeScroll = useSharedValue(0);
   const touchStart = useSharedValue<{ x: number; y: number } | null>(null);
 
-  const panGesture = Gesture.Pan()
-    .onBegin((event) => {
-      touchStart.value = { x: event.x, y: event.y };
-    })
-    .onTouchesMove((event, state) => {
-      if (!touchStart.value || !event.changedTouches.length) {
-        state.fail();
-        return;
-      }
+  const panGesture = useMemo(
+    () =>
+      Gesture.Pan()
+        .onBegin((event) => {
+          touchStart.value = { x: event.x, y: event.y };
+        })
+        .onTouchesMove((event, state) => {
+          if (!touchStart.value || !event.changedTouches.length) {
+            state.fail();
+            return;
+          }
 
-      const xDiff = Math.abs(event.changedTouches[0]!.x - touchStart.value.x);
-      const yDiff = Math.abs(event.changedTouches[0]!.y - touchStart.value.y);
-      const isHorizontalPanning = xDiff > yDiff;
+          const xDiff = Math.abs(
+            event.changedTouches[0]!.x - touchStart.value.x,
+          );
+          const yDiff = Math.abs(
+            event.changedTouches[0]!.y - touchStart.value.y,
+          );
+          const isHorizontalPanning = xDiff > yDiff;
 
-      if (isHorizontalPanning) {
-        state.activate();
-      } else {
-        state.fail();
-      }
-    })
-    .onUpdate((event) => {
-      const { translationX } = event;
+          if (isHorizontalPanning) {
+            state.activate();
+          } else {
+            state.fail();
+          }
+        })
+        .onUpdate((event) => {
+          const { translationX } = event;
 
-      scrollTo(
-        scrollViewRef,
-        offsetBeforeScroll.value - translationX,
-        0,
-        false,
-      );
-    })
-    .onEnd((event) => {
-      const { translationX } = event;
+          scrollTo(
+            scrollViewRef,
+            offsetBeforeScroll.value - translationX,
+            0,
+            false,
+          );
+        })
+        .onEnd((event) => {
+          const { translationX } = event;
 
-      const velocityEffect = event.velocityX * 0.3;
+          const velocityEffect = event.velocityX * 0.3;
 
-      const finalPosition = clamp(
-        offsetBeforeScroll.value - translationX - velocityEffect,
-        0,
-        contentWidth.value - visibleContentWidth.value,
-      );
+          const finalPosition = clamp(
+            offsetBeforeScroll.value - translationX - velocityEffect,
+            0,
+            contentWidth.value - visibleContentWidth.value,
+          );
 
-      offsetBeforeScroll.value = finalPosition;
+          offsetBeforeScroll.value = finalPosition;
 
-      scrollTo(scrollViewRef, finalPosition, 0, true);
-    });
+          scrollTo(scrollViewRef, finalPosition, 0, true);
+        }),
+    [],
+  );
+
+  const onContentSizeChange = useStableCallback((width: number) => {
+    contentWidth.value = width;
+  });
+
+  const onLayout = useStableCallback((event: LayoutChangeEvent) => {
+    visibleContentWidth.value = event.nativeEvent.layout.width;
+  });
 
   return (
-    <View style={{ width: '100%' }}>
+    <View style={styles.wrapper}>
       <GestureDetector gesture={panGesture}>
         <Animated.ScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
+          contentContainerStyle={styles.contentContainer}
           horizontal
           nestedScrollEnabled={true}
-          onContentSizeChange={(width) => {
-            contentWidth.value = width;
-          }}
-          onLayout={(e) => {
-            visibleContentWidth.value = e.nativeEvent.layout.width;
-          }}
+          onContentSizeChange={onContentSizeChange}
+          onLayout={onLayout}
           ref={scrollViewRef}
           scrollEnabled={false}
         >
@@ -87,3 +100,10 @@ export const MarkdownReactiveScrollView = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: {
+    width: '100%',
+  },
+  contentContainer: { flexGrow: 1 },
+});
