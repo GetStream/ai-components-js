@@ -1,4 +1,4 @@
-import React, { type PropsWithChildren } from 'react';
+import React, { type PropsWithChildren, useMemo } from 'react';
 import { Platform, Text } from 'react-native';
 
 import './prism-config';
@@ -22,9 +22,6 @@ import { MarkdownReactiveScrollView } from '../components';
 
 const DEFAULT_FONT_SIZE = 13;
 
-// TODO: Just do useMemo, there's no real need for this type of caching.
-const styleCache = new Map();
-
 const generateNewStylesheet = ({
   stylesheet,
   highlighter,
@@ -32,9 +29,6 @@ const generateNewStylesheet = ({
   stylesheet: SyntaxHighlighterStylesheet;
   highlighter: NativeSyntaxHighlighterProps['highlighter'];
 }) => {
-  if (styleCache.has(stylesheet)) {
-    return styleCache.get(stylesheet);
-  }
   stylesheet = Array.isArray(stylesheet) ? stylesheet[0] : stylesheet;
 
   const transformedStyle = Object.entries(stylesheet ?? {}).reduce<RNSheet>(
@@ -55,7 +49,6 @@ const generateNewStylesheet = ({
 
   const defaultColor = (topLevel && topLevel.color) || '#000';
 
-  styleCache.set(stylesheet, { transformedStyle, defaultColor });
   return { transformedStyle, defaultColor };
 };
 
@@ -171,24 +164,35 @@ const NativeSyntaxHighlighter = ({
   CodeTag = MarkdownReactiveScrollView,
   ...rest
 }: PropsWithChildren<NativeSyntaxHighlighterProps>) => {
-  const { transformedStyle, defaultColor } = generateNewStylesheet({
-    stylesheet: style,
-    highlighter,
-  });
+  const { transformedStyle, defaultColor } = useMemo(
+    () =>
+      generateNewStylesheet({
+        stylesheet: style,
+        highlighter,
+      }),
+    [highlighter, style],
+  );
+  const renderer = useMemo(
+    () =>
+      nativeRenderer({
+        defaultColor: defaultColor as string,
+        fontFamily,
+        fontSize,
+      }),
+    [defaultColor, fontFamily, fontSize],
+  );
+
   const Highlighter =
     highlighter === 'prism' ? SyntaxHighlighterPrism : SyntaxHighlighter;
+
   return (
     <Highlighter
       PreTag={PreTag}
       CodeTag={CodeTag}
       {...rest}
-      style={transformedStyle}
+      style={transformedStyle as SyntaxHighlighterStylesheet}
       horizontal={true}
-      renderer={nativeRenderer({
-        defaultColor,
-        fontFamily,
-        fontSize,
-      })}
+      renderer={renderer}
     >
       {children}
     </Highlighter>
