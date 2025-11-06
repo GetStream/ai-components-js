@@ -4,11 +4,9 @@ import { MODELS } from '@/utils/models';
 import {
   ArrowUpIcon,
   ImageIcon,
-  Mic,
   MicIcon,
   MicOffIcon,
   Paperclip,
-  SpeakerIcon,
   XIcon,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
@@ -19,7 +17,7 @@ import { useTranscriber } from '@/hooks/usetranscribe';
 export default function Composer() {
   const [isActive, setIsActive] = useState(false);
   const [input, setInput] = useState('');
-  const [files, setFiles] = useState<FileList[] | undefined>(undefined);
+  const [files, setFiles] = useState<File[] | undefined>(undefined);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { isListening, transcript, start, stop } = useTranscriber();
 
@@ -53,6 +51,7 @@ export default function Composer() {
 
   useEffect(() => {
     if (transcript) {
+      // eslint-disable-next-line
       handleSubmit({
         preventDefault: () => {},
         target: { value: transcript },
@@ -75,6 +74,7 @@ export default function Composer() {
             : 'outline-transparent'
         }`}
       >
+        {}
         {[...(files || [])]?.map((file: any, index) => (
           <div key={`attachment-${index}`} className="badge badge-sm mb-2">
             <ImageIcon className="w-3 h-3" />
@@ -109,8 +109,7 @@ export default function Composer() {
                 ref={fileInputRef}
                 onChange={(e) => {
                   if (e.target.files) {
-                    //@ts-ignore
-                    setFiles(e.target.files);
+                    setFiles([...e.target.files]);
                   }
                 }}
               />

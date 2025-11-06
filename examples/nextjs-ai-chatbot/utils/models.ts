@@ -1,7 +1,6 @@
 import { openai } from '@ai-sdk/openai';
 import { google } from '@ai-sdk/google';
-import { xai } from '@ai-sdk/xai';
-import { LanguageModel } from 'ai';
+import type { LanguageModel } from 'ai';
 
 export const MODELS = [
   {

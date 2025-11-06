@@ -112,13 +112,14 @@ export function useTranscriber(options: Options = {}) {
         mr.onstop = handleStop;
         mr.start(250);
       }
+       
     } catch (e: any) {
       setError(e?.message || 'Something went wrong');
       console.error(e);
     } finally {
       setStatus('listening');
     }
-  }, [transcribeUrl, shouldTranscribe, isListening]);
+  }, [transcribeUrl, shouldTranscribe]);
 
   const checkSilence = useCallback(() => {
     if (!isListeningRef.current) return;
@@ -184,6 +185,7 @@ export function useTranscriber(options: Options = {}) {
       });
       streamRef.current = stream;
       const ctx = new (window.AudioContext ||
+         
         (window as any).webkitAudioContext)();
       audioCtxRef.current = ctx;
 
@@ -214,6 +216,7 @@ export function useTranscriber(options: Options = {}) {
       recordingStartedAtRef.current = performance.now();
 
       rafRef.current = requestAnimationFrame(checkSilence);
+       
     } catch (e: any) {
       setError(e?.message || 'Mic access failed');
       console.error(e);
