@@ -221,9 +221,6 @@ importers:
       react-native-svg:
         specifier: '>=15.8.0'
         version: 15.14.0(react-native@0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0))(react@19.2.0)
-      react-native-syntax-highlighter:
-        specifier: ^2.1.0
-        version: 2.1.0(react-syntax-highlighter@15.5.0(react@19.2.0))
       react-syntax-highlighter:
         specifier: 15.5.0
         version: 15.5.0(react@19.2.0)
@@ -5124,11 +5121,6 @@ packages:
     peerDependencies:
       react: '*'
       react-native: '*'
-
-  react-native-syntax-highlighter@2.1.0:
-    resolution: {integrity: sha512-upu8gpKT2ZeslXn2d763KwtzzhM9OUHGgJjIKKIUw1JnFAzVwQmKCaFGoI6PkQa7T1LVggBW5k5VoaLFhZDb+g==}
-    peerDependencies:
-      react-syntax-highlighter: ^6.0.4
 
   react-native-worklets@0.5.2:
     resolution: {integrity: sha512-lCzmuIPAK/UaOJYEPgYpVqrsxby1I54f7PyyZUMEO04nwc00CDrCvv9lCTY1daLHYTF8lS3f9zlzErfVsIKqkA==}
@@ -12105,10 +12097,6 @@ snapshots:
       react: 19.2.0
       react-native: 0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0)
       warn-once: 0.1.1
-
-  react-native-syntax-highlighter@2.1.0(react-syntax-highlighter@15.5.0(react@19.2.0)):
-    dependencies:
-      react-syntax-highlighter: 15.5.0(react@19.2.0)
 
   react-native-worklets@0.5.2(@babel/core@7.28.4)(react-native@0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0))(react@19.2.0):
     dependencies:

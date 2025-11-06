@@ -45,7 +45,6 @@
     "@khanacademy/simple-markdown": "^2.1.0",
     "linkifyjs": "^4.3.2",
     "lodash": "4.17.21",
-    "react-native-syntax-highlighter": "^2.1.0",
     "react-syntax-highlighter": "15.5.0"
   },
   "devDependencies": {
