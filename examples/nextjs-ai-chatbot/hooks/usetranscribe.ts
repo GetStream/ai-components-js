@@ -112,7 +112,7 @@ export function useTranscriber(options: Options = {}) {
         mr.onstop = handleStop;
         mr.start(250);
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
     } catch (e: any) {
       setError(e?.message || 'Something went wrong');
       console.error(e);
@@ -185,7 +185,7 @@ export function useTranscriber(options: Options = {}) {
       });
       streamRef.current = stream;
       const ctx = new (window.AudioContext ||
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         (window as any).webkitAudioContext)();
       audioCtxRef.current = ctx;
 
@@ -216,7 +216,7 @@ export function useTranscriber(options: Options = {}) {
       recordingStartedAtRef.current = performance.now();
 
       rafRef.current = requestAnimationFrame(checkSilence);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
     } catch (e: any) {
       setError(e?.message || 'Mic access failed');
       console.error(e);

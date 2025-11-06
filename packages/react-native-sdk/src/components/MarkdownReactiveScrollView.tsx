@@ -1,4 +1,4 @@
-import { type ReactNode, useMemo } from 'react';
+import { type PropsWithChildren, useMemo } from 'react';
 import Animated, {
   clamp,
   scrollTo,
@@ -9,11 +9,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { type LayoutChangeEvent, StyleSheet, View } from 'react-native';
 import { useStableCallback } from '../internal/hooks/useStableCallback.ts';
 
-export const MarkdownReactiveScrollView = ({
-  children,
-}: {
-  children: ReactNode;
-}) => {
+export const MarkdownReactiveScrollView = ({ children }: PropsWithChildren) => {
   const scrollViewRef = useAnimatedRef<Animated.ScrollView>();
   const contentWidth = useSharedValue(0);
   const visibleContentWidth = useSharedValue(0);

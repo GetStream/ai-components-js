@@ -1,7 +1,6 @@
 'use client';
 
-import type {
-  ReactNode} from 'react';
+import type { ReactNode } from 'react';
 import {
   createContext,
   useContext,
@@ -11,7 +10,7 @@ import {
   useState,
 } from 'react';
 import { useParams, usePathname } from 'next/navigation';
-import type { UIMessage} from '@ai-sdk/react';
+import type { UIMessage } from '@ai-sdk/react';
 import { Chat, useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
 import type { Chat as ChatType } from '@/types';
@@ -23,6 +22,7 @@ type AppContextType = {
   chatID: string;
   chat: Chat<UIMessage>;
   messages: UIMessage[];
+
   sendMessage: (message: any) => Promise<any>;
   status: string;
   isLoadingMessages: boolean;
@@ -169,7 +169,7 @@ function AppProviderInner({ children }: { children: ReactNode }) {
       setMessages(loadedMessages);
       setReload(reload + 1);
     }
-  }, [messagesLoaded, loadedMessages, setMessages]);
+  }, [messagesLoaded, loadedMessages, setMessages, reload]);
 
   const contextValue: AppContextType = {
     chatID,
