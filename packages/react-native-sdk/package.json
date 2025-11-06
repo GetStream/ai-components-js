@@ -52,6 +52,7 @@
     "@types/lodash": "4.17.20",
     "@types/node": "^24",
     "@types/react": "19.2.2",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "concurrently": "catalog:",
     "react": "19.2.0",
     "react-native": "^0.82.1",

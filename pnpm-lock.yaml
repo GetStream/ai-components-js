@@ -237,6 +237,9 @@ importers:
       '@types/react':
         specifier: 19.2.2
         version: 19.2.2
+      '@types/react-syntax-highlighter':
+        specifier: ^15.5.13
+        version: 15.5.13
       concurrently:
         specifier: 'catalog:'
         version: 9.2.1

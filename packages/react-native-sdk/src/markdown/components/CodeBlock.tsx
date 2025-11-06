@@ -1,8 +1,7 @@
 import { Pressable, type PressableProps, Text, View } from 'react-native';
 import type { MarkdownComponentProps, RuleRenderFunction } from '../types.ts';
 import { MarkdownReactiveScrollView } from '../../components';
-// @ts-expect-error need to check what's up with the lib
-import SyntaxHighlighter from 'react-native-syntax-highlighter';
+import SyntaxHighlighter from '../../syntax-highlighting/SyntaxHighlighter.tsx';
 import { type PropsWithChildren, useCallback, useMemo } from 'react';
 
 export const CodeBlockCopyButton = ({
@@ -67,6 +66,7 @@ export const CodeBlock = ({ styles, node }: MarkdownComponentProps) => {
       highlighter={'prism'}
       CodeTag={CodeTag}
       PreTag={CodeBlockWrapper}
+      fontSize={13}
     >
       {text}
     </SyntaxHighlighter>
