@@ -1,24 +1,15 @@
 import type { TextStyle } from 'react-native';
-import type * as ReactNS from 'react'; // for React.CSSProperties
-type CSSP = ReactNS.CSSProperties;
-
-/** Options for unit conversion */
-type ConvertOpts = {
-  /** base for `em` (defaults to 16) */
-  baseFontSize?: number;
-  /** root base for `rem` (defaults to baseFontSize) */
-  rootFontSize?: number;
-};
+import type { ConvertOpts, CSSP } from './types.ts';
 
 const EM_DEFAULT = 16;
 
 /** Parse CSS lengths like 14, "14", "14px", "1.25em", "0.875rem" */
-function len(
+const len = (
   v: unknown,
   { baseFontSize, rootFontSize }: ConvertOpts,
-): number | undefined {
+): number | undefined => {
   if (v == null) return undefined;
-  if (typeof v === 'number') return v; // already a device pixel number (RN)
+  if (typeof v === 'number') return v;
   if (typeof v !== 'string') return undefined;
 
   const s = v.trim().toLowerCase();
@@ -38,10 +29,10 @@ function len(
   // plain number-like string
   const n = Number(s);
   return Number.isFinite(n) ? n : undefined;
-}
+};
 
-/** font shorthand: e.g. "italic small-caps 700 14px/20px Menlo, monospace" */
-function parseFontShorthand(v: string, opts: ConvertOpts) {
+/** Font shorthand: e.g. "italic small-caps 700 14px/20px Menlo, monospace" */
+const parseFontShorthand = (v: string, opts: ConvertOpts) => {
   const out: Partial<TextStyle> = {};
   const parts = v.split(/\s+/);
   // Very light parser: pick out style, weight, size[/lineHeight], and family
@@ -90,10 +81,10 @@ function parseFontShorthand(v: string, opts: ConvertOpts) {
     i++;
   }
 
-  // family (rest joined)
+  // family
   const family = parts.slice(i).join(' ').replace(/^,|,$/g, '').trim();
   if (family) {
-    // Basic cleanup: take first family; strip quotes
+    // basic cleanup: take first family; strip quotes
     const first = family
       .split(',')[0]
       ?.trim()
@@ -102,10 +93,10 @@ function parseFontShorthand(v: string, opts: ConvertOpts) {
   }
 
   return out;
-}
+};
 
 /** text-decoration shorthand → RN textDecorationLine/Color/Style */
-function applyTextDecoration(v: unknown, acc: Partial<TextStyle>) {
+const applyTextDecoration = (v: unknown, acc: Partial<TextStyle>) => {
   if (typeof v !== 'string') return;
   const tokens = v.toLowerCase().split(/\s+/);
   let line: TextStyle['textDecorationLine'] | undefined = undefined;
@@ -125,22 +116,23 @@ function applyTextDecoration(v: unknown, acc: Partial<TextStyle>) {
       t === 'dashed'
     )
       style = t;
-    else if (t) color = t; // naive: treat as color token; RN accepts CSS color strings
+    // we take a naive approach and treat this as a color token; RN accepts CSS color strings
+    else if (t) color = t;
   }
 
   if (line) acc.textDecorationLine = line;
   if (style) acc.textDecorationStyle = style;
   if (color) acc.textDecorationColor = color;
-}
+};
 
 /** text-shadow CSS → RN textShadowColor/Offset/Radius
- *  Examples: "1px 1px #000", "1px 1px 2px rgba(0,0,0,0.4)"
+ *  for example: "1px 1px #000", "1px 1px 2px rgba(0,0,0,0.4)"
  */
-function applyTextShadow(
+const applyTextShadow = (
   v: unknown,
   acc: Partial<TextStyle>,
   opts: ConvertOpts,
-) {
+) => {
   if (typeof v !== 'string') return;
   const parts = v.trim().split(/\s+/);
   if (parts.length < 2) return;
@@ -164,13 +156,13 @@ function applyTextShadow(
   if (color) acc.textShadowColor = color;
   acc.textShadowOffset = { width: ox ?? 0, height: oy ?? 0 };
   if (radius != null) acc.textShadowRadius = radius;
-}
+};
 
-/** map CSS (web) → RN TextStyle */
-export function cssToRNTextStyle(
+/** map CSS (web) to RN TextStyle */
+export const cssToRNTextStyle = (
   css: Partial<CSSP>,
   options: ConvertOpts = {},
-): TextStyle {
+): TextStyle => {
   const opts: ConvertOpts = {
     baseFontSize: options.baseFontSize ?? EM_DEFAULT,
     rootFontSize: options.rootFontSize ?? options.baseFontSize ?? EM_DEFAULT,
@@ -213,7 +205,6 @@ export function cssToRNTextStyle(
   if (css.textTransform)
     out.textTransform = css.textTransform as TextStyle['textTransform'];
 
-  // Shorthands
   if (css.font && typeof css.font === 'string') {
     Object.assign(out, parseFontShorthand(css.font, opts));
   }
@@ -222,7 +213,6 @@ export function cssToRNTextStyle(
     applyTextDecoration(css.textDecoration, out);
   }
   if (css.textDecorationLine) {
-    // accept direct value too
     out.textDecorationLine =
       css.textDecorationLine as TextStyle['textDecorationLine'];
   }
@@ -249,4 +239,4 @@ export function cssToRNTextStyle(
   }
 
   return out as TextStyle;
-}
+};

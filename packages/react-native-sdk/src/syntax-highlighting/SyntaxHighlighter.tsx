@@ -1,5 +1,5 @@
 import React, { type PropsWithChildren } from 'react';
-import { Platform, ScrollView, Text, type TextStyle } from 'react-native';
+import { Platform, Text } from 'react-native';
 
 import './prism-config';
 
@@ -12,16 +12,18 @@ import { createStyleObject } from 'react-syntax-highlighter/dist/esm/create-elem
 import { defaultStyle } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { prism as prismDefaultStyle } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { cssToRNTextStyle } from './converter';
+import type {
+  NativeSyntaxHighlighterProps,
+  RNSheet,
+  RNStyle,
+  SyntaxHighlighterStylesheet,
+} from './types.ts';
+import { MarkdownReactiveScrollView } from '../components';
+
+const DEFAULT_FONT_SIZE = 13;
 
 // TODO: Just do useMemo, there's no real need for this type of caching.
 const styleCache = new Map();
-
-type RNStyle = TextStyle;
-type RNSheet = Record<string, RNStyle>;
-
-type SyntaxHighlighterStylesheet = NonNullable<
-  NativeSyntaxHighlighterProps['style']
->;
 
 const generateNewStylesheet = ({
   stylesheet,
@@ -88,7 +90,7 @@ const createNativeElement = ({
   key,
   defaultColor,
   fontFamily,
-  fontSize = 12,
+  fontSize = DEFAULT_FONT_SIZE,
 }: {
   node: rendererNode;
   stylesheet: SyntaxHighlighterStylesheet;
@@ -159,18 +161,14 @@ const nativeRenderer = ({
     );
 };
 
-export type NativeSyntaxHighlighterProps = SyntaxHighlighterProps & {
-  fontFamily?: string;
-  fontSize?: number;
-  highlighter?: 'highlightjs' | 'prism';
-};
-
 const NativeSyntaxHighlighter = ({
-  fontFamily,
-  fontSize,
+  fontFamily = Platform.OS === 'ios' ? 'Courier' : 'Monospace',
+  fontSize = DEFAULT_FONT_SIZE,
   children,
   highlighter = 'highlightjs',
   style = highlighter === 'prism' ? prismDefaultStyle : defaultStyle,
+  PreTag = MarkdownReactiveScrollView,
+  CodeTag = MarkdownReactiveScrollView,
   ...rest
 }: PropsWithChildren<NativeSyntaxHighlighterProps>) => {
   const { transformedStyle, defaultColor } = generateNewStylesheet({
@@ -181,6 +179,8 @@ const NativeSyntaxHighlighter = ({
     highlighter === 'prism' ? SyntaxHighlighterPrism : SyntaxHighlighter;
   return (
     <Highlighter
+      PreTag={PreTag}
+      CodeTag={CodeTag}
       {...rest}
       style={transformedStyle}
       horizontal={true}
@@ -193,13 +193,6 @@ const NativeSyntaxHighlighter = ({
       {children}
     </Highlighter>
   );
-};
-
-NativeSyntaxHighlighter.defaultProps = {
-  fontFamily: Platform.OS === 'ios' ? 'Menlo-Regular' : 'monospace',
-  fontSize: 12,
-  PreTag: ScrollView,
-  CodeTag: ScrollView,
 };
 
 export default NativeSyntaxHighlighter;

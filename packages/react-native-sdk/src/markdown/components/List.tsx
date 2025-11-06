@@ -23,7 +23,7 @@ export const List = ({
 
         if (item === null) {
           return (
-            <ListRow key={index} style={styles?.listRow} testID="list-item">
+            <ListRow key={index} style={styles?.listRow}>
               <Bullet
                 index={node.ordered && indexAfterStart}
                 style={
@@ -40,7 +40,7 @@ export const List = ({
         const style = isSublistWithinText ? { marginBottom: 0 } : {};
 
         return (
-          <ListRow key={index} style={styles?.listRow} testID="list-item">
+          <ListRow key={index} style={styles?.listRow}>
             <Bullet
               index={node.ordered && indexAfterStart}
               style={

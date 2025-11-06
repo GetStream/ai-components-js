@@ -66,7 +66,6 @@ export const CodeBlock = ({ styles, node }: MarkdownComponentProps) => {
       highlighter={'prism'}
       CodeTag={CodeTag}
       PreTag={CodeBlockWrapper}
-      fontSize={13}
     >
       {text}
     </SyntaxHighlighter>
