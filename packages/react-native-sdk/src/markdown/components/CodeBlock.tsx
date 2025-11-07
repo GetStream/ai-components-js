@@ -3,6 +3,7 @@ import type { MarkdownComponentProps, RuleRenderFunction } from '../types.ts';
 import { MarkdownReactiveScrollView } from '../../components';
 import SyntaxHighlighter from '../../syntax-highlighting/SyntaxHighlighter.tsx';
 import { type PropsWithChildren, useCallback, useMemo } from 'react';
+import ChartFromBlockXL from '../../charts/Chart.tsx';
 
 export const CodeBlockCopyButton = ({
   onPress,
@@ -59,6 +60,17 @@ export const CodeBlock = ({ styles, node }: MarkdownComponentProps) => {
     ),
     [CodeBlockHeader, styles.codeBlockWrapper],
   );
+
+  if (node.lang === 'mermaid') {
+    return <ChartFromBlockXL kind={'mermaid'} code={text} />;
+  }
+
+  if (node.lang === 'json') {
+    const parsed = JSON.parse(text);
+    if (parsed && parsed.$schema.includes('vega-lite')) {
+      return <ChartFromBlockXL kind={'vegalite'} spec={parsed} />;
+    }
+  }
 
   return (
     <SyntaxHighlighter
