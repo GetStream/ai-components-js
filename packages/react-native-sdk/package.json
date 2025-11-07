@@ -68,7 +68,8 @@
     "react-native": ">=0.73.0",
     "react-native-gesture-handler": ">=2.18.0",
     "react-native-reanimated": ">=3.16.0",
-    "react-native-svg": ">=15.8.0"
+    "react-native-svg": ">=15.8.0",
+    "react-syntax-highlighter": ">=15.0.0"
   },
   "peerDependenciesMeta": {
     "expo": {
