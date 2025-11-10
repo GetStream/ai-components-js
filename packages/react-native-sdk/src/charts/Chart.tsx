@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import {
   Area as VictoryArea,
-  // CartesianAxis as VictoryAxis,
   Bar as VictoryBar,
   CartesianChart as VictoryChart,
   Line as VictoryLine,
@@ -19,7 +18,7 @@ import {
   Scatter as VictoryScatter,
   PolarChart as VictoryPolarChart,
 } from 'victory-native';
-import { matchFont } from '@shopify/react-native-skia';
+import { LinearGradient, matchFont, vec } from '@shopify/react-native-skia';
 
 const font = matchFont({
   fontFamily: Platform.select({
@@ -85,7 +84,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    maxWidth: '48%', // lets two items sit per row; tweak as needed
+    maxWidth: '48%', // lets two items sit per row, tweak as needed
   },
   swatch: {
     borderRadius: 2,
@@ -95,7 +94,6 @@ const styles = StyleSheet.create({
   },
 });
 
-// ------- (same helpers as before) -------
 type VLType = 'quantitative' | 'nominal' | 'temporal' | 'ordinal';
 
 type MarkName = 'bar' | 'line' | 'area' | 'point' | 'arc';
@@ -211,49 +209,6 @@ function colorFromLabel(
   return hslToHex(hue, sat, light);
 }
 
-// export function hashLabel(raw: string) {
-//   const s = raw.trim().toLowerCase().normalize('NFKC');
-//   let h = 2166136261 >>> 0; // FNV-1a
-//   for (let i = 0; i < s.length; i++) {
-//     h ^= s.charCodeAt(i);
-//     h = Math.imul(h, 16777619) >>> 0;
-//   }
-//   return h >>> 0;
-// }
-//
-// // A bigger categorical palette reduces collisions.
-// // (Tableau10 extended with a few distinct extras)
-// const PALETTE = [
-//   '#4e79a7',
-//   '#f28e2b',
-//   '#e15759',
-//   '#76b7b2',
-//   '#59a14f',
-//   '#edc949',
-//   '#af7aa1',
-//   '#ff9da7',
-//   '#9c755f',
-//   '#bab0ab',
-//   '#8cd17d',
-//   '#b6992d',
-//   '#499894',
-//   '#86bcb6',
-//   '#e39d9e',
-// ];
-//
-// export function colorFromLabel(label: string, usedIdx = new Set<number>()) {
-//   const base = hashLabel(label);
-//   let idx = base % PALETTE.length;
-//   // linear probe to avoid same color within one chart
-//   let steps = 0;
-//   while (usedIdx.has(idx) && steps < PALETTE.length) {
-//     idx = (idx + 1) % PALETTE.length;
-//     steps++;
-//   }
-//   usedIdx.add(idx);
-//   return PALETTE[idx];
-// }
-
 function parseMermaidPie(code: string): {
   title?: string;
   data: { label: string; value: number; color: string }[];
@@ -309,6 +264,7 @@ function toVictoryFromVegaLite(spec: VegaLite):
   const xField = x?.field,
     yField = y?.field;
   const xIsTime = (x?.type ?? '').toLowerCase() === 'temporal';
+  const xIsNumeric = (x?.type ?? '').toLowerCase() === 'quantitative';
 
   const data = (spec.data?.values ?? [])
     .map((d) => {
@@ -320,7 +276,7 @@ function toVictoryFromVegaLite(spec: VegaLite):
     })
     .filter(Boolean) as { x: any; y: number; c?: string }[];
 
-  return { kind: 'xy', mark: markType(spec), data, xIsTime };
+  return { kind: 'xy', mark: markType(spec), data, xIsTime, xIsNumeric };
 }
 
 // ------- Public component (XL API) -------
@@ -329,12 +285,7 @@ export type ChartFromBlockProps =
   | { kind: 'vegalite'; spec: VegaLite; height?: number };
 
 export default function ChartFromBlockXL(props: ChartFromBlockProps) {
-  console.log('RENDER', props);
   const height = props.height ?? 260;
-
-  // Skia font required for axes / tick labels
-  // (swap to your bundled TTF/OTF)
-  // const font = useFont(require('./assets/Inter-Medium.ttf'), 12);
 
   const parsed = useMemo(
     () => (props.code ? parseMermaidPie(props.code) : undefined),
@@ -346,9 +297,13 @@ export default function ChartFromBlockXL(props: ChartFromBlockProps) {
     [props.spec],
   );
 
+  // const { state: transformState } = useChartTransformState({
+  //   scaleX: 1.5,
+  //   scaleY: 1.0,
+  // });
+
   if (props.kind === 'mermaid') {
     if (!parsed?.data.length) return null;
-    // console.log('PARSED: ', parsed);
     return (
       <>
         <View style={{ height, width: 200 }}>
@@ -357,7 +312,6 @@ export default function ChartFromBlockXL(props: ChartFromBlockProps) {
             valueKey={'value'}
             colorKey={'color'}
             data={parsed.data}
-            // containerStyle={{ flex: 1, maxWidth: 200 }}
           >
             <VictoryPie.Chart />
           </VictoryPolarChart>
@@ -369,7 +323,6 @@ export default function ChartFromBlockXL(props: ChartFromBlockProps) {
 
   if (props.kind === 'vegalite' && mapped && mapped?.kind === 'pie') {
     if (!mapped?.data.length) return null;
-    // console.log('TEST', mapped);
     return (
       <>
         <View style={{ height, width: 200 }}>
@@ -378,7 +331,6 @@ export default function ChartFromBlockXL(props: ChartFromBlockProps) {
             valueKey={'value'}
             colorKey={'color'}
             data={mapped.data}
-            // containerStyle={{ flex: 1, maxWidth: 200 }}
           >
             <VictoryPie.Chart />
           </VictoryPolarChart>
@@ -392,8 +344,7 @@ export default function ChartFromBlockXL(props: ChartFromBlockProps) {
   const seriesNames = Array.from(
     new Set(mapped.data.map((d) => d.c ?? 'series')),
   );
-  const yKeys = seriesNames.map((name, idx) => `y${idx}` as const);
-  type YKey = (typeof yKeys)[number];
+  const yKeys = seriesNames.map((_name, idx) => `y${idx}` as const);
 
   // Normalize data into one row per x, with columns y0,y1,... for each series
   const rowsMap = new Map<string | number, Record<string, any>>();
@@ -408,36 +359,64 @@ export default function ChartFromBlockXL(props: ChartFromBlockProps) {
       rowsMap.set(xKey, row);
     }
   }
-  const table = Array.from(rowsMap.values()).sort((a, b) => {
-    const ax = a.x instanceof Date ? a.x.getTime() : a.x;
-    const bx = b.x instanceof Date ? b.x.getTime() : b.x;
-    return ax < bx ? -1 : ax > bx ? 1 : 0;
-  });
+
+  const table = Array.from(rowsMap.values());
+
+  const totalWidth = 225;
+
+  const visibleBars = table.length;
+
+  const barWidth = (totalWidth - 30 - visibleBars * 2) / visibleBars;
+
+  const maxTickCharCount = mapped.xIsTime
+    ? 3
+    : Math.max(
+        ...table.map((entry) =>
+          typeof entry.x === 'string' ? entry.x.length : String(entry.x).length,
+        ),
+      );
+
+  const hasLongLabels =
+    (visibleBars > 4 ? maxTickCharCount > 1 : maxTickCharCount > 5) &&
+    !mapped.xIsNumeric;
 
   return (
-    <View style={{ height, width: 225, marginTop: 12 }}>
+    <View style={{ height, width: totalWidth, marginTop: 12 }}>
       <VictoryChart
         data={table}
         xKey="x"
         yKeys={yKeys as string[]}
-        // Optional: domain padding etc. See docs.
-        domainPadding={{ left: 20, right: 20 }}
-        // axisOptions={{
-        //   font,
-        //   formatXLabel: (label: string) => label ?? '',
-        // }}
+        domainPadding={{
+          left: barWidth * 0.8,
+          right: barWidth * 0.8,
+          top: 20,
+        }}
         xAxis={{
           font,
-          formatXLabel: (label: number | string) =>
-            (typeof label === 'number' ? String(label) : label) ?? '',
+          formatXLabel: (label: number | string) => {
+            const parsedLabel =
+              (typeof label === 'number' ? String(label) : label) ?? '';
+            if (hasLongLabels && parsedLabel.length > 4) {
+              return `${parsedLabel.slice(0, 3)}...`;
+            }
+            return parsedLabel;
+          },
+          labelRotate: hasLongLabels ? 90 : 0,
+          tickCount: visibleBars,
+          labelOffset: hasLongLabels ? 0 : 2,
         }}
         yAxis={[{ font }]}
-        padding={{ bottom: 5 }}
+        padding={{ bottom: hasLongLabels ? 2 * maxTickCharCount + 12 : 0 }}
+        // transformState={transformState}
+        // transformConfig={{
+        //   pinch: { enabled: false },
+        //   pan: { enabled: true, dimensions: 'x' },
+        // }}
       >
         {({ points, chartBounds }) => (
           <>
             {/* One primitive per series */}
-            {yKeys.map((yk, i) => {
+            {yKeys.map((yk) => {
               const pts = (points as Record<string, any[]>)[yk]!;
               switch (mapped.mark) {
                 case 'bar':
@@ -446,9 +425,18 @@ export default function ChartFromBlockXL(props: ChartFromBlockProps) {
                       key={yk}
                       chartBounds={chartBounds}
                       points={pts}
-                      color={'red'}
-                      roundedCorners={{ topLeft: 10, topRight: 10 }}
-                    />
+                      innerPadding={0.33}
+                      roundedCorners={{
+                        topLeft: barWidth * 0.2,
+                        topRight: barWidth * 0.2,
+                      }}
+                    >
+                      <LinearGradient
+                        start={vec(0, 0)}
+                        end={vec(0, 400)}
+                        colors={['#a78bfa', '#a78bfa50']}
+                      />
+                    </VictoryBar>
                   );
                 case 'area':
                   return (
@@ -456,10 +444,24 @@ export default function ChartFromBlockXL(props: ChartFromBlockProps) {
                       key={yk}
                       y0={chartBounds.bottom}
                       points={pts}
-                    />
+                      color={'red'}
+                    >
+                      <LinearGradient
+                        start={vec(0, 0)}
+                        end={vec(0, 400)}
+                        colors={['#a78bfa', '#a78bfa50']}
+                      />
+                    </VictoryArea>
                   );
                 case 'point':
-                  return <VictoryScatter key={yk} points={pts} radius={3} />;
+                  return (
+                    <VictoryScatter
+                      key={yk}
+                      points={pts}
+                      radius={3}
+                      color={'#a78bfa'}
+                    />
+                  );
                 case 'line':
                 default:
                   return (
@@ -467,6 +469,7 @@ export default function ChartFromBlockXL(props: ChartFromBlockProps) {
                       key={yk}
                       points={pts}
                       strokeWidth={2}
+                      color={'#a78bfa'}
                       connectMissingData={true}
                     />
                   );
@@ -478,62 +481,3 @@ export default function ChartFromBlockXL(props: ChartFromBlockProps) {
     </View>
   );
 }
-
-/** ---------------------------
- *  4) USAGE EXAMPLES
- *  (A) Mermaid pie → VictoryPie
- * ----------------------------*/
-// const mermaidPie = `pie
-//   title Browser Usage
-//   "Chrome" : 60
-//   "Safari" : 20
-//   "Firefox" : 10
-//   "Other" : 10
-// `;
-// <ChartFromBlock kind="mermaid" code={mermaidPie} />
-
-/** ---------------------------
- *  (B) Vega-Lite bar → VictoryBar
- * ----------------------------*/
-// const vlBar = {
-//   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-//   data: { values: [ { category: "A", value: 10 }, { category: "B", value: 30 } ] },
-//   mark: "bar",
-//   encoding: {
-//     x: { field: "category", type: "nominal" },
-//     y: { field: "value", type: "quantitative" }
-//   }
-// } as const;
-// <ChartFromBlock kind="vegalite" spec={vlBar} showLegend={false} />
-
-/** ---------------------------
- *  (C) Vega-Lite line (temporal) → VictoryLine
- * ----------------------------*/
-// const vlLine = {
-//   data: { values: [
-//     { date: "2025-01-01", price: 10 },
-//     { date: "2025-02-01", price: 12 },
-//     { date: "2025-03-01", price: 11 },
-//   ] },
-//   mark: "line",
-//   encoding: {
-//     x: { field: "date", type: "temporal" },
-//     y: { field: "price", type: "quantitative" }
-//   }
-// } as const;
-// <ChartFromBlock kind="vegalite" spec={vlLine} />
-
-/** ---------------------------
- *  (D) Vega-Lite pie (arc) → VictoryPie
- * ----------------------------*/
-// const vlPie = {
-//   data: { values: [
-//     { label: "A", v: 10 }, { label: "B", v: 20 }, { label: "C", v: 15 }
-//   ] },
-//   mark: "arc",
-//   encoding: {
-//     theta: { field: "v", type: "quantitative" },
-//     color: { field: "label", type: "nominal" }
-//   }
-// } as const;
-// <ChartFromBlock kind="vegalite" spec={vlPie} />

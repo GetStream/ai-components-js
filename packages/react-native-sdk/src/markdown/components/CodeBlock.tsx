@@ -66,9 +66,13 @@ export const CodeBlock = ({ styles, node }: MarkdownComponentProps) => {
   }
 
   if (node.lang === 'json') {
-    const parsed = JSON.parse(text);
-    if (parsed && parsed.$schema.includes('vega-lite')) {
-      return <ChartFromBlockXL kind={'vegalite'} spec={parsed} />;
+    try {
+      const parsed = JSON.parse(text);
+      if (parsed && parsed.$schema.includes('vega-lite')) {
+        return <ChartFromBlockXL kind={'vegalite'} spec={parsed} />;
+      }
+    } catch (e) {
+      console.error(e);
     }
   }
 
