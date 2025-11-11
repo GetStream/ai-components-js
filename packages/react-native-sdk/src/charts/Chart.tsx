@@ -2,35 +2,15 @@
 // ChartFromBlockXL.tsx
 import React, { useMemo } from 'react';
 import {
-  Platform,
   StyleSheet,
   Text,
   type TextStyle,
   View,
   type ViewStyle,
 } from 'react-native';
-import {
-  Area as VictoryArea,
-  Bar as VictoryBar,
-  CartesianChart as VictoryChart,
-  Line as VictoryLine,
-  Pie as VictoryPie,
-  PolarChart as VictoryPolarChart,
-  Scatter as VictoryScatter,
-  // useChartTransformState,
-} from 'victory-native';
-import { LinearGradient, matchFont, vec } from '@shopify/react-native-skia';
+import type { ChartSpec, Datum } from './types.ts';
 
-const font = matchFont({
-  fontFamily: Platform.select({
-    ios: 'Helvetica',
-    android: 'sans-serif',
-    default: 'serif',
-  }),
-  fontSize: 12,
-  fontWeight: 'normal', // 'bold' | number | 'normal'
-  fontStyle: 'normal', // 'italic' | 'normal' | 'oblique'
-});
+import { VictoryChart } from './victory/VictoryChart.tsx';
 
 export type LegendItem = { label: string; color: string };
 export function PieLegend({
@@ -41,7 +21,7 @@ export function PieLegend({
   style,
   textStyle,
 }: {
-  items: LegendItem[];
+  items: Datum[];
   align?: 'left' | 'center' | 'right';
   maxRows?: number;
   swatchSize?: number;
@@ -54,7 +34,7 @@ export function PieLegend({
   return (
     <View style={[styles.container, { justifyContent }, style]}>
       {items.slice(0, maxRows * 4).map((it, i) => (
-        <View key={`${it.label}-${i}`} style={styles.item}>
+        <View key={`${it.dimension}-${i}`} style={styles.item}>
           <View
             style={[
               styles.swatch,
@@ -66,7 +46,7 @@ export function PieLegend({
             ]}
           />
           <Text numberOfLines={1} style={[styles.label, textStyle]}>
-            {it.label}
+            {it.dimension}
           </Text>
         </View>
       ))}
@@ -224,14 +204,12 @@ function colorFromLabel(
   return hslToHex(hue, sat, light);
 }
 
-function parseMermaidPie(code: string): {
-  title?: string;
-  data: { label: string; value: number; color: string }[];
-} {
+function parseMermaidPie(code: string): ChartSpec {
   const lines = code.split(/\r?\n/).map((l) => l.trim());
-  if (!/^pie\b/i.test(lines[0] || '')) return { data: [] };
+  // TODO: This is bad. Fix this please.
+  if (!/^pie\b/i.test(lines[0] || '')) return { type: 'pie', data: [] };
   let title: string | undefined;
-  const data: { label: string; value: number; color: string }[] = [];
+  const data: Datum[] = [];
   const usedHues: number[] = [];
   for (const ln of lines.slice(1)) {
     const t = ln.match(/^title\s+(.+)$/i);
@@ -244,23 +222,17 @@ function parseMermaidPie(code: string): {
     if (d) {
       const label = (d[1] ?? d[2] ?? '').trim();
       data.push({
-        label,
+        dimension: label,
         value: Number(d[3]),
         color: colorFromLabel(label, usedHues),
       });
     }
   }
-  return { title, data };
+  return { type: 'pie', title, data };
 }
 
-function toVictoryFromVegaLite(spec: VegaLite):
-  | {
-      kind: 'xy';
-      mark: 'bar' | 'line' | 'area' | 'point';
-      data: { x: any; y: number; c?: string }[];
-      xIsTime?: boolean;
-    }
-  | { kind: 'pie'; data: { label: string; value: number; color: string }[] } {
+function toVictoryFromVegaLite(spec: VegaLite): ChartSpec {
+  const mark = markType(spec);
   if (markType(spec) === 'arc') {
     const tField = (spec as any).encoding?.theta?.field;
     const cField = (spec as any).encoding?.color?.field;
@@ -270,11 +242,15 @@ function toVictoryFromVegaLite(spec: VegaLite):
         const y = Number(d[tField]);
         const x = cField ? String(d[cField]) : '';
         return Number.isFinite(y)
-          ? { label: x.trim(), value: y, color: colorFromLabel(x, usedHues) }
+          ? {
+              dimension: x.trim(),
+              value: y,
+              color: colorFromLabel(x, usedHues),
+            }
           : null;
       })
-      .filter(Boolean) as { label: string; value: number; color: string }[];
-    return { kind: 'pie', data };
+      .filter(Boolean) as Datum[];
+    return { type: 'pie', data };
   }
 
   const { x, y, color } = (spec as any).encoding;
@@ -292,16 +268,15 @@ function toVictoryFromVegaLite(spec: VegaLite):
       const yv = Number(d[yField]);
       if (!Number.isFinite(yv)) return null;
       const c = color?.field ? String(d[color.field]) : undefined;
-      return { x: xv, y: yv, c };
+      return { dimension: xv, value: yv, color: c };
     })
-    .filter(Boolean) as { x: any; y: number; c?: string }[];
+    .filter(Boolean) as Datum[];
 
   return {
-    kind: 'xy',
-    mark: markType(spec) ?? 'bar',
+    type: mark === 'arc' ? 'pie' : (mark ?? 'bar'),
     data,
-    xIsTime,
-    xIsNumeric,
+    isTemporalDim: xIsTime,
+    isNumericDim: xIsNumeric,
   };
 }
 
@@ -313,197 +288,24 @@ export type ChartFromBlockProps =
 export default function ChartFromBlockXL(props: ChartFromBlockProps) {
   const height = props.height ?? 260;
 
-  const parsed = useMemo(
-    () => (props.code ? parseMermaidPie(props.code) : undefined),
-    [props.code],
+  const spec = useMemo(
+    () =>
+      props.code
+        ? parseMermaidPie(props.code)
+        : props.spec
+          ? toVictoryFromVegaLite(props.spec)
+          : undefined,
+    [props.code, props.spec],
   );
-  // vegalite
-  const mapped = useMemo(
-    () => (props.spec ? toVictoryFromVegaLite(props.spec) : undefined),
-    [props.spec],
-  );
+
+  if (!spec) {
+    return null;
+  }
 
   // const { state: transformState } = useChartTransformState({
   //   scaleX: 1.5,
   //   scaleY: 1.0,
   // });
 
-  if (props.kind === 'mermaid') {
-    if (!parsed?.data.length) return null;
-    return (
-      <>
-        <View style={{ height, width: 200 }}>
-          <VictoryPolarChart
-            labelKey={'label'}
-            valueKey={'value'}
-            colorKey={'color'}
-            data={parsed.data}
-          >
-            <VictoryPie.Chart />
-          </VictoryPolarChart>
-        </View>
-        <PieLegend items={parsed.data} align={'center'} />
-      </>
-    );
-  }
-
-  if (props.kind === 'vegalite' && mapped && mapped?.kind === 'pie') {
-    if (!mapped?.data.length) return null;
-    return (
-      <>
-        <View style={{ height, width: 200 }}>
-          <VictoryPolarChart
-            labelKey={'label'}
-            valueKey={'value'}
-            colorKey={'color'}
-            data={mapped.data}
-          >
-            <VictoryPie.Chart />
-          </VictoryPolarChart>
-        </View>
-        <PieLegend items={mapped.data} align={'center'} />
-      </>
-    );
-  }
-
-  // Group by color (c) into series; XL uses yKeys + render-prop "points"
-  const seriesNames = Array.from(
-    new Set(mapped.data.map((d) => d.c ?? 'series')),
-  );
-  const yKeys = seriesNames.map((_name, idx) => `y${idx}` as const);
-
-  // Normalize data into one row per x, with columns y0,y1,... for each series
-  const rowsMap = new Map<string | number, Record<string, any>>();
-  for (const s of seriesNames) {
-    const keyIndex = seriesNames.indexOf(s);
-    const yKey = yKeys[keyIndex];
-    for (const pt of mapped.data.filter((d) => (d.c ?? 'series') === s)) {
-      const xKey =
-        mapped.xIsTime && pt.x instanceof Date ? pt.x.getTime() : pt.x;
-      const row = rowsMap.get(xKey) ?? { x: pt.x };
-      row[yKey] = pt.y;
-      rowsMap.set(xKey, row);
-    }
-  }
-
-  const table = Array.from(rowsMap.values());
-
-  const totalWidth = 225;
-
-  const visibleBars = table.length;
-
-  const barWidth = (totalWidth - 30 - visibleBars * 2) / visibleBars;
-
-  const maxTickCharCount = mapped.xIsTime
-    ? 3
-    : Math.max(
-        ...table.map((entry) =>
-          typeof entry.x === 'string' ? entry.x.length : String(entry.x).length,
-        ),
-      );
-
-  const hasLongLabels =
-    (visibleBars > 4 ? maxTickCharCount > 1 : maxTickCharCount > 5) &&
-    !mapped.xIsNumeric;
-
-  return (
-    <View style={{ height, width: totalWidth, marginTop: 12 }}>
-      <VictoryChart
-        data={table}
-        xKey="x"
-        yKeys={yKeys as string[]}
-        domainPadding={{
-          left: barWidth * 0.8,
-          right: barWidth * 0.8,
-          top: 20,
-        }}
-        xAxis={{
-          font,
-          formatXLabel: (label: number | string) => {
-            const parsedLabel =
-              (typeof label === 'number' ? String(label) : label) ?? '';
-            if (hasLongLabels && parsedLabel.length > 4) {
-              return `${parsedLabel.slice(0, 3)}...`;
-            }
-            return parsedLabel;
-          },
-          labelRotate: hasLongLabels ? 90 : 0,
-          tickCount: visibleBars,
-          labelOffset: hasLongLabels ? 0 : 2,
-        }}
-        yAxis={[{ font }]}
-        padding={{ bottom: hasLongLabels ? 2 * maxTickCharCount + 12 : 0 }}
-        // transformState={transformState}
-        // transformConfig={{
-        //   pinch: { enabled: false },
-        //   pan: { enabled: true, dimensions: 'x', activateAfterLongPress: 10 },
-        // }}
-      >
-        {({ points, chartBounds }) => (
-          <>
-            {/* One primitive per series */}
-            {yKeys.map((yk) => {
-              const pts = (points as Record<string, any[]>)[yk]!;
-              switch (mapped.mark) {
-                case 'bar':
-                  return (
-                    <VictoryBar
-                      key={yk}
-                      chartBounds={chartBounds}
-                      points={pts}
-                      innerPadding={0.33}
-                      roundedCorners={{
-                        topLeft: barWidth * 0.2,
-                        topRight: barWidth * 0.2,
-                      }}
-                    >
-                      <LinearGradient
-                        start={vec(0, 0)}
-                        end={vec(0, 400)}
-                        colors={['#a78bfa', '#a78bfa50']}
-                      />
-                    </VictoryBar>
-                  );
-                case 'area':
-                  return (
-                    <VictoryArea
-                      key={yk}
-                      y0={chartBounds.bottom}
-                      points={pts}
-                      color={'red'}
-                    >
-                      <LinearGradient
-                        start={vec(0, 0)}
-                        end={vec(0, 400)}
-                        colors={['#a78bfa', '#a78bfa50']}
-                      />
-                    </VictoryArea>
-                  );
-                case 'point':
-                  return (
-                    <VictoryScatter
-                      key={yk}
-                      points={pts}
-                      radius={3}
-                      color={'#a78bfa'}
-                    />
-                  );
-                case 'line':
-                default:
-                  return (
-                    <VictoryLine
-                      key={yk}
-                      points={pts}
-                      strokeWidth={2}
-                      color={'#a78bfa'}
-                      connectMissingData={true}
-                    />
-                  );
-              }
-            })}
-          </>
-        )}
-      </VictoryChart>
-    </View>
-  );
+  return <VictoryChart spec={spec} width={225} height={height} />;
 }
