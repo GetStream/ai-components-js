@@ -15,8 +15,9 @@ import {
   CartesianChart as VictoryChart,
   Line as VictoryLine,
   Pie as VictoryPie,
-  Scatter as VictoryScatter,
   PolarChart as VictoryPolarChart,
+  Scatter as VictoryScatter,
+  // useChartTransformState,
 } from 'victory-native';
 import { LinearGradient, matchFont, vec } from '@shopify/react-native-skia';
 
@@ -110,19 +111,33 @@ type PieEncoding = {
   color?: { field: string; type?: VLType };
 };
 
-type BaseVL = { data: { values: Record<string, any>[] } };
+type BaseVL = { data: { values: Record<string, unknown>[] } };
+
+type VLLayer = Array<{ mark: MarkDef } & Record<string, unknown>>;
+
+type VLMarks = Array<MarkDef>;
 
 export type VegaLite =
-  | (BaseVL & { mark: MarkName | MarkDef; encoding: XyEncoding })
-  | (BaseVL & { mark: MarkName | MarkDef; encoding: PieEncoding });
+  | (BaseVL & {
+      mark?: MarkName | MarkDef;
+      layer?: VLLayer;
+      marks?: VLMarks;
+      encoding: XyEncoding;
+    })
+  | (BaseVL & {
+      mark?: MarkName | MarkDef;
+      layer?: VLLayer;
+      marks?: VLMarks;
+      encoding: PieEncoding;
+    });
 
 // Normalize mark to a string
-export function markType(spec: { mark: MarkName | MarkDef }): MarkName {
+export function markType(spec: VegaLite): MarkName | undefined {
   if (spec.mark) {
     return typeof spec.mark === 'string' ? spec.mark : spec.mark.type;
   }
   const firstLayerMark =
-    spec.layer && spec.layer.length > 0 ? spec.layer[0].mark.type : undefined;
+    spec.layer && spec.layer[0] ? spec.layer[0].mark.type : undefined;
   const firstMark =
     spec.marks && spec.marks.length > 0 ? spec.marks[0] : undefined;
   return firstLayerMark ? firstLayerMark : firstMark?.type;
@@ -220,18 +235,20 @@ function parseMermaidPie(code: string): {
   const usedHues: number[] = [];
   for (const ln of lines.slice(1)) {
     const t = ln.match(/^title\s+(.+)$/i);
-    if (t) {
-      title = t[1].trim();
+    // TODO: Check if this is correct ? We only have one group.
+    if (t && t[1]) {
+      title = t[1]?.trim();
       continue;
     }
     const d = ln.match(/^(?:"([^"]+)"|([^"]+))\s*:\s*([+-]?\d+(?:\.\d+)?)/);
-    const label = (d[1] ?? d[2] ?? '').trim();
-    if (d)
+    if (d) {
+      const label = (d[1] ?? d[2] ?? '').trim();
       data.push({
         label,
         value: Number(d[3]),
         color: colorFromLabel(label, usedHues),
       });
+    }
   }
   return { title, data };
 }
@@ -268,7 +285,10 @@ function toVictoryFromVegaLite(spec: VegaLite):
 
   const data = (spec.data?.values ?? [])
     .map((d) => {
-      const xv = xIsTime ? new Date(d[xField]) : d[xField];
+      const xv =
+        xIsTime && typeof d[xField] === 'string'
+          ? new Date(d[xField])
+          : d[xField];
       const yv = Number(d[yField]);
       if (!Number.isFinite(yv)) return null;
       const c = color?.field ? String(d[color.field]) : undefined;
@@ -276,7 +296,13 @@ function toVictoryFromVegaLite(spec: VegaLite):
     })
     .filter(Boolean) as { x: any; y: number; c?: string }[];
 
-  return { kind: 'xy', mark: markType(spec), data, xIsTime, xIsNumeric };
+  return {
+    kind: 'xy',
+    mark: markType(spec) ?? 'bar',
+    data,
+    xIsTime,
+    xIsNumeric,
+  };
 }
 
 // ------- Public component (XL API) -------
@@ -410,7 +436,7 @@ export default function ChartFromBlockXL(props: ChartFromBlockProps) {
         // transformState={transformState}
         // transformConfig={{
         //   pinch: { enabled: false },
-        //   pan: { enabled: true, dimensions: 'x' },
+        //   pan: { enabled: true, dimensions: 'x', activateAfterLongPress: 10 },
         // }}
       >
         {({ points, chartBounds }) => (
