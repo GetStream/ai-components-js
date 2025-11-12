@@ -1,9 +1,16 @@
-import { Pressable, type PressableProps, Text, View } from 'react-native';
+import {
+  Platform,
+  Pressable,
+  type PressableProps,
+  Text,
+  View,
+} from 'react-native';
 import type { MarkdownComponentProps, RuleRenderFunction } from '../types.ts';
 import { MarkdownReactiveScrollView } from '../../components';
 import SyntaxHighlighter from '../../syntax-highlighting/SyntaxHighlighter.tsx';
-import { type PropsWithChildren, useCallback, useMemo } from 'react';
+import React, { type PropsWithChildren, useCallback, useMemo } from 'react';
 import ChartFromBlockXL from '../../charts/Chart.tsx';
+import { VegaLiteSchema } from '../../charts/vega-lite/schema.ts';
 
 export const CodeBlockCopyButton = ({
   onPress,
@@ -18,27 +25,28 @@ export const CodeBlockCopyButton = ({
   </Pressable>
 );
 
+// export const CodeBlockLineNumberGutter = ({ lineCount, styles }) => (
+//   <View style={styles.codeBlockLineNumberGutter}>
+//     {Array.from({ length: lineCount }, (_, i) => i).map((idx) => (
+//       <Text style={styles.codeBlockLineNumberCell} key={idx}>
+//         {`${idx + 1}.`}
+//       </Text>
+//     ))}
+//   </View>
+// );
+
 export const CodeBlock = ({ styles, node }: MarkdownComponentProps) => {
   const text = useMemo(() => node.content?.trim(), [node.content]);
-  const lineNumbers = useMemo(
-    () => Array.from({ length: text?.split('\n').length ?? 0 }, (_, i) => i),
-    [text],
-  );
+  // const lineCount = useMemo(() => text.split('\n').length ?? 0, [text]);
 
   const CodeTag = useCallback(
     ({ children }: PropsWithChildren) => (
       <View style={styles.codeBlockContainer}>
-        <View style={styles.codeBlockLineNumberGutter}>
-          {lineNumbers.map((idx) => (
-            <Text style={styles.codeBlockLineNumberCell} key={idx}>
-              {`${idx + 1}.`}
-            </Text>
-          ))}
-        </View>
+        {/*<CodeBlockLineNumberGutter lineCount={lineCount} styles={styles} />*/}
         <Text style={styles.codeBlock}>{children}</Text>
       </View>
     ),
-    [styles, lineNumbers],
+    [styles],
   );
 
   const CodeBlockHeader = useCallback(
@@ -67,9 +75,10 @@ export const CodeBlock = ({ styles, node }: MarkdownComponentProps) => {
 
   if (node.lang === 'json') {
     try {
-      const parsed = JSON.parse(text);
-      if (parsed && parsed.$schema.includes('vega-lite')) {
-        return <ChartFromBlockXL kind={'vegalite'} spec={parsed} />;
+      const json = JSON.parse(text);
+      const parsed = VegaLiteSchema.parse(json);
+      if (parsed) {
+        return <ChartFromBlockXL kind={parsed.archetype} spec={parsed} />;
       }
     } catch (e) {
       console.error(e);
@@ -79,7 +88,7 @@ export const CodeBlock = ({ styles, node }: MarkdownComponentProps) => {
   return (
     <SyntaxHighlighter
       language={node.lang}
-      highlighter={'prism'}
+      highlighter={Platform.OS === 'android' ? 'highlightjs' : 'prism'}
       CodeTag={CodeTag}
       PreTag={CodeBlockWrapper}
     >

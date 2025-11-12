@@ -25,16 +25,17 @@ const font = matchFont({
   fontStyle: 'normal', // 'italic' | 'normal' | 'oblique'
 });
 
-// ------- Public component (XL API) -------
-export type ChartFromBlockProps = {
+export type VictoryChartProps = {
   spec: ChartSpec;
   width: number;
   height: number;
 };
 
-export const VictoryChart = (props: ChartFromBlockProps) => {
-  const { spec } = props;
-  const height = props.height ?? 260;
+const DEFAULT_HEIGHT = 260;
+const DEFAULT_WIDTH = 225;
+
+export const VictoryChart = (props: VictoryChartProps) => {
+  const { spec, height = DEFAULT_HEIGHT, width = DEFAULT_WIDTH } = props;
 
   // const { state: transformState } = useChartTransformState({
   //   scaleX: 1.5,
@@ -85,11 +86,9 @@ export const VictoryChart = (props: ChartFromBlockProps) => {
 
   const table = Array.from(rowsMap.values());
 
-  const totalWidth = 225;
-
   const visibleBars = table.length;
 
-  const estimatedBarWidth = (totalWidth - 30 - visibleBars * 2) / visibleBars;
+  const estimatedBarWidth = (width - 30 - visibleBars * 2) / visibleBars;
 
   const maxTickCharCount = spec.isTemporalDim
     ? 3
@@ -104,7 +103,7 @@ export const VictoryChart = (props: ChartFromBlockProps) => {
     !spec.isNumericDim;
 
   return (
-    <View style={{ height, width: totalWidth, marginTop: 12 }}>
+    <View style={{ height, width, marginTop: 12 }}>
       <CartesianChart
         data={table}
         xKey={'x'}
@@ -141,7 +140,6 @@ export const VictoryChart = (props: ChartFromBlockProps) => {
             {/* One primitive per series */}
             {yKeys.map((yk) => {
               const pts = (points as Record<string, any[]>)[yk]!;
-              console.log('TEST: ', points, pts);
               switch (spec.type) {
                 case 'bar':
                   return (

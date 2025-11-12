@@ -224,6 +224,9 @@ importers:
       react-syntax-highlighter:
         specifier: 15.5.0
         version: 15.5.0(react@19.2.0)
+      zod:
+        specifier: ^4.1.12
+        version: 4.1.12
     devDependencies:
       '@shopify/react-native-skia':
         specifier: ^2.3.10

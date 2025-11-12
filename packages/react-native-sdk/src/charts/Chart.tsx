@@ -11,6 +11,7 @@ import {
 import type { ChartSpec, Datum } from './types.ts';
 
 import { VictoryChart } from './victory/VictoryChart.tsx';
+import type { VegaLite } from './vega-lite/schema.ts';
 
 export type LegendItem = { label: string; color: string };
 export function PieLegend({
@@ -74,42 +75,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
 });
-
-type VLType = 'quantitative' | 'nominal' | 'temporal' | 'ordinal';
-
-type MarkName = 'bar' | 'line' | 'area' | 'point' | 'arc';
-type MarkDef = { type: MarkName } & Record<string, unknown>; // allow extra props
-
-type XyEncoding = {
-  x: { field: string; type?: VLType };
-  y: { field: string; type?: VLType };
-  color?: { field?: string; type?: VLType };
-};
-
-type PieEncoding = {
-  theta: { field: string; type?: VLType };
-  color?: { field: string; type?: VLType };
-};
-
-type BaseVL = { data: { values: Record<string, unknown>[] } };
-
-type VLLayer = Array<{ mark: MarkDef } & Record<string, unknown>>;
-
-type VLMarks = Array<MarkDef>;
-
-export type VegaLite =
-  | (BaseVL & {
-      mark?: MarkName | MarkDef;
-      layer?: VLLayer;
-      marks?: VLMarks;
-      encoding: XyEncoding;
-    })
-  | (BaseVL & {
-      mark?: MarkName | MarkDef;
-      layer?: VLLayer;
-      marks?: VLMarks;
-      encoding: PieEncoding;
-    });
 
 // Normalize mark to a string
 export function markType(spec: VegaLite): MarkName | undefined {
