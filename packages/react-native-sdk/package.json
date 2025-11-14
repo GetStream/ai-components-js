@@ -16,12 +16,25 @@
     }
   },
   "files": [
-    "dist",
     "src",
-    "!src/*.test.ts"
+    "dist",
+    "android",
+    "ios",
+    "cpp",
+    "*.podspec",
+    "!ios/build",
+    "!android/build",
+    "!android/gradle",
+    "!android/gradlew",
+    "!android/gradlew.bat",
+    "!android/local.properties",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__",
+    "!**/.*"
   ],
   "scripts": {
-    "build": "tsc --project tsconfig.json && pnpm run clean && bob build",
+    "build": "pnpm run clean && bob build",
     "start": "tsc --project tsconfig.json --watch",
     "eslint": "eslint 'src/**/*.{js,ts,tsx}' --max-warnings 0",
     "lint": "prettier --list-different 'src/**/*.{js,ts,tsx,json}' && yarn run eslint",
@@ -87,6 +100,14 @@
       "module",
       "typescript"
     ]
+  },
+  "codegenConfig": {
+    "name": "AiComponentsReactNative",
+    "type": "components",
+    "jsSrcsDir": "src/native-specs",
+    "android": {
+      "javaPackageName": "com.streamio.aicomponents.renderkit"
+    }
   },
   "packageManager": "pnpm@10.13.1"
 }

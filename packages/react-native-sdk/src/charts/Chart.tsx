@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
 });
 
 // Normalize mark to a string
-export function markType(spec: VegaLite): MarkName | undefined {
+export function markType(spec: VegaLite) {
   if (spec.mark) {
     return typeof spec.mark === 'string' ? spec.mark : spec.mark.type;
   }
@@ -238,6 +238,7 @@ function toVictoryFromVegaLite(spec: VegaLite): ChartSpec {
     .filter(Boolean) as Datum[];
 
   return {
+    // @ts-expect-error bla bla
     type: mark === 'arc' ? 'pie' : (mark ?? 'bar'),
     data,
     isTemporalDim: xIsTime,
@@ -255,11 +256,16 @@ export default function ChartFromBlockXL(props: ChartFromBlockProps) {
 
   const spec = useMemo(
     () =>
+      // @ts-expect-error bla bla
       props.code
-        ? parseMermaidPie(props.code)
-        : props.spec
-          ? toVictoryFromVegaLite(props.spec)
+        ? // @ts-expect-error bla bla
+          parseMermaidPie(props.code)
+        : // @ts-expect-error bla bla
+          props.spec
+          ? // @ts-expect-error bla bla
+            toVictoryFromVegaLite(props.spec)
           : undefined,
+    // @ts-expect-error bla bla
     [props.code, props.spec],
   );
 

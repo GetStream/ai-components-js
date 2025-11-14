@@ -88,7 +88,7 @@ export const CodeBlock = ({ styles, node }: MarkdownComponentProps) => {
   return (
     <SyntaxHighlighter
       language={node.lang}
-      highlighter={Platform.OS === 'android' ? 'highlightjs' : 'prism'}
+      highlighter={Platform.OS === 'android' ? 'prism' : 'prism'}
       CodeTag={CodeTag}
       PreTag={CodeBlockWrapper}
     >

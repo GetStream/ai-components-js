@@ -1,0 +1,45 @@
+buildscript {
+  ext.kotlin_version = '1.9.24'
+  repositories { google(); mavenCentral() }
+  dependencies {
+    classpath "com.android.tools.build:gradle:8.3.2"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+  }
+}
+
+def isNewArchitectureEnabled() {
+  return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
+}
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+if (isNewArchitectureEnabled()) {
+  apply plugin: "com.facebook.react"
+}
+
+android {
+  namespace "com.streamio.aicomponents.renderkit"
+  compileSdkVersion 34
+  defaultConfig { minSdk 21; targetSdk 34 }
+}
+
+repositories {
+  google()
+  mavenCentral()
+  // If your RN is < 0.73, also add the old RN maven dirs:
+  // maven { url("$rootDir/../node_modules/react-native/android") }
+  // maven { url("$rootDir/../node_modules/jsc-android/dist") }
+}
+
+dependencies {
+  // RN Android APIs for view managers, annotations, etc.
+  // Option A (simple): let Gradle pick whatever the app uses
+  compileOnly("com.facebook.react:react-android:+")
+  // Option B (pin to your app’s RN version, e.g. 0.78.x)
+  // compileOnly("com.facebook.react:react-android:0.78.0")
+
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation "androidx.core:core-ktx:1.13.1"
+  implementation "androidx.appcompat:appcompat:1.7.0"
+}
