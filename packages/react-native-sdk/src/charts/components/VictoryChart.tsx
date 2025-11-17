@@ -1,6 +1,5 @@
 import React from 'react';
 import { Platform, View } from 'react-native';
-import { PieLegend } from '../Chart.tsx';
 import type { ChartSpec } from '../types.ts';
 import {
   Area,
@@ -13,6 +12,7 @@ import {
   // useChartTransformState,
 } from 'victory-native';
 import { LinearGradient, matchFont, vec } from '@shopify/react-native-skia';
+import { PieLegend } from './PieLegend.tsx';
 
 const font = matchFont({
   fontFamily: Platform.select({
@@ -21,8 +21,8 @@ const font = matchFont({
     default: 'serif',
   }),
   fontSize: 12,
-  fontWeight: 'normal', // 'bold' | number | 'normal'
-  fontStyle: 'normal', // 'italic' | 'normal' | 'oblique'
+  fontWeight: 'normal',
+  fontStyle: 'normal',
 });
 
 export type VictoryChartProps = {
@@ -56,12 +56,12 @@ export const VictoryChart = (props: VictoryChartProps) => {
             <Pie.Chart />
           </PolarChart>
         </View>
-        <PieLegend items={spec.data} align={'center'} />
+        <PieLegend items={spec.data} />
       </>
     );
   }
 
-  // Group by color (c) into series; XL uses yKeys + render-prop "points"
+  // Group by color into series
   const seriesNames = Array.from(
     new Set(spec.data.map((d) => d.color ?? 'series')),
   );

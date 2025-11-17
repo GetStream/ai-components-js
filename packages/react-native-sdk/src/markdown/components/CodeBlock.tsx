@@ -1,16 +1,11 @@
-import {
-  Platform,
-  Pressable,
-  type PressableProps,
-  Text,
-  View,
-} from 'react-native';
+import { Pressable, type PressableProps, Text, View } from 'react-native';
 import type { MarkdownComponentProps, RuleRenderFunction } from '../types.ts';
 import { MarkdownReactiveScrollView } from '../../components';
 import SyntaxHighlighter from '../../syntax-highlighting/SyntaxHighlighter.tsx';
 import React, { type PropsWithChildren, useCallback, useMemo } from 'react';
-import ChartFromBlockXL from '../../charts/Chart.tsx';
-import { VegaLiteSchema } from '../../charts/vega-lite/schema.ts';
+import Chart from '../../charts/Chart.tsx';
+import { parseJsonChart } from '../../charts/util/parse-json-chart.ts';
+import { parseMermaid } from '../../charts/mermaid/parser.ts';
 
 export const CodeBlockCopyButton = ({
   onPress,
@@ -25,24 +20,12 @@ export const CodeBlockCopyButton = ({
   </Pressable>
 );
 
-// export const CodeBlockLineNumberGutter = ({ lineCount, styles }) => (
-//   <View style={styles.codeBlockLineNumberGutter}>
-//     {Array.from({ length: lineCount }, (_, i) => i).map((idx) => (
-//       <Text style={styles.codeBlockLineNumberCell} key={idx}>
-//         {`${idx + 1}.`}
-//       </Text>
-//     ))}
-//   </View>
-// );
-
 export const CodeBlock = ({ styles, node }: MarkdownComponentProps) => {
   const text = useMemo(() => node.content?.trim(), [node.content]);
-  // const lineCount = useMemo(() => text.split('\n').length ?? 0, [text]);
 
   const CodeTag = useCallback(
     ({ children }: PropsWithChildren) => (
       <View style={styles.codeBlockContainer}>
-        {/*<CodeBlockLineNumberGutter lineCount={lineCount} styles={styles} />*/}
         <Text style={styles.codeBlock}>{children}</Text>
       </View>
     ),
@@ -70,25 +53,31 @@ export const CodeBlock = ({ styles, node }: MarkdownComponentProps) => {
   );
 
   if (node.lang === 'mermaid') {
-    return <ChartFromBlockXL kind={'mermaid'} code={text} />;
+    try {
+      const parsed = parseMermaid(text);
+      if (parsed) {
+        return <Chart spec={parsed} />;
+      }
+    } catch (_e) {
+      /* do nothing */
+    }
   }
 
   if (node.lang === 'json') {
     try {
-      const json = JSON.parse(text);
-      const parsed = VegaLiteSchema.parse(json);
+      const parsed = parseJsonChart(text);
       if (parsed) {
-        return <ChartFromBlockXL kind={parsed.archetype} spec={parsed} />;
+        return <Chart spec={parsed} />;
       }
-    } catch (e) {
-      console.error(e);
+    } catch (_e) {
+      /* do nothing */
     }
   }
 
   return (
     <SyntaxHighlighter
       language={node.lang}
-      highlighter={Platform.OS === 'android' ? 'prism' : 'prism'}
+      highlighter={'prism'}
       CodeTag={CodeTag}
       PreTag={CodeBlockWrapper}
     >
