@@ -95,69 +95,6 @@ const parseFontShorthand = (v: string, opts: ConvertOpts) => {
   return out;
 };
 
-/** text-decoration shorthand → RN textDecorationLine/Color/Style */
-const applyTextDecoration = (v: unknown, acc: Partial<TextStyle>) => {
-  if (typeof v !== 'string') return;
-  const tokens = v.toLowerCase().split(/\s+/);
-  let line: TextStyle['textDecorationLine'] | undefined = undefined;
-  let style: TextStyle['textDecorationStyle'] | undefined;
-  let color: TextStyle['textDecorationColor'] | undefined;
-
-  for (const t of tokens) {
-    if (t === 'none') line = 'none';
-    else if (t === 'underline')
-      line = line === 'line-through' ? 'underline line-through' : 'underline';
-    else if (t === 'line-through')
-      line = line === 'underline' ? 'underline line-through' : 'line-through';
-    else if (
-      t === 'solid' ||
-      t === 'double' ||
-      t === 'dotted' ||
-      t === 'dashed'
-    )
-      style = t;
-    // we take a naive approach and treat this as a color token; RN accepts CSS color strings
-    else if (t) color = t;
-  }
-
-  if (line) acc.textDecorationLine = line;
-  if (style) acc.textDecorationStyle = style;
-  if (color) acc.textDecorationColor = color;
-};
-
-/** text-shadow CSS → RN textShadowColor/Offset/Radius
- *  for example: "1px 1px #000", "1px 1px 2px rgba(0,0,0,0.4)"
- */
-const applyTextShadow = (
-  v: unknown,
-  acc: Partial<TextStyle>,
-  opts: ConvertOpts,
-) => {
-  if (typeof v !== 'string') return;
-  const parts = v.trim().split(/\s+/);
-  if (parts.length < 2) return;
-
-  const ox = len(parts[0], opts);
-  const oy = len(parts[1], opts);
-
-  let radius: number | undefined;
-  let color: string | undefined;
-
-  if (parts[2]) {
-    const r = len(parts[2], opts);
-    if (Number.isFinite(r!)) {
-      radius = r!;
-      color = parts.slice(3).join(' ');
-    } else {
-      color = parts.slice(2).join(' ');
-    }
-  }
-
-  if (color) acc.textShadowColor = color;
-  acc.textShadowOffset = { width: ox ?? 0, height: oy ?? 0 };
-  if (radius != null) acc.textShadowRadius = radius;
-};
-
 /** map CSS (web) to RN TextStyle */
 export const cssToRNTextStyle = (
   css: Partial<CSSP>,
@@ -172,14 +109,6 @@ export const cssToRNTextStyle = (
 
   // Simple 1:1 or unit-converted mappings
   if (css.color) out.color = String(css.color);
-
-  if (css.background || css.backgroundColor) {
-    // RN ignores complex backgrounds; pass solid color if present
-    if (typeof css.backgroundColor === 'string')
-      out.backgroundColor = css.backgroundColor;
-    else if (typeof css.background === 'string')
-      out.backgroundColor = css.background;
-  }
 
   if (css.fontFamily) out.fontFamily = String(css.fontFamily);
   if (css.fontStyle) out.fontStyle = css.fontStyle as TextStyle['fontStyle'];
@@ -202,29 +131,10 @@ export const cssToRNTextStyle = (
   }
 
   if (css.textAlign) out.textAlign = css.textAlign as TextStyle['textAlign'];
-  if (css.textTransform)
-    out.textTransform = css.textTransform as TextStyle['textTransform'];
 
   if (css.font && typeof css.font === 'string') {
     Object.assign(out, parseFontShorthand(css.font, opts));
   }
-
-  if (css.textDecoration) {
-    applyTextDecoration(css.textDecoration, out);
-  }
-  if (css.textDecorationLine) {
-    out.textDecorationLine =
-      css.textDecorationLine as TextStyle['textDecorationLine'];
-  }
-  if (css.textDecorationColor) {
-    out.textDecorationColor = String(css.textDecorationColor);
-  }
-  if (css.textDecorationStyle) {
-    out.textDecorationStyle =
-      css.textDecorationStyle as TextStyle['textDecorationStyle'];
-  }
-
-  if (css.textShadow) applyTextShadow(css.textShadow, out, opts);
 
   // Simulating the closest we can get to a CSS overflow-like functionality
   const overflowLike =
