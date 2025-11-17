@@ -76,18 +76,6 @@ const styles = StyleSheet.create({
   },
 });
 
-// Normalize mark to a string
-export function markType(spec: VegaLite) {
-  if (spec.mark) {
-    return typeof spec.mark === 'string' ? spec.mark : spec.mark.type;
-  }
-  const firstLayerMark =
-    spec.layer && spec.layer[0] ? spec.layer[0].mark.type : undefined;
-  const firstMark =
-    spec.marks && spec.marks.length > 0 ? spec.marks[0] : undefined;
-  return firstLayerMark ? firstLayerMark : firstMark?.type;
-}
-
 // ---- hashing & rng ----
 function hashLabel(raw: string) {
   const s = raw.trim().toLowerCase().normalize('NFKC');
@@ -197,10 +185,9 @@ function parseMermaidPie(code: string): ChartSpec {
 }
 
 function toVictoryFromVegaLite(spec: VegaLite): ChartSpec {
-  const mark = markType(spec);
-  if (markType(spec) === 'arc') {
-    const tField = (spec as any).encoding?.theta?.field;
-    const cField = (spec as any).encoding?.color?.field;
+  if (spec.type === 'pie') {
+    const tField = spec.encoding?.theta?.field;
+    const cField = spec.encoding?.color?.field;
     const usedHues: number[] = [];
     const data = (spec.data?.values ?? [])
       .map((d) => {
@@ -218,7 +205,7 @@ function toVictoryFromVegaLite(spec: VegaLite): ChartSpec {
     return { type: 'pie', data };
   }
 
-  const { x, y, color } = (spec as any).encoding;
+  const { x, y, color } = spec.encoding;
   const xField = x?.field,
     yField = y?.field;
   const xIsTime = (x?.type ?? '').toLowerCase() === 'temporal';
@@ -238,8 +225,7 @@ function toVictoryFromVegaLite(spec: VegaLite): ChartSpec {
     .filter(Boolean) as Datum[];
 
   return {
-    // @ts-expect-error bla bla
-    type: mark === 'arc' ? 'pie' : (mark ?? 'bar'),
+    type: spec.type === 'xy' && spec.markName !== 'arc' ? spec.markName : 'pie',
     data,
     isTemporalDim: xIsTime,
     isNumericDim: xIsNumeric,
