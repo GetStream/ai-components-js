@@ -1,8 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import type { ChartSpec, Datum } from './types.ts';
+import type { ChartSpec } from './types.ts';
 
-import { VictoryChart } from './components/VictoryChart.tsx';
+import { VictoryChart } from './components';
 
 export type ChartFromBlockProps = {
   spec: ChartSpec;

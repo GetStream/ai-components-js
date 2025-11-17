@@ -1,5 +1,5 @@
 import type { ChartSpec, Datum } from '../types.ts';
-import { colorFromLabel } from '../util/generate-pie-colors.ts';
+import { colorFromLabel } from '../utils';
 
 export const parseMermaidPie = (lines: string[]): ChartSpec => {
   let title: string | undefined;

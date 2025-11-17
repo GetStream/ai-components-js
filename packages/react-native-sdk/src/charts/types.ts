@@ -1,4 +1,3 @@
-// export type Dim = string | number | Date;
 export type Dim = string;
 
 export type Datum = {
@@ -15,25 +14,12 @@ export type Datum = {
 export type ChartType = 'bar' | 'line' | 'area' | 'point' | 'pie';
 
 export type ChartSpec = {
-  /** Final mark/type to render. */
   type: ChartType;
-
-  /** Flat, tidy table. Group by `series` if present. */
   data: Datum[];
-
-  /** Optional per-series color preference. */
   seriesColors?: Record<string, string>;
-
-  /** Metadata (optional). */
   title?: string;
-
-  /** Hints (optional; static only). */
-  stacked?: boolean | 'normalize';
   orientation?: 'vertical' | 'horizontal';
   isTemporalDim?: boolean;
   isNumericDim?: boolean;
-  donutInnerRadius?: number;
-
-  /** Optional fixed category/time ordering. */
   dimDomain?: Dim[];
 };

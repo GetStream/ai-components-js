@@ -4,7 +4,7 @@ import { MarkdownReactiveScrollView } from '../../components';
 import SyntaxHighlighter from '../../syntax-highlighting/SyntaxHighlighter.tsx';
 import React, { type PropsWithChildren, useCallback, useMemo } from 'react';
 import Chart from '../../charts/Chart.tsx';
-import { parseJsonChart } from '../../charts/util/parse-json-chart.ts';
+import { parseJsonChart } from '../../charts/utils/parse-json-chart.ts';
 import { parseMermaid } from '../../charts/mermaid/parser.ts';
 
 export const CodeBlockCopyButton = ({

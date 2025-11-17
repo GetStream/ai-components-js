@@ -1,6 +1,6 @@
 import type { VegaLite } from './schema.ts';
 import type { ChartSpec, Datum } from '../types.ts';
-import { colorFromLabel } from '../util/generate-pie-colors.ts';
+import { colorFromLabel } from '../utils';
 
 export const parseVegalite = (spec: VegaLite): ChartSpec => {
   if (spec.type === 'pie') {
