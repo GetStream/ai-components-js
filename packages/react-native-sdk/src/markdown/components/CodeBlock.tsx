@@ -1,9 +1,9 @@
 import { Pressable, type PressableProps, Text, View } from 'react-native';
-import type { MarkdownComponentProps, RuleRenderFunction } from '../types.ts';
+import type { MarkdownComponentProps, RuleRenderFunction } from '../types';
 import { MarkdownReactiveScrollView } from '../../components';
 import { SyntaxHighlighter } from '../../syntax-highlighting';
 import React, { type PropsWithChildren, useCallback, useMemo } from 'react';
-import Chart from '../../charts/Chart.tsx';
+import Chart from '../../charts/Chart';
 import { parseJsonChart } from '../../charts';
 import { parseMermaid } from '../../charts';
 

@@ -1,8 +1,8 @@
-import type { SyntaxHighlighterStylesheet } from '../types.ts';
+import type { SyntaxHighlighterStylesheet } from '../types';
 // @ts-expect-error createStyleObject is not available in the type exports, it is still exported though
 import { createStyleObject } from 'react-syntax-highlighter/dist/esm/create-element';
 import { processColor } from 'react-native';
-import type { ColorRange } from '../SyntaxHighlighter.tsx';
+import type { ColorRange } from '../SyntaxHighlighter';
 
 type FlattenOptions = {
   nodes: rendererNode | rendererNode[];

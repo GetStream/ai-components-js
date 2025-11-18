@@ -1,5 +1,5 @@
 import type { TextStyle } from 'react-native';
-import type { ConvertOpts, CSSP } from '../types.ts';
+import type { ConvertOpts, CSSP } from '../types';
 
 const EM_DEFAULT = 16;
 

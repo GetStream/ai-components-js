@@ -1,4 +1,4 @@
-import type { Datum } from '../types.ts';
+import type { Datum } from '../types';
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 

@@ -1,1 +1,1 @@
-export * from './generate-markdown-text.ts';
+export * from './generate-markdown-text';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Platform, View } from 'react-native';
-import type { ChartSpec } from '../types.ts';
+import type { ChartSpec } from '../types';
 import {
   Area,
   Bar,
@@ -12,7 +12,7 @@ import {
   // useChartTransformState,
 } from 'victory-native';
 import { LinearGradient, matchFont, vec } from '@shopify/react-native-skia';
-import { PieLegend } from './PieLegend.tsx';
+import { PieLegend } from './PieLegend';
 
 const font = matchFont({
   fontFamily: Platform.select({

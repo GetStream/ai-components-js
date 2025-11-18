@@ -2,7 +2,7 @@ import React from 'react';
 import { type StyleProp, type ViewStyle } from 'react-native';
 import PerfTextNative, {
   type ColorRange as NativeColorRange,
-} from '../native-specs/PerfTextNativeComponent.ts';
+} from '../native-specs/PerfTextNativeComponent';
 import type { ColorRange } from '../syntax-highlighting';
 
 export type PerfTextProps = {

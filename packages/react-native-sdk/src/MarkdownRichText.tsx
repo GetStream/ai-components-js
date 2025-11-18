@@ -4,7 +4,7 @@ import { Markdown } from './markdown';
 import type { MarkdownRules, MarkdownStyle } from './markdown';
 import { Linking } from 'react-native';
 
-import { useStableCallback } from './internal/hooks/useStableCallback.ts';
+import { useStableCallback } from './internal/hooks/useStableCallback';
 
 // export const useStreamingMessage = ({
 //   letterInterval = 0,

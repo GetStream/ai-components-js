@@ -3,8 +3,8 @@ import type {
   RNSheet,
   RNStyle,
   SyntaxHighlighterStylesheet,
-} from '../types.ts';
-import { cssToRNTextStyle } from './converter.ts';
+} from '../types';
+import { cssToRNTextStyle } from './converter';
 import { Platform, Text } from 'react-native';
 // @ts-expect-error createStyleObject is not available in the type exports, it is still exported though
 import { createStyleObject } from 'react-syntax-highlighter/dist/esm/create-element';

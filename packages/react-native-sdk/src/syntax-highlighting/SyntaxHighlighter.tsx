@@ -16,7 +16,7 @@ import {
 import type {
   NativeSyntaxHighlighterProps,
   SyntaxHighlighterStylesheet,
-} from './types.ts';
+} from './types';
 import { MarkdownReactiveScrollView } from '../components';
 
 export type ColorRange = {
