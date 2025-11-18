@@ -15,6 +15,8 @@ import remarkGfm from 'remark-gfm';
 import { Prism, type SyntaxHighlighterProps } from 'react-syntax-highlighter';
 import clsx from 'clsx';
 
+import { SuspendedChart } from './tools/charts/suspended';
+
 const SyntaxHighlighter =
   Prism as unknown as ComponentType<SyntaxHighlighterProps>;
 
@@ -22,7 +24,12 @@ const getToolOrLanguage = (className: string = '') => {
   return className.match(/language-(?<tool>[\w-]+)/)?.groups?.['tool'];
 };
 
-type ToolComponents = Record<string, ComponentType<{ data: string }>>;
+type ToolComponents = {
+  [key in string]?: ComponentType<{
+    data: string;
+  }>;
+};
+
 type MarkdownComponents = Components;
 
 const AIMarkdownContext = React.createContext<{
@@ -36,35 +43,45 @@ type DefaultPreProps = BaseDefaultPreProps & {
 };
 
 const DefaultPre = (props: DefaultPreProps) => {
-  const { children, Pre = 'pre', ...restProps } = props;
+  const { children, className, Pre = 'pre', ...restProps } = props;
 
   const { toolComponents } = useContext(AIMarkdownContext);
 
   const [codeElement] = Children.toArray(children);
 
   if (
-    !isValidElement(codeElement) ||
-    codeElement.props.node.tagName !== 'code'
+    isValidElement(codeElement) &&
+    codeElement.props.node.tagName === 'code'
   ) {
-    return <Pre {...restProps}>{children}</Pre>;
-  }
+    const toolOrLanguage = getToolOrLanguage(codeElement.props.className);
 
-  const tool = getToolOrLanguage(codeElement.props.className);
+    // grab from pre-registered component set and render
+    const Component =
+      typeof toolOrLanguage === 'string'
+        ? toolComponents[toolOrLanguage]
+        : null;
 
-  // grab from pre-registered component set and render
-  const Component = typeof tool === 'string' ? toolComponents[tool] : null;
-  if (Component) {
-    return <Component data={codeElement.props.children as string} />;
-  }
+    console.log(codeElement.props.node);
 
-  // render just a fragment with the code content
-  // which gets replaced by SyntaxHighlighter (it itself renders pre too)
-  if (tool) {
-    return <>{children}</>;
+    if (Component) {
+      // TODO: forward metadata
+      // TODO: allow fallthrough if render fails/errors-out (display raw code block instead)
+      return <Component data={codeElement.props.children as string} />;
+    }
+
+    // render just a fragment with the code content
+    // which gets replaced by SyntaxHighlighter (it itself renders pre too)
+    if (toolOrLanguage) {
+      return <>{children}</>;
+    }
   }
 
   // treat as regular pre/code block if there's no tool/language
-  return <Pre {...restProps}>{children}</Pre>;
+  return (
+    <Pre className={clsx(className, 'aicr__pre')} {...restProps}>
+      {children}
+    </Pre>
+  );
 };
 
 const DefaultSyntaxHighlighter = ({
@@ -113,7 +130,7 @@ const DefaultCode = (props: DefaultCodeProps) => {
 
   return (
     <Component
-      className={className}
+      className={clsx(className, 'aicr__code')}
       node={node}
       {...(typeof Component === 'string'
         ? {
@@ -153,8 +170,8 @@ export const AIMarkdown: AIMarkdown = (props) => {
 
   const mergedToolComponents: ToolComponents = useMemo(
     () => ({
+      chartjs: SuspendedChart,
       ...props.toolComponents,
-      // ...DefaultTools,
     }),
     [props.toolComponents],
   );
