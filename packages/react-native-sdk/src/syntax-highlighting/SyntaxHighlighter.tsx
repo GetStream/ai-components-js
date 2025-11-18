@@ -1,5 +1,5 @@
 import React, { type PropsWithChildren, useMemo } from 'react';
-import { PixelRatio, Platform, type ProcessedColorValue } from 'react-native';
+import { Platform, type ProcessedColorValue } from 'react-native';
 
 import './prism-config';
 
@@ -20,7 +20,6 @@ import type {
   SyntaxHighlighterStylesheet,
 } from './types.ts';
 import { MarkdownReactiveScrollView, PerfText } from '../components';
-import { useMonospaceCharMetrics } from './hooks/useMonospaceCharMetrics';
 
 export type ColorRange = {
   start: number;
@@ -43,37 +42,20 @@ const AndroidNativeRenderer = ({
   fontSize: number;
   lineHeight: number;
 }) => {
-  const { text, ranges, longestLine } = flattenRowsToTextAndColorRanges(rows, {
+  const { text, ranges } = flattenRowsToTextAndColorRanges(rows, {
     stylesheet,
     defaultColor,
     fontFamily,
     fontSize,
   });
 
-  const { charWidth } = useMonospaceCharMetrics(fontSize);
-
-  const width = longestLine * charWidth;
-
-  // We respect the device's pixel density ratio in order to precalculate
-  // the height of the view.
-  const px = PixelRatio.getPixelSizeForLayoutSize(lineHeight);
-  const height = rows.length * px * 0.85;
-
-  return (
-    <PerfText
-      style={{ height, width }}
-      text={text}
-      ranges={ranges}
-      lineHeight={lineHeight}
-      fontSize={fontSize}
-    />
-  );
+  return <PerfText text={text} ranges={ranges} lineHeight={9} fontSize={13} />;
 };
 
 const nativeRenderer = ({
   defaultColor,
   fontFamily,
-  fontSize,
+  fontSize = 13,
 }: {
   defaultColor: string;
   fontFamily?: string;
@@ -86,8 +68,8 @@ const nativeRenderer = ({
         stylesheet={stylesheet}
         defaultColor={defaultColor}
         fontFamily={fontFamily}
-        fontSize={13}
-        lineHeight={9}
+        fontSize={fontSize}
+        lineHeight={fontSize - 4}
       />
     ) : (
       rows.map((node, i) =>

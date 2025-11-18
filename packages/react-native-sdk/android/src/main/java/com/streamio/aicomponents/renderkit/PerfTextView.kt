@@ -12,11 +12,6 @@ class PerfTextView(context: Context) : AppCompatTextView(context) {
 
   private var colorRanges: List<ColorRange> = emptyList()
 
-  override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-          // DO NOT force your own height here. Just:
-          super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-      }
-
   fun setTextValue(value: String) {
     applyTextAndColors(value, colorRanges)
   }

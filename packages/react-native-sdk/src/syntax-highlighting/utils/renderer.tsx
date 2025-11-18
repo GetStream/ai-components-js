@@ -82,7 +82,7 @@ export const createNativeElement = ({
   fontSize?: number;
 }) => {
   const { properties, type, tagName: TagName, value } = node;
-  const startingStyle = { fontFamily, fontSize, height: fontSize + 5 };
+  const startingStyle = { fontFamily, fontSize };
   if (type === 'text') {
     return (
       <Text

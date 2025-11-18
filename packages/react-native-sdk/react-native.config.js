@@ -2,10 +2,8 @@ module.exports = {
   dependency: {
     platforms: {
       android: {
-        sourceDir: './android',
-        packageImportPath:
-          'import com.streamio.aicomponents.renderkit.RenderKitPackage;',
-        packageInstance: 'new RenderKitPackage()',
+        componentDescriptors: ['PerfTextComponentDescriptor'],
+        cmakeListsPath: '../android/src/main/jni/CMakeLists.txt',
       },
       ios: null,
     },

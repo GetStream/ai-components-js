@@ -16,4 +16,12 @@ export interface NativeProps extends ViewProps {
   lineHeight?: Float;
 }
 
-export default codegenNativeComponent<NativeProps>('PerfText');
+// Applying interfaceOnly is extremely important, as we are going to
+// override some of the codegen-generated code within our C++ bindings
+// and without it it won't compile as there will be naming collisions.
+// This essentially allows the compiler to pick the interface that's
+// defined first (which we make sure is ours within CMakeLists.txt) and
+// stick with that, ignoring anything else.
+export default codegenNativeComponent<NativeProps>('PerfText', {
+  interfaceOnly: true,
+});
