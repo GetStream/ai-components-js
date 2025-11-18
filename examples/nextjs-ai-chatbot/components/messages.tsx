@@ -8,6 +8,9 @@ import { useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import ToolsOutput from './tools';
+import { AIMarkdown } from '@stream-io/ai-components-react';
+import Weather from './tools/weather';
+import clsx from 'clsx';
 
 export default function Messages() {
   const { messages, status, isLoadingMessages } = useApp();
@@ -81,11 +84,48 @@ export default function Messages() {
                 : 'max-w-full overflow-scroll'
             }`}
           >
-            <Markdown>
+            <AIMarkdown
+              toolComponents={{
+                'ai-tool-weather': Weather,
+              }}
+              markdownComponents={{
+                p: ({ children }) => <div className="no-prose">{children}</div>,
+                code: ({ children, ...rest }) => (
+                  <AIMarkdown.default.code
+                    {...rest}
+                    className={clsx(
+                      rest.className,
+                      'text-sm py-0.5 px-1 rounded',
+                    )}
+                  >
+                    {children}
+                  </AIMarkdown.default.code>
+                ),
+                ol: ({ node, children, ...props }) => (
+                  <ol className="list-decimal list-inside ml-4" {...props}>
+                    {children}
+                  </ol>
+                ),
+                li: ({ node, children, ...props }) => {
+                  return (
+                    <li className="py-1" {...props}>
+                      {children}
+                    </li>
+                  );
+                },
+                ul: ({ node, children, ...props }) => {
+                  return (
+                    <ul className="list-decimal list-inside ml-4" {...props}>
+                      {children}
+                    </ul>
+                  );
+                },
+              }}
+            >
               {m.parts
                 .map((part: any) => (part.type === 'text' ? part.text : ''))
                 .join('')}
-            </Markdown>
+            </AIMarkdown>
             <ToolsOutput parts={m.parts} />
           </div>
         </div>

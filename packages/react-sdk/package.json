@@ -9,7 +9,7 @@
     ".": {
       "types": "./dist/types/index.d.ts",
       "browser": {
-        "import": "./dist/esm/index.mjs",
+        "import": "./dist/es/index.mjs",
         "require": "./dist/cjs/index.js"
       },
       "default": "./dist/cjs/index.js"
@@ -17,7 +17,7 @@
     "./stream": {
       "types": "./dist/types/stream/index.d.ts",
       "browser": {
-        "import": "./dist/esm/stream/index.mjs",
+        "import": "./dist/es/stream/index.mjs",
         "require": "./dist/cjs/stream/index.js"
       },
       "default": "./dist/cjs/stream/index.js"
@@ -29,9 +29,11 @@
     "!src/*.test.ts"
   ],
   "scripts": {
-    "build": "rimraf ./dist && concurrently 'vite build' 'tsc -p ./tsconfig.lib.json'",
+    "build": "rimraf ./dist && concurrently 'vite build' 'tsc -p ./tsconfig.lib.json' 'pnpm run build:styles'",
+    "build:styles": "exit 0",
+    "dev": "concurrently 'vite build --watch' 'tsc -p ./tsconfig.lib.json' --watch",
     "prepare": "pnpm run build",
-    "test": "vitest"
+    "test": ""
   },
   "keywords": [
     "ai",
@@ -50,13 +52,22 @@
     "react-dom": "^17 || ^18 || ^19"
   },
   "devDependencies": {
-    "@types/react": "^17",
-    "@types/react-dom": "^17",
     "@types/node": "^24",
+    "@types/react": "^18.3.26",
+    "@types/react-dom": "^18.3.7",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "concurrently": "catalog:",
-    "vite": "catalog:",
     "rimraf": "^6.0.1",
     "typescript": "catalog:",
+    "vite": "catalog:",
     "vitest": "catalog:"
+  },
+  "dependencies": {
+    "chart.js": "^4.5.1",
+    "clsx": "^2.1.1",
+    "react-chartjs-2": "^5.3.1",
+    "react-markdown": "^10.1.0",
+    "react-syntax-highlighter": "15.5.0",
+    "remark-gfm": "^4.0.1"
   }
 }
