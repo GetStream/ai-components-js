@@ -13,8 +13,6 @@ import com.facebook.react.uimanager.PixelUtil
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
-import com.facebook.react.viewmanagers.PerfTextManagerDelegate
-import com.facebook.react.viewmanagers.PerfTextManagerInterface
 import com.facebook.yoga.YogaMeasureMode
 import com.facebook.yoga.YogaMeasureOutput
 import kotlin.math.ceil
