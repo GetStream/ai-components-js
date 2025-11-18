@@ -1,11 +1,11 @@
 import { Pressable, type PressableProps, Text, View } from 'react-native';
 import type { MarkdownComponentProps, RuleRenderFunction } from '../types.ts';
 import { MarkdownReactiveScrollView } from '../../components';
-import SyntaxHighlighter from '../../syntax-highlighting/SyntaxHighlighter.tsx';
+import { SyntaxHighlighter } from '../../syntax-highlighting';
 import React, { type PropsWithChildren, useCallback, useMemo } from 'react';
 import Chart from '../../charts/Chart.tsx';
-import { parseJsonChart } from '../../charts/utils/parse-json-chart.ts';
-import { parseMermaid } from '../../charts/mermaid/parser.ts';
+import { parseJsonChart } from '../../charts';
+import { parseMermaid } from '../../charts';
 
 export const CodeBlockCopyButton = ({
   onPress,

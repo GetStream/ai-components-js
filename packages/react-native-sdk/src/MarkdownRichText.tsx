@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo } from 'react';
 import { generateMarkdownText } from './markdown';
 import { Markdown } from './markdown';
 import type { MarkdownRules, MarkdownStyle } from './markdown';

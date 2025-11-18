@@ -5,9 +5,12 @@ import type {
   SyntaxHighlighterStylesheet,
 } from '../types.ts';
 import { cssToRNTextStyle } from './converter.ts';
-import { Text } from 'react-native';
+import { Platform, Text } from 'react-native';
 // @ts-expect-error createStyleObject is not available in the type exports, it is still exported though
 import { createStyleObject } from 'react-syntax-highlighter/dist/esm/create-element';
+import type { SyntaxHighlighterProps } from 'react-syntax-highlighter';
+import { AndroidNativeRenderer } from '../components';
+import React from 'react';
 
 export const DEFAULT_FONT_SIZE = 13;
 
@@ -119,4 +122,37 @@ export const createNativeElement = ({
       </Text>
     );
   }
+};
+
+export const nativeRenderer = ({
+  defaultColor,
+  fontFamily,
+  fontSize = 13,
+}: {
+  defaultColor: string;
+  fontFamily?: string;
+  fontSize?: number;
+}): SyntaxHighlighterProps['renderer'] => {
+  return ({ rows, stylesheet }) =>
+    Platform.OS === 'android' ? (
+      <AndroidNativeRenderer
+        rows={rows}
+        stylesheet={stylesheet}
+        defaultColor={defaultColor}
+        fontFamily={fontFamily}
+        fontSize={fontSize}
+        lineHeight={fontSize - 4}
+      />
+    ) : (
+      rows.map((node, i) =>
+        createNativeElement({
+          node,
+          stylesheet,
+          key: `code-segment-${i}`,
+          defaultColor,
+          fontFamily,
+          fontSize,
+        }),
+      )
+    );
 };

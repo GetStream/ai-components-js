@@ -3,23 +3,21 @@ import { Platform, type ProcessedColorValue } from 'react-native';
 
 import './prism-config';
 
-import SyntaxHighlighter, {
+import SyntaxHighlighterHljs, {
   Prism as SyntaxHighlighterPrism,
-  type SyntaxHighlighterProps,
 } from 'react-syntax-highlighter';
 import { defaultStyle } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { prism as prismDefaultStyle } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import {
-  createNativeElement,
   DEFAULT_FONT_SIZE,
-  flattenRowsToTextAndColorRanges,
   generateNewStylesheet,
+  nativeRenderer,
 } from './utils';
 import type {
   NativeSyntaxHighlighterProps,
   SyntaxHighlighterStylesheet,
 } from './types.ts';
-import { MarkdownReactiveScrollView, PerfText } from '../components';
+import { MarkdownReactiveScrollView } from '../components';
 
 export type ColorRange = {
   start: number;
@@ -27,65 +25,7 @@ export type ColorRange = {
   color: ProcessedColorValue;
 };
 
-const AndroidNativeRenderer = ({
-  rows,
-  stylesheet,
-  defaultColor,
-  fontFamily,
-  fontSize,
-  lineHeight = 17,
-}: {
-  rows: rendererNode[];
-  stylesheet: rendererProps['stylesheet'];
-  defaultColor: string;
-  fontFamily?: string;
-  fontSize: number;
-  lineHeight: number;
-}) => {
-  const { text, ranges } = flattenRowsToTextAndColorRanges(rows, {
-    stylesheet,
-    defaultColor,
-    fontFamily,
-    fontSize,
-  });
-
-  return <PerfText text={text} ranges={ranges} lineHeight={9} fontSize={13} />;
-};
-
-const nativeRenderer = ({
-  defaultColor,
-  fontFamily,
-  fontSize = 13,
-}: {
-  defaultColor: string;
-  fontFamily?: string;
-  fontSize?: number;
-}): SyntaxHighlighterProps['renderer'] => {
-  return ({ rows, stylesheet }) =>
-    Platform.OS === 'android' ? (
-      <AndroidNativeRenderer
-        rows={rows}
-        stylesheet={stylesheet}
-        defaultColor={defaultColor}
-        fontFamily={fontFamily}
-        fontSize={fontSize}
-        lineHeight={fontSize - 4}
-      />
-    ) : (
-      rows.map((node, i) =>
-        createNativeElement({
-          node,
-          stylesheet,
-          key: `code-segment-${i}`,
-          defaultColor,
-          fontFamily,
-          fontSize,
-        }),
-      )
-    );
-};
-
-const NativeSyntaxHighlighter = ({
+export const SyntaxHighlighter = ({
   fontFamily = Platform.OS === 'ios' ? 'Courier' : 'Monospace',
   fontSize = DEFAULT_FONT_SIZE,
   children,
@@ -114,7 +54,7 @@ const NativeSyntaxHighlighter = ({
   );
 
   const Highlighter =
-    highlighter === 'prism' ? SyntaxHighlighterPrism : SyntaxHighlighter;
+    highlighter === 'prism' ? SyntaxHighlighterPrism : SyntaxHighlighterHljs;
 
   return (
     <Highlighter
@@ -129,5 +69,3 @@ const NativeSyntaxHighlighter = ({
     </Highlighter>
   );
 };
-
-export default NativeSyntaxHighlighter;
