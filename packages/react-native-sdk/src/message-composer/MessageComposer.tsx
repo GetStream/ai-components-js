@@ -1,8 +1,24 @@
 import React, { useState } from 'react';
-import { Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import {
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { openSheet } from '../store/bottom-sheet-state-store';
 import { BottomSheet } from '../components/BottomSheet';
 import { BottomSheetContent } from './ActionSheet';
+import { Mic } from '../internal/icons/Mic';
+import { SendUp } from '../internal/icons/SendUp';
+
+import Animated, {
+  FadeIn,
+  FadeOut,
+  ZoomIn,
+  ZoomOut,
+} from 'react-native-reanimated';
 
 export type BottomSheetOption = {
   title: string;
@@ -31,7 +47,17 @@ export const AIMessageComposer = ({
       <View pointerEvents={'box-none'} style={styles.absoluteContainer}>
         <View style={styles.row}>
           <Pressable style={styles.roundButton} onPress={openSheet}>
-            <View style={styles.plusIcon} />
+            <Text
+              style={{
+                fontSize: 32,
+                textAlign: 'center',
+                alignSelf: 'center',
+                lineHeight: 32,
+                color: '#7A7A7A',
+              }}
+            >
+              +
+            </Text>
           </Pressable>
 
           <View style={styles.inputPill}>
@@ -45,13 +71,35 @@ export const AIMessageComposer = ({
               underlineColorAndroid={'transparent'}
             />
 
-            <Pressable style={styles.iconButton}>
-              <View style={styles.micIcon} />
-            </Pressable>
-
-            <Pressable style={styles.voiceButton}>
-              <View style={styles.waveIcon} />
-            </Pressable>
+            {text && text.length > 0 ? (
+              <Animated.View
+                key={'send-button'}
+                entering={ZoomIn.duration(250)}
+                exiting={ZoomOut.duration(250)}
+              >
+                <Pressable style={styles.iconButton}>
+                  <View style={styles.sendIcon}>
+                    <SendUp size={24} />
+                  </View>
+                </Pressable>
+              </Animated.View>
+            ) : (
+              <Animated.View
+                key={'mic-button'}
+                entering={ZoomIn.duration(250)}
+                exiting={ZoomOut.duration(250)}
+              >
+                <Pressable style={styles.iconButton}>
+                  <View style={styles.micIcon}>
+                    <Mic
+                      size={32}
+                      viewBox={`0 0 ${32} ${28}`}
+                      fill={'#7A7A7A'}
+                    />
+                  </View>
+                </Pressable>
+              </Animated.View>
+            )}
           </View>
         </View>
         <BottomSheet>
@@ -65,7 +113,7 @@ export const AIMessageComposer = ({
   );
 };
 
-const PILL_HEIGHT = 44;
+const PILL_HEIGHT = 52;
 
 const styles = StyleSheet.create({
   absoluteContainer: {
@@ -90,11 +138,9 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   plusIcon: {
-    width: 16,
-    height: 2,
-    borderRadius: 1,
     backgroundColor: '#555',
-    transform: [{ rotate: '90deg' }],
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   inputPill: {
     flex: 1,
@@ -118,21 +164,24 @@ const styles = StyleSheet.create({
     color: '#111',
     paddingVertical: 0,
     paddingHorizontal: 0,
+    marginRight: 24,
   },
   iconButton: {
-    marginLeft: 6,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
   },
   micIcon: {
-    width: 12,
-    height: 16,
-    borderRadius: 6,
-    borderWidth: 2,
+    width: 32,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderColor: '#777',
+  },
+  sendIcon: {
+    width: 32,
+    height: 32,
+    backgroundColor: 'black',
+    borderRadius: 16,
   },
   voiceButton: {
     marginLeft: 4,
