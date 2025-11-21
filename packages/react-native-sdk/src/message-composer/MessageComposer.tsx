@@ -17,6 +17,7 @@ import Animated, { ZoomIn, ZoomOut } from 'react-native-reanimated';
 import { MediaPickerService } from '../services';
 import { useMediaPickerState } from '../services/media-picker-service/hooks/useMediaPickerState.ts';
 import type { MediaPickerState } from '../services/media-picker-service/AbstractMediaPickerService.ts';
+import { useStableCallback } from '../internal/hooks/useStableCallback.ts';
 
 export type BottomSheetOption = {
   title: string;
@@ -50,6 +51,23 @@ export const AIMessageComposer = ({
   const [text, setText] = useState<string>('');
   const { attachments } =
     useMediaPickerState({ service: mediaPickerService }) ?? {};
+
+  const clearState = useStableCallback(() => {
+    setText('');
+    mediaPickerService?.clearAssets();
+  });
+
+  const sendMessage = useStableCallback(async () => {
+    const data = {
+      text,
+      attachments: mediaPickerService?.state.getLatestValue().assets,
+    };
+
+    clearState();
+
+    await onSendMessage(data);
+  });
+
   return (
     <>
       <View pointerEvents={'box-none'} style={styles.absoluteContainer}>
@@ -75,10 +93,7 @@ export const AIMessageComposer = ({
                 entering={ZoomIn.duration(250)}
                 exiting={ZoomOut.duration(250)}
               >
-                <Pressable
-                  style={styles.iconButton}
-                  onPress={() => onSendMessage({ text, attachments })}
-                >
+                <Pressable style={styles.iconButton} onPress={sendMessage}>
                   <View style={styles.sendIcon}>
                     <SendUp size={24} />
                   </View>
