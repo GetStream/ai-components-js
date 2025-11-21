@@ -23,7 +23,7 @@ export type PickMediaApi = (
   opts: PickMediaOpts,
 ) => Promise<PickMediaReturnType>;
 
-export type TakeMediaOpts = { compressionQuality: number };
+export type TakeMediaOpts = { compressionQuality?: number };
 export type TakeMediaReturnType = {
   asset?: MediaAsset;
   cancelled?: boolean;

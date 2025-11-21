@@ -13,12 +13,10 @@ import { BottomSheetContent } from './ActionSheet';
 import { Mic } from '../internal/icons/Mic';
 import { SendUp } from '../internal/icons/SendUp';
 
-import Animated, {
-  FadeIn,
-  FadeOut,
-  ZoomIn,
-  ZoomOut,
-} from 'react-native-reanimated';
+import Animated, { ZoomIn, ZoomOut } from 'react-native-reanimated';
+import { MediaPickerService } from '../services';
+import { useMediaPickerState } from '../services/media-picker-service/hooks/useMediaPickerState.ts';
+import type { MediaPickerState } from '../services/media-picker-service/AbstractMediaPickerService.ts';
 
 export type BottomSheetOption = {
   title: string;
@@ -35,29 +33,29 @@ export type AIMessageComposerProps = {
     right: number;
   };
   bottomSheetOptions: BottomSheetOption[];
+  onSendMessage: (opts: {
+    text: string;
+    attachments?: MediaPickerState['assets'];
+  }) => Promise<void>;
 };
 
 export const AIMessageComposer = ({
   bottomSheetInsets,
   bottomSheetOptions = [],
+  onSendMessage,
 }: AIMessageComposerProps) => {
+  const [mediaPickerService] = useState(() =>
+    MediaPickerService ? new MediaPickerService() : undefined,
+  );
   const [text, setText] = useState<string>('');
+  const { attachments } =
+    useMediaPickerState({ service: mediaPickerService }) ?? {};
   return (
     <>
       <View pointerEvents={'box-none'} style={styles.absoluteContainer}>
         <View style={styles.row}>
           <Pressable style={styles.roundButton} onPress={openSheet}>
-            <Text
-              style={{
-                fontSize: 32,
-                textAlign: 'center',
-                alignSelf: 'center',
-                lineHeight: 32,
-                color: '#7A7A7A',
-              }}
-            >
-              +
-            </Text>
+            <Text style={styles.attachIcon}>+</Text>
           </Pressable>
 
           <View style={styles.inputPill}>
@@ -77,7 +75,10 @@ export const AIMessageComposer = ({
                 entering={ZoomIn.duration(250)}
                 exiting={ZoomOut.duration(250)}
               >
-                <Pressable style={styles.iconButton}>
+                <Pressable
+                  style={styles.iconButton}
+                  onPress={() => onSendMessage({ text, attachments })}
+                >
                   <View style={styles.sendIcon}>
                     <SendUp size={24} />
                   </View>
@@ -106,6 +107,7 @@ export const AIMessageComposer = ({
           <BottomSheetContent
             bottomSheetInsets={bottomSheetInsets}
             bottomSheetOptions={bottomSheetOptions}
+            mediaPickerService={mediaPickerService}
           />
         </BottomSheet>
       </View>
@@ -169,6 +171,13 @@ const styles = StyleSheet.create({
   iconButton: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  attachIcon: {
+    fontSize: 32,
+    textAlign: 'center',
+    alignSelf: 'center',
+    lineHeight: 32,
+    color: '#7A7A7A',
   },
   micIcon: {
     width: 32,

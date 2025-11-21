@@ -21,7 +21,7 @@ type Size = {
 };
 
 class ExpoMediaPickerService extends AbstractMediaPickerService {
-  pickMedia = async ({ maxNumberOfFiles }: PickMediaOpts = {}) => {
+  pickMedia = async ({ maxNumberOfFiles = 3 }: PickMediaOpts = {}) => {
     try {
       let permissionGranted = true;
       if (Platform.OS === 'ios') {

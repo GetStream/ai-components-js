@@ -1,4 +1,5 @@
 import { StateStore } from '@stream-io/state-store';
+import { Keyboard } from 'react-native';
 
 export type BottomSheetState = {
   open: boolean;
@@ -12,7 +13,10 @@ const DEFAULT_STATE: BottomSheetState = {
 
 export const store = new StateStore<BottomSheetState>(DEFAULT_STATE);
 
-export const openSheet = () => store.partialNext({ open: true });
+export const openSheet = () => {
+  Keyboard.dismiss();
+  store.partialNext({ open: true });
+};
 
 export const closeSheet = () => store.partialNext(DEFAULT_STATE);
 

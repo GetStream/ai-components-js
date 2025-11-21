@@ -9,15 +9,17 @@ import { setHeight } from '../store/bottom-sheet-state-store.ts';
 import { Camera } from '../internal/icons/Camera.tsx';
 import { Picture } from '../internal/icons/Picture.tsx';
 import { Folder } from '../internal/icons/Folder.tsx';
+import type { AbstractMediaPickerService } from '../services/media-picker-service/AbstractMediaPickerService';
 
 type BottomSheetContentProps = Pick<
   AIMessageComposerProps,
   'bottomSheetInsets' | 'bottomSheetOptions'
->;
+> & { mediaPickerService?: AbstractMediaPickerService };
 
 export const BottomSheetContent = ({
   bottomSheetInsets,
   bottomSheetOptions,
+  mediaPickerService,
 }: BottomSheetContentProps) => {
   return (
     <ScrollView
@@ -29,8 +31,16 @@ export const BottomSheetContent = ({
       onContentSizeChange={(_, height) => setHeight(height)}
     >
       <View style={styles.quickActionsCard}>
-        <QuickActionButton label={'Camera'} Icon={Camera} />
-        <QuickActionButton label={'Photos'} Icon={Picture} />
+        <QuickActionButton
+          label={'Camera'}
+          Icon={Camera}
+          onPress={() => mediaPickerService?.takeMedia({})}
+        />
+        <QuickActionButton
+          label={'Photos'}
+          Icon={Picture}
+          onPress={() => mediaPickerService?.pickMedia({})}
+        />
         <QuickActionButton label={'Files'} Icon={Folder} />
       </View>
 

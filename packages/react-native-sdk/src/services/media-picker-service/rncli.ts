@@ -15,7 +15,7 @@ try {
 }
 
 class RNCLIMediaPickerService extends AbstractMediaPickerService {
-  pickMedia = async ({ maxNumberOfFiles }: PickMediaOpts = {}) => {
+  pickMedia = async ({ maxNumberOfFiles = 3 }: PickMediaOpts = {}) => {
     try {
       const result = await internalService!.launchImageLibrary({
         assetRepresentationMode: 'current',
