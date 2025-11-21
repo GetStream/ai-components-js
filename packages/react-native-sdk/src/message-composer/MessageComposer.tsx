@@ -24,7 +24,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import { MediaPickerService } from '../services';
 import { useMediaPickerState } from '../services/media-picker-service/hooks/useMediaPickerState.ts';
-import type { MediaPickerState } from '../services/media-picker-service/AbstractMediaPickerService.ts';
+import type { AbstractMediaPickerService } from '../services/media-picker-service/AbstractMediaPickerService.ts';
+import { type MediaPickerState } from '../services/media-picker-service/AbstractMediaPickerService.ts';
 import { useStableCallback } from '../internal/hooks/useStableCallback.ts';
 import { Close } from '../internal/icons/Close.tsx';
 
@@ -58,8 +59,6 @@ export const AIMessageComposer = ({
     MediaPickerService ? new MediaPickerService() : undefined,
   );
   const [text, setText] = useState<string>('');
-  const { attachments } =
-    useMediaPickerState({ service: mediaPickerService }) ?? {};
 
   const clearState = useStableCallback(() => {
     setText('');
@@ -86,57 +85,10 @@ export const AIMessageComposer = ({
           </Pressable>
 
           <Animated.View
-            style={{
-              flex: 1,
-              minHeight: PILL_HEIGHT,
-              alignItems: 'center',
-              borderRadius: PILL_HEIGHT / 2,
-              backgroundColor: '#F5F5F5',
-              paddingHorizontal: 14,
-              paddingVertical: Platform.OS === 'ios' ? 10 : 6,
-              shadowColor: '#000',
-              shadowOpacity: 0.08,
-              shadowOffset: { width: 0, height: 1 },
-              shadowRadius: 4,
-              elevation: 2,
-            }}
+            style={styles.inputPillContainer}
             layout={LinearTransition.duration(150)}
           >
-            <ScrollView
-              style={{
-                width: '100%',
-              }}
-              contentContainerStyle={{ flexGrow: 1 }}
-              horizontal={true}
-            >
-              {(attachments ?? []).map((attachment, index) => (
-                <Animated.View
-                  key={attachment.uri}
-                  entering={FadeIn.duration(150)}
-                  exiting={FadeOut.duration(150)}
-                  layout={LinearTransition.duration(150)}
-                >
-                  <Image
-                    style={{ borderRadius: 12, marginRight: 8 }}
-                    source={{ uri: attachment.uri }}
-                    width={100}
-                    height={100}
-                  />
-                  <Pressable
-                    style={{
-                      position: 'absolute',
-                      top: 8,
-                      right: 12,
-                      backgroundColor: '#000000CC',
-                      borderRadius: 24,
-                    }}
-                    onPress={() => mediaPickerService?.removeAsset(index)}
-                  >
-                    <Close pathFill={'white'} />
-                  </Pressable>
-                </Animated.View>
-              ))}
-            </ScrollView>
+            <MediaPreviewList mediaPickerService={mediaPickerService} />
             <View style={styles.inputPill}>
               <TextInput
                 value={text}
@@ -192,6 +144,45 @@ export const AIMessageComposer = ({
   );
 };
 
+export const MediaPreviewList = ({
+  mediaPickerService,
+}: {
+  mediaPickerService?: AbstractMediaPickerService;
+}) => {
+  const { attachments } =
+    useMediaPickerState({ service: mediaPickerService }) ?? {};
+
+  return (
+    <ScrollView
+      style={styles.mediaPreviewStyle}
+      contentContainerStyle={styles.mediaPreviewContentContainerStyle}
+      horizontal={true}
+    >
+      {(attachments ?? []).map((attachment, index) => (
+        <Animated.View
+          key={attachment.uri}
+          entering={FadeIn.duration(150)}
+          exiting={FadeOut.duration(150)}
+          layout={LinearTransition.duration(150)}
+        >
+          <Image
+            style={styles.mediaPreviewImage}
+            source={{ uri: attachment.uri }}
+            width={100}
+            height={100}
+          />
+          <Pressable
+            style={styles.mediaPreviewRemoveButton}
+            onPress={() => mediaPickerService?.removeAsset(index)}
+          >
+            <Close pathFill={'white'} />
+          </Pressable>
+        </Animated.View>
+      ))}
+    </ScrollView>
+  );
+};
+
 const PILL_HEIGHT = 52;
 
 const styles = StyleSheet.create({
@@ -225,6 +216,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     maxHeight: PILL_HEIGHT * 3,
+  },
+  inputPillContainer: {
+    flex: 1,
+    minHeight: PILL_HEIGHT,
+    alignItems: 'center',
+    borderRadius: PILL_HEIGHT / 2,
+    backgroundColor: '#F5F5F5',
+    paddingHorizontal: 14,
+    paddingVertical: Platform.OS === 'ios' ? 10 : 6,
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 1 },
+    shadowRadius: 4,
+    elevation: 2,
   },
   textInput: {
     flex: 1,
@@ -267,10 +272,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  waveIcon: {
-    width: 16,
-    height: 10,
-    borderRadius: 3,
-    backgroundColor: '#FFF',
+  mediaPreviewStyle: {
+    width: '100%',
+  },
+  mediaPreviewContentContainerStyle: { flexGrow: 1 },
+  mediaPreviewImage: { borderRadius: 12, marginRight: 8 },
+  mediaPreviewRemoveButton: {
+    position: 'absolute',
+    top: 8,
+    right: 12,
+    backgroundColor: '#000000CC',
+    borderRadius: 24,
   },
 });
