@@ -10,6 +10,7 @@ import { Camera } from '../internal/icons/Camera.tsx';
 import { Picture } from '../internal/icons/Picture.tsx';
 import { Folder } from '../internal/icons/Folder.tsx';
 import type { AbstractMediaPickerService } from '../services/media-picker-service/AbstractMediaPickerService';
+import { withCloseSheet } from './utils/withCloseSheet.ts';
 
 type BottomSheetContentProps = Pick<
   AIMessageComposerProps,
@@ -34,12 +35,12 @@ export const BottomSheetContent = ({
         <QuickActionButton
           label={'Camera'}
           Icon={Camera}
-          onPress={() => mediaPickerService?.takeMedia({})}
+          onPress={withCloseSheet(() => mediaPickerService?.takeMedia({}))}
         />
         <QuickActionButton
           label={'Photos'}
           Icon={Picture}
-          onPress={() => mediaPickerService?.pickMedia({})}
+          onPress={withCloseSheet(() => mediaPickerService?.pickMedia({}))}
         />
         <QuickActionButton label={'Files'} Icon={Folder} />
       </View>
@@ -64,7 +65,7 @@ type QuickActionButtonProps = {
   onPress?: () => void;
 };
 
-const QuickActionButton = ({
+export const QuickActionButton = ({
   label,
   Icon,
   onPress,
@@ -81,15 +82,15 @@ const QuickActionButton = ({
   </Pressable>
 );
 
-type ListItemProps = {
+export type ListItemProps = {
   option: BottomSheetOption;
 };
 
-const ListItem = ({ option }: ListItemProps) => {
+export const ListItem = ({ option }: ListItemProps) => {
   const { title, subtitle, action, Icon } = option;
   return (
     <Pressable
-      onPress={action}
+      onPress={withCloseSheet(action)}
       style={({ pressed }) => [
         styles.listItem,
         pressed && styles.listItemPressed,
@@ -149,8 +150,6 @@ const styles = StyleSheet.create({
     color: '#111111',
     marginTop: 4,
   },
-
-  // List
   listSection: {
     marginTop: 4,
     borderRadius: 18,

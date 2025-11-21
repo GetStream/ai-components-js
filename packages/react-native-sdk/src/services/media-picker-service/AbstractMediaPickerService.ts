@@ -56,7 +56,7 @@ export abstract class AbstractMediaPickerService {
   removeAsset = (index: number) => {
     this.state.next((prevState) => ({
       ...prevState,
-      assets: prevState.assets.splice(index, 1),
+      assets: prevState.assets.filter((_, i) => i !== index),
     }));
   };
 

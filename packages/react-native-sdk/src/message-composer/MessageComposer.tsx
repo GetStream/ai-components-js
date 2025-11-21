@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import {
+  Image,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -13,11 +15,18 @@ import { BottomSheetContent } from './ActionSheet';
 import { Mic } from '../internal/icons/Mic';
 import { SendUp } from '../internal/icons/SendUp';
 
-import Animated, { ZoomIn, ZoomOut } from 'react-native-reanimated';
+import Animated, {
+  FadeIn,
+  FadeOut,
+  LinearTransition,
+  ZoomIn,
+  ZoomOut,
+} from 'react-native-reanimated';
 import { MediaPickerService } from '../services';
 import { useMediaPickerState } from '../services/media-picker-service/hooks/useMediaPickerState.ts';
 import type { MediaPickerState } from '../services/media-picker-service/AbstractMediaPickerService.ts';
 import { useStableCallback } from '../internal/hooks/useStableCallback.ts';
+import { Close } from '../internal/icons/Close.tsx';
 
 export type BottomSheetOption = {
   title: string;
@@ -76,47 +85,100 @@ export const AIMessageComposer = ({
             <Text style={styles.attachIcon}>+</Text>
           </Pressable>
 
-          <View style={styles.inputPill}>
-            <TextInput
-              value={text}
-              onChangeText={setText}
-              placeholder={'Ask anything'}
-              placeholderTextColor={'#9E9E9E'}
-              style={styles.textInput}
-              multiline
-              underlineColorAndroid={'transparent'}
-            />
+          <Animated.View
+            style={{
+              flex: 1,
+              minHeight: PILL_HEIGHT,
+              alignItems: 'center',
+              borderRadius: PILL_HEIGHT / 2,
+              backgroundColor: '#F5F5F5',
+              paddingHorizontal: 14,
+              paddingVertical: Platform.OS === 'ios' ? 10 : 6,
+              shadowColor: '#000',
+              shadowOpacity: 0.08,
+              shadowOffset: { width: 0, height: 1 },
+              shadowRadius: 4,
+              elevation: 2,
+            }}
+            layout={LinearTransition.duration(150)}
+          >
+            <ScrollView
+              style={{
+                width: '100%',
+              }}
+              contentContainerStyle={{ flexGrow: 1 }}
+              horizontal={true}
+            >
+              {(attachments ?? []).map((attachment, index) => (
+                <Animated.View
+                  key={attachment.uri}
+                  entering={FadeIn.duration(150)}
+                  exiting={FadeOut.duration(150)}
+                  layout={LinearTransition.duration(150)}
+                >
+                  <Image
+                    style={{ borderRadius: 12, marginRight: 8 }}
+                    source={{ uri: attachment.uri }}
+                    width={100}
+                    height={100}
+                  />
+                  <Pressable
+                    style={{
+                      position: 'absolute',
+                      top: 8,
+                      right: 12,
+                      backgroundColor: '#000000CC',
+                      borderRadius: 24,
+                    }}
+                    onPress={() => mediaPickerService?.removeAsset(index)}
+                  >
+                    <Close pathFill={'white'} />
+                  </Pressable>
+                </Animated.View>
+              ))}
+            </ScrollView>
+            <View style={styles.inputPill}>
+              <TextInput
+                value={text}
+                onChangeText={setText}
+                placeholder={'Ask anything'}
+                placeholderTextColor={'#9E9E9E'}
+                style={styles.textInput}
+                multiline
+                underlineColorAndroid={'transparent'}
+              />
 
-            {text && text.length > 0 ? (
-              <Animated.View
-                key={'send-button'}
-                entering={ZoomIn.duration(250)}
-                exiting={ZoomOut.duration(250)}
-              >
-                <Pressable style={styles.iconButton} onPress={sendMessage}>
-                  <View style={styles.sendIcon}>
-                    <SendUp size={24} />
-                  </View>
-                </Pressable>
-              </Animated.View>
-            ) : (
-              <Animated.View
-                key={'mic-button'}
-                entering={ZoomIn.duration(250)}
-                exiting={ZoomOut.duration(250)}
-              >
-                <Pressable style={styles.iconButton}>
-                  <View style={styles.micIcon}>
-                    <Mic
-                      size={32}
-                      viewBox={`0 0 ${32} ${28}`}
-                      fill={'#7A7A7A'}
-                    />
-                  </View>
-                </Pressable>
-              </Animated.View>
-            )}
-          </View>
+              {text && text.length > 0 ? (
+                <Animated.View
+                  key={'send-button'}
+                  entering={ZoomIn.duration(250)}
+                  exiting={ZoomOut.duration(250)}
+                >
+                  <Pressable style={styles.iconButton} onPress={sendMessage}>
+                    <View style={styles.sendIcon}>
+                      <SendUp size={24} />
+                    </View>
+                  </Pressable>
+                </Animated.View>
+              ) : (
+                <Animated.View
+                  key={'mic-button'}
+                  entering={ZoomIn.duration(250)}
+                  exiting={ZoomOut.duration(250)}
+                >
+                  <Pressable style={styles.iconButton}>
+                    <View style={styles.micIcon}>
+                      <Mic
+                        size={32}
+                        viewBox={`0 0 ${32} ${28}`}
+                        fill={'#7A7A7A'}
+                      />
+                    </View>
+                  </Pressable>
+                </Animated.View>
+              )}
+            </View>
+          </Animated.View>
         </View>
         <BottomSheet>
           <BottomSheetContent
@@ -160,20 +222,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   inputPill: {
-    flex: 1,
-    flexDirection: 'row',
     alignItems: 'center',
-    minHeight: PILL_HEIGHT,
+    flexDirection: 'row',
     maxHeight: PILL_HEIGHT * 3,
-    borderRadius: PILL_HEIGHT / 2,
-    backgroundColor: '#F5F5F5',
-    paddingHorizontal: 14,
-    paddingVertical: Platform.OS === 'ios' ? 10 : 6,
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowOffset: { width: 0, height: 1 },
-    shadowRadius: 4,
-    elevation: 2,
   },
   textInput: {
     flex: 1,
