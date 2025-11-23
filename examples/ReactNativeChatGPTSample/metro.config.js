@@ -22,6 +22,9 @@ const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const projectRoot = __dirname;
 const workspaceRoot = path.resolve(projectRoot, '../..'); // adjust if needed
 
+console.log('PROJECTROOT: ', projectRoot);
+console.log('WORKSPACEROOT: ', workspaceRoot);
+
 const defaultConfig = getDefaultConfig(projectRoot);
 
 module.exports = mergeConfig(defaultConfig, {
