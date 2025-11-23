@@ -4,7 +4,14 @@ import {
   DrawerContentComponentProps,
 } from '@react-navigation/drawer';
 
-import { Platform, StatusBar, View } from 'react-native';
+import {
+  Platform,
+  Pressable,
+  StatusBar,
+  View,
+  Text,
+  Alert,
+} from 'react-native';
 import {
   SafeAreaProvider,
   SafeAreaView,
@@ -16,13 +23,20 @@ import {
   AITypingIndicatorView,
   Channel,
   ChannelList,
+  ChannelPreviewMessengerProps,
   Chat,
+  Copy,
+  DownloadArrow,
+  DownloadCloud,
+  Edit,
+  Flag,
   mergeThemes,
   Message,
   MessageList,
   MessageTextContainer,
   OverlayProvider,
   ThemeProvider,
+  useChannelsContext,
   useCreateChatClient,
   useMessageComposer,
   useMessageContext,
@@ -37,7 +51,11 @@ import {
   chatUserName,
   chatUserToken,
 } from './chatConfig.ts';
-import { ChannelSort, LocalMessage } from 'stream-chat';
+import {
+  ChannelSort,
+  LocalMessage,
+  Channel as ChannelClass,
+} from 'stream-chat';
 import { startAI } from './http/requests.ts';
 import {
   MarkdownRichText,
@@ -92,17 +110,51 @@ const filters = {
 
 const sort: ChannelSort = { last_updated: -1 };
 
+const ChannelPreview = (props: ChannelPreviewMessengerProps) => {
+  const channel = props.channel;
+  const { onSelect } = useChannelsContext();
+  const onPress = useStableCallback(() => {
+    onSelect?.(channel);
+  });
+  return (
+    <Pressable
+      style={({ pressed }) => ({
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        opacity: pressed ? 0.6 : 1,
+      })}
+      onPress={onPress}
+    >
+      <Text style={{ fontSize: 15, fontWeight: 'bold' }} numberOfLines={1}>
+        {channel.data?.name ?? channel.cid}
+      </Text>
+    </Pressable>
+  );
+};
+
 const MenuDrawer = ({ navigation }: DrawerContentComponentProps) => {
   const { setChannel } = useAppContext();
+  const onSelect = useStableCallback((channel: ChannelClass) => {
+    setChannel(channel);
+    navigation.closeDrawer();
+  });
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <View
+        style={{
+          marginHorizontal: 12,
+          paddingVertical: 16,
+          borderBottomWidth: 1,
+          borderBottomColor: 'grey',
+        }}
+      >
+        <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Conversations</Text>
+      </View>
       <ChannelList
         filters={filters}
         sort={sort}
-        onSelect={(channel) => {
-          setChannel(channel);
-          navigation.closeDrawer();
-        }}
+        onSelect={onSelect}
+        Preview={ChannelPreview}
       />
     </SafeAreaView>
   );
@@ -117,7 +169,7 @@ const DrawerNavigator = () => (
       },
     }}
   >
-    <Drawer.Screen name="Home" component={AppContent} />
+    <Drawer.Screen name="Chat" component={AppContent} />
   </Drawer.Navigator>
 );
 
@@ -163,7 +215,8 @@ function AppContent() {
         // MessageText={MessageText}
         MessageAvatar={() => null}
         MessageFooter={() => null}
-        // enableSwipeToReply={false}
+        enableSwipeToReply={false}
+        EmptyStateIndicator={EmptyStateIndicator}
       >
         <MessageList
           additionalFlatListProps={{
@@ -175,11 +228,47 @@ function AppContent() {
         />
         <AITypingIndicatorView />
         {/*<MessageInput />*/}
-        <MessageComposerAI bottomSheetInsets={insets} bottomSheetOptions={[]} />
+        <MessageComposerAI
+          bottomSheetInsets={insets}
+          bottomSheetOptions={bottomSheetOptions}
+        />
       </Channel>
     </View>
   );
 }
+
+const bottomSheetOptions = [
+  {
+    title: 'Create Image',
+    subtitle: 'Visualize anything',
+    action: () => Alert.alert('Pressed on Create Image !'),
+    Icon: DownloadArrow,
+  },
+  {
+    title: 'Thinking',
+    subtitle: 'Think longer for better answers',
+    action: () => Alert.alert('Pressed on Thinking !'),
+    Icon: Flag,
+  },
+  {
+    title: 'Deep research',
+    subtitle: 'Get a detailed report',
+    action: () => Alert.alert('Pressed on Deep research !'),
+    Icon: DownloadCloud,
+  },
+  {
+    title: 'Web search',
+    subtitle: 'Find real-time news and info',
+    action: () => Alert.alert('Pressed on Web search !'),
+    Icon: Copy,
+  },
+  {
+    title: 'Study and learn',
+    subtitle: 'Learn a new concept',
+    action: () => Alert.alert('Pressed on Study and learn !'),
+    Icon: Edit,
+  },
+];
 
 const CustomMessage = (props) => {
   const { theme } = useTheme();
@@ -250,5 +339,20 @@ const MessageComposerAI = (props: AIMessageComposerProps) => {
 
   return <AIMessageComposer {...props} onSendMessage={serializeToMessage} />;
 };
+
+const EmptyStateIndicator = () => (
+  <View
+    style={{
+      flex: 1,
+      backgroundColor: 'white',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}
+  >
+    <Text style={{ fontSize: 24, fontWeight: 'bold' }}>
+      What can I help with ?
+    </Text>
+  </View>
+);
 
 export default App;
