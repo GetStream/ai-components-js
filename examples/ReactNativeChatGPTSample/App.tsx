@@ -145,10 +145,17 @@ function AppContent() {
       <Channel
         channel={channel}
         doSendMessageRequest={async (_, messageData) => {
-          await channel.watch({
-            created_by_id: messageData.user_id,
-          });
-          await startAI(channel.id);
+          // TODO: Think of a better way to do this than this hack. It's garbage.
+          if (
+            channel.state.messages &&
+            channel.state.messages.length === 1 &&
+            channel.id
+          ) {
+            await channel.watch({
+              created_by_id: messageData.user_id,
+            });
+            await startAI(channel.id);
+          }
           return await channel?.sendMessage(messageData);
         }}
         StreamingMessageView={StreamingMessageView}

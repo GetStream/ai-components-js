@@ -152,6 +152,10 @@ export const MediaPreviewList = ({
   const { attachments } =
     useMediaPickerState({ service: mediaPickerService }) ?? {};
 
+  if (!attachments?.length) {
+    return null;
+  }
+
   return (
     <ScrollView
       style={styles.mediaPreviewStyle}
@@ -183,14 +187,10 @@ export const MediaPreviewList = ({
   );
 };
 
-const PILL_HEIGHT = 52;
+const PILL_HEIGHT = 48;
 
 const styles = StyleSheet.create({
   absoluteContainer: {
-    // position: 'absolute',
-    // left: 0,
-    // right: 0,
-    // bottom: 0,
     paddingHorizontal: 12,
     paddingBottom: 8,
   },
@@ -221,6 +221,7 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: PILL_HEIGHT,
     alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: PILL_HEIGHT / 2,
     backgroundColor: '#F5F5F5',
     paddingHorizontal: 14,
@@ -275,7 +276,7 @@ const styles = StyleSheet.create({
   mediaPreviewStyle: {
     width: '100%',
   },
-  mediaPreviewContentContainerStyle: { flexGrow: 1 },
+  mediaPreviewContentContainerStyle: { flexGrow: 1, paddingBottom: 8 },
   mediaPreviewImage: { borderRadius: 12, marginRight: 8 },
   mediaPreviewRemoveButton: {
     position: 'absolute',
