@@ -209,6 +209,9 @@ importers:
       '@khanacademy/simple-markdown':
         specifier: ^2.1.0
         version: 2.1.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@stream-io/state-store':
+        specifier: ^1.1.6
+        version: 1.1.6(react@19.2.0)(use-sync-external-store@1.6.0(react@19.2.0))
       expo:
         specifier: '>=51.0.0'
         version: 54.0.20(@babel/core@7.28.4)(react-native@0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0))(react@19.2.0)
@@ -246,6 +249,9 @@ importers:
       concurrently:
         specifier: 'catalog:'
         version: 9.2.1
+      expo-image-picker:
+        specifier: ^17.0.8
+        version: 17.0.8(expo@54.0.20(@babel/core@7.28.4)(react-native@0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0))(react@19.2.0))
       react:
         specifier: 19.2.0
         version: 19.2.0
@@ -258,6 +264,9 @@ importers:
       react-native-gesture-handler:
         specifier: ^2.29.0
         version: 2.29.0(react-native@0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0))(react@19.2.0)
+      react-native-image-picker:
+        specifier: ^8.2.1
+        version: 8.2.1(react-native@0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0))(react@19.2.0)
       react-native-reanimated:
         specifier: ^4.1.3
         version: 4.1.3(@babel/core@7.28.4)(react-native-worklets@0.5.2(@babel/core@7.28.4)(react-native@0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0))(react@19.2.0))(react-native@0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0))(react@19.2.0)
@@ -2047,6 +2056,17 @@ packages:
   '@standard-schema/spec@1.0.0':
     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
 
+  '@stream-io/state-store@1.1.6':
+    resolution: {integrity: sha512-4jZ7vub9EBh+zrNsA8cyW/4U2EuiCkO3T9FgZrbgorO2iBE4k8gP9GAl6w8Ikv+ZcO5jR53CeG+AA48UG3LOVQ==}
+    peerDependencies:
+      react: ^17 || ^18 || ^19
+      use-sync-external-store: ^1.5.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+      use-sync-external-store:
+        optional: true
+
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
 
@@ -3504,6 +3524,16 @@ packages:
       expo: '*'
       react: '*'
       react-native: '*'
+
+  expo-image-loader@6.0.0:
+    resolution: {integrity: sha512-nKs/xnOGw6ACb4g26xceBD57FKLFkSwEUTDXEDF3Gtcu3MqF3ZIYd3YM+sSb1/z9AKV1dYT7rMSGVNgsveXLIQ==}
+    peerDependencies:
+      expo: '*'
+
+  expo-image-picker@17.0.8:
+    resolution: {integrity: sha512-489ByhVs2XPoAu9zodivAKLv7hG4S/FOe8hO/C2U6jVxmRjpAKakKNjMml0IwWjf1+c/RYBqm1XxKaZ+vq/fDQ==}
+    peerDependencies:
+      expo: '*'
 
   expo-keep-awake@15.0.7:
     resolution: {integrity: sha512-CgBNcWVPnrIVII5G54QDqoE125l+zmqR4HR8q+MQaCfHet+dYpS5vX5zii/RMayzGN4jPgA4XYIQ28ePKFjHoA==}
@@ -5206,6 +5236,12 @@ packages:
 
   react-native-gesture-handler@2.29.0:
     resolution: {integrity: sha512-nxikN5b2ebSTPqqhIlTHQJqIHTu0Y5GAhST3w3/G1pm9BlqHVFcLFPZfIaT4A3TVKjQDcKElij1hhHKpAVUcOQ==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+
+  react-native-image-picker@8.2.1:
+    resolution: {integrity: sha512-FBeGYJGFDjMdGCcyubDJgBAPCQ4L1D3hwLXyUU91jY9ahOZMTbluceVvRmrEKqnDPFJ0gF1NVhJ0nr1nROFLdg==}
     peerDependencies:
       react: '*'
       react-native: '*'
@@ -7691,7 +7727,7 @@ snapshots:
     dependencies:
       '@babel/code-frame': 7.27.1
       '@babel/core': 7.28.4
-      '@babel/generator': 7.28.3
+      '@babel/generator': 7.28.5
       '@expo/config': 12.0.10
       '@expo/env': 2.0.7
       '@expo/json-file': 10.0.7
@@ -8372,6 +8408,11 @@ snapshots:
       '@sinonjs/commons': 3.0.1
 
   '@standard-schema/spec@1.0.0': {}
+
+  '@stream-io/state-store@1.1.6(react@19.2.0)(use-sync-external-store@1.6.0(react@19.2.0))':
+    optionalDependencies:
+      react: 19.2.0
+      use-sync-external-store: 1.6.0(react@19.2.0)
 
   '@swc/helpers@0.5.15':
     dependencies:
@@ -10064,6 +10105,15 @@ snapshots:
       react: 19.2.0
       react-native: 0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0)
 
+  expo-image-loader@6.0.0(expo@54.0.20(@babel/core@7.28.4)(react-native@0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0))(react@19.2.0)):
+    dependencies:
+      expo: 54.0.20(@babel/core@7.28.4)(react-native@0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0))(react@19.2.0)
+
+  expo-image-picker@17.0.8(expo@54.0.20(@babel/core@7.28.4)(react-native@0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0))(react@19.2.0)):
+    dependencies:
+      expo: 54.0.20(@babel/core@7.28.4)(react-native@0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0))(react@19.2.0)
+      expo-image-loader: 6.0.0(expo@54.0.20(@babel/core@7.28.4)(react-native@0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0))(react@19.2.0))
+
   expo-keep-awake@15.0.7(expo@54.0.20(@babel/core@7.28.4)(react-native@0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0))(react@19.2.0))(react@19.2.0):
     dependencies:
       expo: 54.0.20(@babel/core@7.28.4)(react-native@0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0))(react@19.2.0)
@@ -11392,7 +11442,7 @@ snapshots:
     dependencies:
       '@babel/traverse': 7.28.4
       '@babel/traverse--for-generate-function-map': '@babel/traverse@7.28.5'
-      '@babel/types': 7.28.4
+      '@babel/types': 7.28.5
       flow-enums-runtime: 0.0.6
       invariant: 2.2.4
       metro-symbolicate: 0.83.2
@@ -11443,7 +11493,7 @@ snapshots:
   metro-transform-plugins@0.83.2:
     dependencies:
       '@babel/core': 7.28.4
-      '@babel/generator': 7.28.3
+      '@babel/generator': 7.28.5
       '@babel/template': 7.27.2
       '@babel/traverse': 7.28.4
       flow-enums-runtime: 0.0.6
@@ -11465,9 +11515,9 @@ snapshots:
   metro-transform-worker@0.83.2:
     dependencies:
       '@babel/core': 7.28.4
-      '@babel/generator': 7.28.3
-      '@babel/parser': 7.28.4
-      '@babel/types': 7.28.4
+      '@babel/generator': 7.28.5
+      '@babel/parser': 7.28.5
+      '@babel/types': 7.28.5
       flow-enums-runtime: 0.0.6
       metro: 0.83.2
       metro-babel-transformer: 0.83.2
@@ -11506,11 +11556,11 @@ snapshots:
     dependencies:
       '@babel/code-frame': 7.27.1
       '@babel/core': 7.28.4
-      '@babel/generator': 7.28.3
-      '@babel/parser': 7.28.4
+      '@babel/generator': 7.28.5
+      '@babel/parser': 7.28.5
       '@babel/template': 7.27.2
       '@babel/traverse': 7.28.4
-      '@babel/types': 7.28.4
+      '@babel/types': 7.28.5
       accepts: 1.3.8
       chalk: 4.1.2
       ci-info: 2.0.0
@@ -12291,6 +12341,11 @@ snapshots:
       '@egjs/hammerjs': 2.0.17
       hoist-non-react-statics: 3.3.2
       invariant: 2.2.4
+      react: 19.2.0
+      react-native: 0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0)
+
+  react-native-image-picker@8.2.1(react-native@0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0))(react@19.2.0):
+    dependencies:
       react: 19.2.0
       react-native: 0.82.1(@babel/core@7.28.4)(@types/react@19.2.2)(react@19.2.0)
 
