@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Image,
   Platform,
@@ -23,11 +23,12 @@ import Animated, {
   ZoomOut,
 } from 'react-native-reanimated';
 import { MediaPickerService } from '../services';
-import { useMediaPickerState } from '../services/media-picker-service/hooks/useMediaPickerState.ts';
-import type { AbstractMediaPickerService } from '../services/media-picker-service/AbstractMediaPickerService.ts';
-import { type MediaPickerState } from '../services/media-picker-service/AbstractMediaPickerService.ts';
-import { useStableCallback } from '../internal/hooks/useStableCallback.ts';
-import { Close } from '../internal/icons/Close.tsx';
+import { useMediaPickerState } from '../services/media-picker-service/hooks/useMediaPickerState';
+import type { AbstractMediaPickerService } from '../services/media-picker-service/AbstractMediaPickerService';
+import { type MediaPickerState } from '../services/media-picker-service/AbstractMediaPickerService';
+import { useStableCallback } from '../internal/hooks/useStableCallback';
+import { Close } from '../internal/icons/Close';
+import { useDictation } from '../transcription/useDictation';
 
 export type BottomSheetOption = {
   title: string;
@@ -59,6 +60,33 @@ export const AIMessageComposer = ({
     MediaPickerService ? new MediaPickerService() : undefined,
   );
   const [text, setText] = useState<string>('');
+
+  const { transcript, error, isRecording, start, stop, cancel } = useDictation({
+    language: 'en-US',
+    interimResults: true,
+  });
+
+  useEffect(() => {
+    return () => {
+      cancel();
+    };
+  }, [cancel]);
+
+  useEffect(() => {
+    if (isRecording && !error) {
+      setText(transcript);
+    }
+  }, [isRecording, transcript, error]);
+
+  const onMicPress = useStableCallback(() => {
+    if (isRecording) {
+      // Stop and get final result
+      stop();
+    } else {
+      // Start listening
+      void start();
+    }
+  });
 
   const clearState = useStableCallback(() => {
     setText('');
@@ -100,7 +128,7 @@ export const AIMessageComposer = ({
                 underlineColorAndroid={'transparent'}
               />
 
-              {text && text.length > 0 ? (
+              {text && text.length > 0 && !isRecording ? (
                 <Animated.View
                   key={'send-button'}
                   entering={ZoomIn.duration(250)}
@@ -118,12 +146,12 @@ export const AIMessageComposer = ({
                   entering={ZoomIn.duration(250)}
                   exiting={ZoomOut.duration(250)}
                 >
-                  <Pressable style={styles.iconButton}>
+                  <Pressable style={styles.iconButton} onPress={onMicPress}>
                     <View style={styles.micIcon}>
                       <Mic
                         size={32}
                         viewBox={`0 0 ${32} ${28}`}
-                        fill={'#7A7A7A'}
+                        fill={isRecording ? 'blue' : '#7A7A7A'}
                       />
                     </View>
                   </Pressable>

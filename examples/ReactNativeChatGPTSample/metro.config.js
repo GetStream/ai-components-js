@@ -29,7 +29,10 @@ const defaultConfig = getDefaultConfig(projectRoot);
 
 module.exports = mergeConfig(defaultConfig, {
   projectRoot,
-  watchFolders: [workspaceRoot],
+  watchFolders: [
+    workspaceRoot,
+    path.join(workspaceRoot, 'packages/react-native-sdk'),
+  ],
   resolver: {
     ...defaultConfig.resolver,
     // Force Metro to resolve deps from the workspace root

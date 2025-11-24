@@ -62,7 +62,6 @@ import {
   AIMessageComposer,
   AIMessageComposerProps,
 } from '@stream-io/ai-components-react-native';
-import { createAnimatedComponent } from 'react-native-reanimated';
 
 const Drawer = createDrawerNavigator();
 
@@ -229,6 +228,7 @@ function AppContent() {
         <AITypingIndicatorView />
         {/*<MessageInput />*/}
         <MessageComposerAI
+          key={channel.cid}
           bottomSheetInsets={insets}
           bottomSheetOptions={bottomSheetOptions}
         />

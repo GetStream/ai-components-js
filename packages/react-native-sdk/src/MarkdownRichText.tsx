@@ -10,6 +10,7 @@ export const useStreamingMessage = ({
   letterInterval = 0,
   renderingLetterCount = 2,
   text,
+  // @ts-expect-error adsads asd ads
 }: UseStreamingMessageProps): { streamedMessageText: string } => {
   const [streamedMessageText, setStreamedMessageText] = useState<string>(text);
   const textCursor = useRef<number>(text.length);

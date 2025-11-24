@@ -4,13 +4,13 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import type {
   AIMessageComposerProps,
   BottomSheetOption,
-} from './MessageComposer.tsx';
-import { setHeight } from '../store/bottom-sheet-state-store.ts';
-import { Camera } from '../internal/icons/Camera.tsx';
-import { Picture } from '../internal/icons/Picture.tsx';
-import { Folder } from '../internal/icons/Folder.tsx';
+} from './MessageComposer';
+import { setHeight } from '../store/bottom-sheet-state-store';
+import { Camera } from '../internal/icons/Camera';
+import { Picture } from '../internal/icons/Picture';
+import { Folder } from '../internal/icons/Folder';
 import type { AbstractMediaPickerService } from '../services/media-picker-service/AbstractMediaPickerService';
-import { withCloseSheet } from './utils/withCloseSheet.ts';
+import { withCloseSheet } from './utils/withCloseSheet';
 
 type BottomSheetContentProps = Pick<
   AIMessageComposerProps,

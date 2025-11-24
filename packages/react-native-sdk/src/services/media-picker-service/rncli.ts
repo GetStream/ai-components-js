@@ -2,7 +2,7 @@ import {
   AbstractMediaPickerService,
   type MediaAsset,
   type PickMediaOpts,
-} from './AbstractMediaPickerService.ts';
+} from './AbstractMediaPickerService';
 import { AppState, Image, PermissionsAndroid, Platform } from 'react-native';
 import type { Asset } from 'react-native-image-picker';
 

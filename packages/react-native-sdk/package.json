@@ -107,7 +107,7 @@
   },
   "codegenConfig": {
     "name": "AiComponentsReactNative",
-    "type": "components",
+    "type": "all",
     "jsSrcsDir": "src/native-specs",
     "android": {
       "javaPackageName": "com.streamio.aicomponents.renderkit"
