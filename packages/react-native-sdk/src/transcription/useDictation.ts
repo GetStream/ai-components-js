@@ -4,13 +4,13 @@ import { AIDictation } from '../native/AIDictation';
 import type { DictationError, DictationState } from '../native/AIDictation';
 import type { DictationResult } from '../native-specs/NativeAIDictation';
 
-// Optional: you can export this from ../native/AIDictation instead
 type StartOptions = {
   language?: string;
   interimResults?: boolean;
   silenceTimeoutMs?: number;
 };
 
+// TODO: a generic utility can be created for ensuring permissions
 async function ensureAndroidPermission(): Promise<boolean> {
   if (Platform.OS !== 'android') return true;
 
@@ -21,6 +21,7 @@ async function ensureAndroidPermission(): Promise<boolean> {
   return granted === PermissionsAndroid.RESULTS.GRANTED;
 }
 
+// TODO: add proper jsdocs
 export const useDictation = (defaultOptions?: StartOptions) => {
   const [state, setState] = useState<DictationState>('idle');
   const [transcript, setTranscript] = useState('');
@@ -70,6 +71,7 @@ export const useDictation = (defaultOptions?: StartOptions) => {
       setError(null);
       setTranscript('');
 
+      // TODO: this should be configurable from the outside
       const opts: StartOptions = {
         interimResults: true,
         silenceTimeoutMs: 2500,
