@@ -500,7 +500,6 @@ class AIDictationModule(
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                 .emit(eventName, params)
         } catch (e: Throwable) {
-            throw e;
             // "Swallow" the error here if something throws. This
             // will typically happen if the React instance is
             // "falsely active" or if emission errors out. In both
