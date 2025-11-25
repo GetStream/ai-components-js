@@ -1,7 +1,13 @@
 import Foundation
 import Speech
 import AVFoundation
-import React  // for RCTEventEmitter
+import React
+
+@objc public protocol AIDictationEventSink {
+    func emitOnState(_ value: NSDictionary)
+    func emitOnResult(_ value: NSDictionary)
+    func emitOnError(_ value: NSDictionary)
+}
 
 @objc(AIDictationModule)
 public class AIDictationModule: NSObject {
@@ -11,10 +17,6 @@ public class AIDictationModule: NSObject {
     // -------------------------------------------------------------------------
 
     static let NAME = "NativeAIDictation"
-
-    private let EVENT_RESULT = "AIDictationResult"
-    private let EVENT_STATE  = "AIDictationState"
-    private let EVENT_ERROR  = "AIDictationError"
 
     private let STATE_IDLE      = "idle"
     private let STATE_STARTING  = "starting"
@@ -30,7 +32,7 @@ public class AIDictationModule: NSObject {
     // -------------------------------------------------------------------------
     // Internal state
     // -------------------------------------------------------------------------
-
+    
     private let audioEngine = AVAudioEngine()
     private var speechRecognizer: SFSpeechRecognizer?
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
@@ -48,7 +50,7 @@ public class AIDictationModule: NSObject {
     // Event emitter plumbing
     // -------------------------------------------------------------------------
 
-    private var eventEmitter: NSObject?
+    @objc public weak var eventSink: AIDictationEventSink?
 
     /// Called from Obj-C: [_impl startWithOptions:options eventEmitter:self];
     @objc(startWithOptions:eventEmitter:)
@@ -333,47 +335,47 @@ public class AIDictationModule: NSObject {
     // -------------------------------------------------------------------------
 
     private func emitResult(text: String, isFinal: Bool) {
-        let payload: [String: Any] = [
+        let payload: NSDictionary = [
             "text": text,
             "isFinal": isFinal
         ]
-        sendEventSafe(name: EVENT_RESULT, body: payload)
+        eventSink?.emitOnResult(payload)
     }
 
     private func emitState(_ state: String) {
-        let payload: [String: Any] = [
+        let payload: NSDictionary = [
             "state": state
         ]
-        sendEventSafe(name: EVENT_STATE, body: payload)
+        eventSink?.emitOnState(payload)
     }
 
     private func emitError(_ code: String, message: String) {
-        let payload: [String: Any] = [
+        let payload: NSDictionary = [
             "code": code,
             "message": message
         ]
-        sendEventSafe(name: EVENT_ERROR, body: payload)
+        eventSink?.emitOnError(payload)
     }
 
-    private func sendEventSafe(name: String, body: Any) {
-//        if Thread.isMainThread {
-//            DictationEventEmitter.emit(
-//                            name,
-//                            body: body
-//                        )
-////            emitter.sendEvent(withName: name, body: body)
-//        } else {
-//            DispatchQueue.main.async {
-//                DictationEventEmitter.emit(
-//                                name,
-//                                body: body
-//                            )
-////                emitter.sendEvent(withName: name, body: body)
-//            }
-//        }
-        DictationEventEmitter.emit(
-                        name,
-                        body: body
-                    )
-    }
+//    private func sendEventSafe(name: String, body: Any) {
+////        if Thread.isMainThread {
+////            DictationEventEmitter.emit(
+////                            name,
+////                            body: body
+////                        )
+//////            emitter.sendEvent(withName: name, body: body)
+////        } else {
+////            DispatchQueue.main.async {
+////                DictationEventEmitter.emit(
+////                                name,
+////                                body: body
+////                            )
+//////                emitter.sendEvent(withName: name, body: body)
+////            }
+////        }
+//        DictationEventEmitter.emit(
+//                        name,
+//                        body: body
+//                    )
+//    }
 }

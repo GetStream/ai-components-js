@@ -16,8 +16,6 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.ReadableType
-import com.facebook.react.bridge.WritableMap
-import com.facebook.react.modules.core.DeviceEventManagerModule
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -31,10 +29,6 @@ class AIDictationModule(
 
     companion object {
         const val NAME = "AIDictation"
-
-        private const val EVENT_RESULT = "AIDictationResult"
-        private const val EVENT_STATE = "AIDictationState"
-        private const val EVENT_ERROR = "AIDictationError"
 
         private const val STATE_IDLE = "idle"
         private const val STATE_STARTING = "starting"
@@ -443,7 +437,7 @@ class AIDictationModule(
             putString("text", text)
             putBoolean("isFinal", isFinal)
         }
-        sendEvent(EVENT_RESULT, map)
+        emitOnResult(map);
     }
 
     /**
@@ -453,7 +447,7 @@ class AIDictationModule(
         val map = Arguments.createMap().apply {
             putString("state", state)
         }
-        sendEvent(EVENT_STATE, map)
+        emitOnState(map)
     }
 
     /**
@@ -464,7 +458,7 @@ class AIDictationModule(
             putString("code", code)
             putString("message", message)
         }
-        sendEvent(EVENT_ERROR, map)
+        emitOnError(map)
     }
 
     /**
@@ -486,26 +480,6 @@ class AIDictationModule(
         }
 
         emitError(ERROR_ANDROID, msg)
-    }
-
-    /**
-     * Sends a device event to JS via RCTDeviceEventEmitter.
-     *
-     * Safely no-ops if there is no active React instance or if emission throws.
-     */
-    private fun sendEvent(eventName: String, params: WritableMap?) {
-        if (!reactContext.hasActiveReactInstance()) return
-        try {
-            reactContext
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                .emit(eventName, params)
-        } catch (e: Throwable) {
-            // "Swallow" the error here if something throws. This
-            // will typically happen if the React instance is
-            // "falsely active" or if emission errors out. In both
-            // scenarios, we don't want to crash native because JS
-            // is missing.
-        }
     }
 
     private fun ReadableMap.getBooleanSafe(key: String): Boolean? =

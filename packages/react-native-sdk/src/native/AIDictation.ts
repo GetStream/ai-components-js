@@ -1,25 +1,9 @@
-import { NativeEventEmitter, NativeModules } from 'react-native';
 import NativeAIDictation, {
+  type DictationError,
   type DictationResult,
   type DictationStartOptions,
+  type DictationState,
 } from '../native-specs/NativeAIDictation';
-
-console.log(
-  'NATIVEAIDICTATAION',
-  NativeAIDictation,
-  NativeModules.DictationEventEmitter,
-);
-
-const emitter = new NativeEventEmitter(
-  NativeModules.DictationEventEmitter ?? NativeAIDictation,
-);
-
-export type DictationState = 'idle' | 'starting' | 'listening' | 'stopping';
-
-export type DictationError = {
-  code: string;
-  message: string;
-};
 
 // Low-level API
 export const AIDictation = {
@@ -36,15 +20,15 @@ export const AIDictation = {
     return NativeAIDictation.isRecording();
   },
   addResultListener(listener: (result: DictationResult) => void) {
-    const sub = emitter.addListener('AIDictationResult', listener);
+    const sub = NativeAIDictation.onResult(listener);
     return () => sub.remove();
   },
-  addStateListener(listener: (payload: { state: DictationState }) => void) {
-    const sub = emitter.addListener('AIDictationState', listener);
+  addStateListener(listener: (payload: DictationState) => void) {
+    const sub = NativeAIDictation.onState(listener);
     return () => sub.remove();
   },
   addErrorListener(listener: (payload: DictationError) => void) {
-    const sub = emitter.addListener('AIDictationError', listener);
+    const sub = NativeAIDictation.onError(listener);
     return () => sub.remove();
   },
 };

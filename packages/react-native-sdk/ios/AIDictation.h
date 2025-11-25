@@ -1,5 +1,5 @@
 #import <AiComponentsReactNative/AiComponentsReactNative.h>
 
-@interface AIDictation : NSObject <NativeAIDictationSpec>
+@interface AIDictation : NativeAIDictationSpecBase <NativeAIDictationSpec>
 
 @end
