@@ -1,12 +1,18 @@
-import { NativeEventEmitter } from 'react-native';
+import { NativeEventEmitter, NativeModules } from 'react-native';
 import NativeAIDictation, {
   type DictationResult,
   type DictationStartOptions,
 } from '../native-specs/NativeAIDictation';
 
-console.log('NATIVEAIDICTATAION', NativeAIDictation);
+console.log(
+  'NATIVEAIDICTATAION',
+  NativeAIDictation,
+  NativeModules.DictationEventEmitter,
+);
 
-const emitter = new NativeEventEmitter(NativeAIDictation as any);
+const emitter = new NativeEventEmitter(
+  NativeModules.DictationEventEmitter ?? NativeAIDictation,
+);
 
 export type DictationState = 'idle' | 'starting' | 'listening' | 'stopping';
 

@@ -5,6 +5,7 @@
   "description": "React Native SDK for AI Components",
   "main": "./dist/commonjs/index.js",
   "types": "./dist/typescript/index.d.ts",
+  "homepage": "https://github.com/GetStream/ai-components-js.git",
   "exports": {
     ".": {
       "react-native": {
