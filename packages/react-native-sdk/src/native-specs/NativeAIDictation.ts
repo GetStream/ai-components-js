@@ -19,4 +19,4 @@ export interface Spec extends TurboModule {
   isRecording(): boolean;
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>('NativeAIDictation');
+export default TurboModuleRegistry.getEnforcing<Spec>('AIDictation');

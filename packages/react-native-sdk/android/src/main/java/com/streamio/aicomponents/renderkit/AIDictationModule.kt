@@ -30,7 +30,7 @@ class AIDictationModule(
     // ---------------------------------------------------------------------------
 
     companion object {
-        const val NAME = "NativeAIDictation"
+        const val NAME = "AIDictation"
 
         private const val EVENT_RESULT = "AIDictationResult"
         private const val EVENT_STATE = "AIDictationState"
