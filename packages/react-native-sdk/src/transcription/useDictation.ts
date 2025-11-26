@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { PermissionsAndroid, Platform } from 'react-native';
 import { AIDictation } from '../native/AIDictation';
-import type { DictationError, DictationState } from '../native/AIDictation';
-import type { DictationResult } from '../native-specs/NativeAIDictation';
+import type {
+  DictationError,
+  DictationResult,
+  DictationStateValue,
+} from '../native-specs/NativeAIDictation';
 
 type StartOptions = {
   language?: string;
@@ -23,7 +26,7 @@ async function ensureAndroidPermission(): Promise<boolean> {
 
 // TODO: add proper jsdocs
 export const useDictation = (defaultOptions?: StartOptions) => {
-  const [state, setState] = useState<DictationState>('idle');
+  const [state, setState] = useState<DictationStateValue>('idle');
   const [transcript, setTranscript] = useState('');
   const [error, setError] = useState<DictationError | null>(null);
   const [isRecording, setIsRecording] = useState(false);
