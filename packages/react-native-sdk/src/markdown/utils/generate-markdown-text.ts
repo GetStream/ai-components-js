@@ -121,5 +121,10 @@ export const generateMarkdownText = (text?: string) => {
   // items for example were broken. We clean up the code block closing state within the rendering itself.
   resultText = resultText.replace(/\n```/g, '\n\n```\n');
 
+  const codeBlockCounts = (resultText.match(/```/g) || []).length;
+  if (codeBlockCounts % 2 > 0) {
+    resultText += '```';
+  }
+
   return resultText;
 };
