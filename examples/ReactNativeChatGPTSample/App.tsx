@@ -11,6 +11,7 @@ import {
   View,
   Text,
   Alert,
+  Dimensions,
 } from 'react-native';
 import {
   SafeAreaProvider,
@@ -302,10 +303,12 @@ const CustomMessage = (props) => {
   );
 };
 
-const StreamingMessageView = (props) => {
+const w = Dimensions.get('window').width - 32;
+
+const StreamingMessageView = () => {
   const { message } = useMessageContext();
   return (
-    <View style={{ width: '100%', paddingHorizontal: 16 }}>
+    <View style={{ width: w, paddingLeft: 16 }}>
       <MarkdownRichText text={message.text ?? ''} />
     </View>
   );

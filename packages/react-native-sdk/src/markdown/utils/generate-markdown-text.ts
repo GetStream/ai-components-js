@@ -80,17 +80,6 @@ export const generateMarkdownText = (text?: string) => {
     resultText = resultText.replace(mentionsRegex, `@${displayLink}`);
   }
 
-  // Escape the " and ' characters, except in code blocks where we deem this allowed.
-  resultText = resultText.replace(
-    /(```[\s\S]*?```|`.*?`)|[<"']/g,
-    (match, code) => {
-      if (code) {
-        return code;
-      }
-      return `\\${match}`;
-    },
-  );
-
   // Remove whitespaces that come directly after newlines except in code blocks where we deem this allowed.
   // A line starts a (possibly quoted) list item if, after indentation, it has
   //   - unordered bullet: -, *, +
