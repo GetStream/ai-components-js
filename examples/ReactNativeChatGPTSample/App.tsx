@@ -88,7 +88,7 @@ function App() {
             <Chat
               client={chatClient}
               isMessageAIGenerated={isMessageAIGenerated}
-              enableOfflineSupport={true}
+              enableOfflineSupport={false}
             >
               <NavigationContainer>
                 <DrawerNavigator />
