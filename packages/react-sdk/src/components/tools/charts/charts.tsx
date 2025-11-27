@@ -1,26 +1,27 @@
-import { useMemo, type ComponentProps } from 'react';
+import { type ComponentProps, useMemo } from 'react';
 import {
-  Chart as ChartJS,
   ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   LineElement,
   PointElement,
   Title as TitlePlugin,
+  Tooltip,
 } from 'chart.js';
 import {
-  Pie,
   Bar,
-  Line,
   Bubble,
   Doughnut,
+  Line,
+  Pie,
   PolarArea,
   Radar,
   Scatter,
 } from 'react-chartjs-2';
+import type { ToolComponentProps } from '../../ai-markdown';
 
 ChartJS.register(
   ArcElement,
@@ -46,17 +47,17 @@ const components = {
   unknown: () => <div>Unknown chart type</div>,
 } as const;
 
-const Chart = ({ data }: { data: string }) => {
+const Chart = ({ data, fallback }: ToolComponentProps) => {
   const parsedData = useMemo(() => {
     try {
       return JSON.parse(data);
-    } catch (error) {
+    } catch {
       return new Error('Invalid JSON data for Chart.js');
     }
   }, [data]);
 
   if (parsedData instanceof Error) {
-    return <div className="aicr__chart--error">{parsedData.message}</div>;
+    return fallback;
   }
 
   const Component =

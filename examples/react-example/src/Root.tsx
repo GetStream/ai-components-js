@@ -59,21 +59,6 @@ const sort: ChannelSort = { pinned_at: 1, last_message_at: -1, updated_at: -1 };
 // @ts-ignore
 const isMessageAIGenerated = (message: LocalMessage) => !!message?.ai_generated;
 
-// const markdownContent = `
-// # Welcome to AI Components!
-
-// \`asddasd asdasd\`
-
-// \`\`\`
-// This is a code block
-// \`\`\`
-// `;
-
-// TBD:
-// - create Message component wrapping AIMarkdown
-// - ensure styles are applied correctly
-//
-
 const InputComponent = () => {
   const { updateMessage, sendMessage } = useChannelActionContext();
   const { channel } = useChannelStateContext();

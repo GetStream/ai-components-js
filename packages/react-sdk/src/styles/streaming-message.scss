@@ -10,6 +10,10 @@
     }
   }
 
+  .aicr__chart {
+    padding-block: 0.5rem;
+  }
+
   > pre {
     background-color: #f5f5f5;
     padding: 0.5rem !important;
@@ -19,7 +23,7 @@
 
   > p {
     margin: 0;
-    
+
     .aicr__code {
       font-size: .85rem;
       background-color: #f5f5f5;

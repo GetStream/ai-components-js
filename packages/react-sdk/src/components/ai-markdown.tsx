@@ -28,8 +28,14 @@ const getToolOrLanguage = (className: string = '') => {
 type ToolComponents = {
   [key in string]?: ComponentType<{
     data: string;
+    fallback: React.ReactNode;
   }>;
 };
+
+type ToolComponent = NonNullable<ToolComponents[string]>;
+
+export type ToolComponentProps =
+  ToolComponent extends ComponentType<infer P> ? P : never;
 
 type MarkdownComponents = Components;
 
@@ -56,6 +62,8 @@ const DefaultPre = (props: DefaultPreProps) => {
   ) {
     const toolOrLanguage = getToolOrLanguage(codeElement.props.className);
 
+    const fallback = <>{children}</>;
+
     // grab from pre-registered component set and render
     const Component =
       typeof toolOrLanguage === 'string'
@@ -64,14 +72,19 @@ const DefaultPre = (props: DefaultPreProps) => {
 
     if (Component) {
       // TODO: forward metadata
-      // TODO: allow fallthrough if render fails/errors-out (display raw code block instead)
-      return <Component data={codeElement.props.children as string} />;
+
+      return (
+        <Component
+          fallback={fallback}
+          data={codeElement.props.children as string}
+        />
+      );
     }
 
     // render just a fragment with the code content
     // which gets replaced by SyntaxHighlighter (it itself renders pre too)
     if (toolOrLanguage) {
-      return <>{children}</>;
+      return fallback;
     }
   }
 

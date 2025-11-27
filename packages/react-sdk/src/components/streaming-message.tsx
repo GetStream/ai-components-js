@@ -1,5 +1,4 @@
 import { AIMarkdown } from './ai-markdown';
-import styled from '@emotion/styled';
 
 import { useEffect, useRef, useState } from 'react';
 
