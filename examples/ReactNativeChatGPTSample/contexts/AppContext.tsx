@@ -41,7 +41,6 @@ export const AppProvider = ({
     const c = client.channel('messaging', nanoid(), {
       members: [chatUserId],
     });
-    c.initialized = true;
     return c;
   });
 

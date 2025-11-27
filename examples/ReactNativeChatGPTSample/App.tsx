@@ -34,7 +34,6 @@ import {
   mergeThemes,
   Message,
   MessageList,
-  MessageTextContainer,
   OverlayProvider,
   ThemeProvider,
   useChannelsContext,
@@ -196,19 +195,21 @@ function AppContent() {
     <View style={{ flex: 1, paddingBottom: bottom, backgroundColor: 'white' }}>
       <Channel
         channel={channel}
-        doSendMessageRequest={async (_, messageData) => {
-          // TODO: Think of a better way to do this than this hack. It's garbage.
+        initializeOnMount={false}
+        preSendMessageRequest={async ({ localMessage }) => {
+          if (channel && !channel.initialized) {
+            await channel.watch({
+              created_by_id: localMessage.user_id,
+            });
+          }
           if (
-            channel.state.messages &&
-            channel.state.messages.length === 1 &&
+            !Object.keys(channel.state.watchers).some((watcher) =>
+              watcher.startsWith('ai-bot'),
+            ) &&
             channel.id
           ) {
-            await channel.watch({
-              created_by_id: messageData.user_id,
-            });
             await startAI(channel.id);
           }
-          return await channel?.sendMessage(messageData);
         }}
         StreamingMessageView={StreamingMessageView}
         Message={CustomMessage}
@@ -217,6 +218,7 @@ function AppContent() {
         MessageFooter={() => null}
         enableSwipeToReply={false}
         EmptyStateIndicator={EmptyStateIndicator}
+        allowSendBeforeAttachmentsUpload={true}
       >
         <MessageList
           additionalFlatListProps={{
