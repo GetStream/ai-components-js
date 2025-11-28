@@ -1,8 +1,37 @@
-@layer material-rounded, stream, ai-chat;
+@layer material-rounded, stream, stream-overrides, ai-chat;
 
 @import 'stream-chat-react/dist/css/v2/index.css' layer(stream);
 @import 'material-symbols/rounded.css' layer(material-rounded);
 @import '@stream-io/ai-chat-react/styles/index.css' layer(ai-chat);
+
+@layer stream-overrides {
+  .str-chat__channel {
+    flex-grow: 1;
+  }
+
+  .str-chat__channel-list {
+    flex-shrink: 0;
+    max-width: 300px;
+  }
+
+  .str-chat__message--other {
+    .str-chat__message-inner {
+      margin-inline-end: 0;
+    }
+  }
+  .str-chat__message--other {
+    .str-chat__message-bubble {
+      max-width: unset;
+      background-color: transparent;
+    }
+  }
+
+  .str-chat__message--me {
+    .str-chat__message-inner {
+      margin-inline-start: 0;
+    }
+  }
+}
 
 .material-symbols-outlined {
   font-variation-settings:
@@ -40,21 +69,4 @@ body {
   width: 100%;
   height: 100%;
   display: flex;
-}
-
-.str-chat__channel {
-  flex-grow: 1;
-}
-
-.str-chat__channel-list {
-  flex-shrink: 0;
-  max-width: 300px;
-}
-
-.str-chat__message--other .str-chat__message-inner {
-  margin-inline-end: 0;
-}
-
-.str-chat__message--me .str-chat__message-inner {
-  margin-inline-start: 0;
 }
