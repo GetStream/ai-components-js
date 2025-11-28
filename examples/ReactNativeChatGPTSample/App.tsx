@@ -19,8 +19,9 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
+  AIStates,
   AITypingIndicatorView,
   Channel,
   ChannelList,
@@ -37,6 +38,8 @@ import {
   MessageProps,
   OverlayProvider,
   ThemeProvider,
+  useAIState,
+  useChannelContext,
   useChannelsContext,
   useCreateChatClient,
   useMessageComposer,
@@ -331,6 +334,17 @@ const MessageComposerAI = (
 ) => {
   const messageComposer = useMessageComposer();
   const { sendMessage } = useMessageInputContext();
+  const { channel } = useChannelContext();
+
+  const { aiState } = useAIState(channel);
+
+  const stopGenerating = useCallback(
+    () => channel?.stopAIResponse(),
+    [channel],
+  );
+  const isGenerating = [AIStates.Thinking, AIStates.Generating].includes(
+    aiState,
+  );
 
   const serializeToMessage = useStableCallback(
     async ({ text, attachments }: { text: string; attachments?: any[] }) => {
@@ -348,7 +362,14 @@ const MessageComposerAI = (
     },
   );
 
-  return <AIMessageComposer {...props} onSendMessage={serializeToMessage} />;
+  return (
+    <AIMessageComposer
+      {...props}
+      onSendMessage={serializeToMessage}
+      isGenerating={isGenerating}
+      stopGenerating={stopGenerating}
+    />
+  );
 };
 
 const EmptyStateIndicator = () => (

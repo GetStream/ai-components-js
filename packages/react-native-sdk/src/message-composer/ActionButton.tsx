@@ -8,12 +8,17 @@ import { useStateStore } from '@stream-io/state-store/react-bindings';
 import { useDictation } from '../transcription/useDictation';
 import { useComposerHasText } from '../store/composer/useComposerHasText';
 import { useMessageComposerContext } from '../contexts/message-composer-context';
+import type { AIMessageComposerProps } from './MessageComposer.tsx';
+import { CircleStop } from '../internal/icons/CircleStop.tsx';
 
 const selector = ({ isRecording }: DictationStoreState) => ({
   isRecording,
 });
 
-export const ActionButton = () => {
+export const ActionButton = ({
+  isGenerating,
+  stopGenerating,
+}: Pick<AIMessageComposerProps, 'isGenerating' | 'stopGenerating'>) => {
   const { cancel, toggle } = useDictation();
   const { hasText } = useComposerHasText();
   const { isRecording } = useStateStore(store, selector);
@@ -24,6 +29,22 @@ export const ActionButton = () => {
       cancel();
     };
   }, [cancel]);
+
+  if (isGenerating) {
+    return (
+      <Animated.View
+        key={'stop-generating'}
+        entering={ZoomIn.duration(250)}
+        exiting={ZoomOut.duration(250)}
+      >
+        <Pressable style={styles.iconButton} onPress={stopGenerating}>
+          <View style={styles.stopGeneratingIcon}>
+            <CircleStop fill={'black'} size={32} />
+          </View>
+        </Pressable>
+      </Animated.View>
+    );
+  }
 
   return hasText && !isRecording ? (
     <Animated.View
@@ -68,6 +89,12 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     backgroundColor: 'black',
+    borderRadius: 16,
+  },
+  stopGeneratingIcon: {
+    width: 32,
+    height: 32,
+    backgroundColor: 'transparent',
     borderRadius: 16,
   },
   iconButton: {

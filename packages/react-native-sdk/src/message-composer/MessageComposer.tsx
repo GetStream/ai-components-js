@@ -30,10 +30,14 @@ export type AIMessageComposerProps = {
     attachments?: MediaPickerState['assets'];
     custom?: Record<string, unknown>;
   }) => Promise<void>;
+  isGenerating: boolean;
+  stopGenerating: () => Promise<void>;
 };
 
 export const MessageComposerUI = ({
   bottomSheetOptions = [],
+  isGenerating,
+  stopGenerating,
 }: AIMessageComposerProps) => {
   const { error, isRecording } = useDictationState();
   const { transcript } = useDictationTranscript();
@@ -58,7 +62,10 @@ export const MessageComposerUI = ({
             <MediaPreviewList mediaPickerService={mediaPickerService} />
             <View style={styles.inputPill}>
               <MessageInput />
-              <ActionButton />
+              <ActionButton
+                isGenerating={isGenerating}
+                stopGenerating={stopGenerating}
+              />
             </View>
           </Animated.View>
         </View>
