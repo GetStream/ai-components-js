@@ -34,7 +34,6 @@ export default tseslint.config(
       'array-callback-return': 'error',
       'arrow-body-style': 'off',
       'comma-dangle': 'off',
-      'jsx-quotes': ['error', 'prefer-single'],
       'linebreak-style': ['error', 'unix'],
       'no-console': 'off',
       'no-mixed-spaces-and-tabs': 'warn',

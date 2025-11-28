@@ -7,23 +7,23 @@ import type {
 } from 'stream-chat';
 import {
   AIStateIndicator,
+  Attachment,
   Channel,
   ChannelList,
-  Chat,
-  useCreateChatClient,
-  MessageList,
-  Window,
-  type ChannelPreviewProps,
   ChannelPreview,
+  type ChannelPreviewProps,
+  Chat,
+  MessageErrorIcon,
+  messageHasAttachments,
+  MessageInput,
+  MessageList,
+  useChannelActionContext,
   useChannelStateContext,
   useChatContext,
-  MessageInput,
-  useChannelActionContext,
+  useCreateChatClient,
   useMessageComposer,
   useMessageContext,
-  Attachment,
-  messageHasAttachments,
-  MessageErrorIcon,
+  Window,
 } from 'stream-chat-react';
 
 import { customAlphabet } from 'nanoid';
@@ -56,7 +56,6 @@ const filters: ChannelFilters = {
 const options: ChannelOptions = { limit: 5, presence: true, state: true };
 const sort: ChannelSort = { pinned_at: 1, last_message_at: -1, updated_at: -1 };
 
-// @ts-ignore
 const isMessageAIGenerated = (message: LocalMessage) => !!message?.ai_generated;
 
 const InputComponent = () => {
@@ -94,18 +93,21 @@ const InputComponent = () => {
           await channel.watch();
 
           // TODO: wrap in retry (in case channel creation takes longer)
-          await fetch('http://localhost:3000/start-ai-agent', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
+          await fetch(
+            'https://stream-nodejs-ai-e5d85ed5ce6f.herokuapp.com/start-ai-agent',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                channel_id: channel.id,
+                channel_type: channel.type,
+                platform: 'openai',
+                model,
+              }),
             },
-            body: JSON.stringify({
-              channel_id: channel.id,
-              channel_type: channel.type,
-              platform: 'openai',
-              model: model,
-            }),
-          });
+          );
 
           await sendMessage(d);
         }
@@ -118,8 +120,7 @@ const CustomPreview = (p: ChannelPreviewProps) => {
   const { setActiveChannel } = useChatContext();
   return (
     <div onClick={() => setActiveChannel(p.channel)}>
-      {/* @ts-expect-error */}
-      {p.channel.data.summary ?? p.channel.id}
+      {p.channel.data?.summary ?? p.channel.id}
     </div>
   );
 };
