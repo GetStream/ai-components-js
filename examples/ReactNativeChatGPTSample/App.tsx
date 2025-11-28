@@ -220,7 +220,7 @@ const AppContent = () => {
   return (
     <Animated.View
       key={channel.id}
-      style={{ flex: 1, paddingBottom: bottom, backgroundColor: 'white' }}
+      style={{ flex: 1, paddingBottom: bottom, backgroundColor: '#fcfcfc' }}
       entering={FadeIn.duration(200)}
       exiting={FadeOut.duration(200)}
     >
@@ -246,7 +246,6 @@ const AppContent = () => {
           }}
         />
         <AITypingIndicatorView />
-        {/*<MessageInput />*/}
         <MessageComposerAI bottomSheetOptions={bottomSheetOptions} />
       </Channel>
     </Animated.View>
@@ -376,7 +375,8 @@ const EmptyStateIndicator = () => (
   <View
     style={{
       flex: 1,
-      backgroundColor: 'white',
+      width: '100%',
+      backgroundColor: 'transparent',
       justifyContent: 'center',
       alignItems: 'center',
     }}
