@@ -62,6 +62,7 @@ import {
   AIMessageComposer,
   AIMessageComposerProps,
 } from '@stream-io/ai-components-react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
 const Drawer = createDrawerNavigator();
 
@@ -192,7 +193,12 @@ function AppContent() {
   }
 
   return (
-    <View style={{ flex: 1, paddingBottom: bottom, backgroundColor: 'white' }}>
+    <Animated.View
+      key={channel.id}
+      style={{ flex: 1, paddingBottom: bottom, backgroundColor: 'white' }}
+      entering={FadeIn.duration(200)}
+      exiting={FadeOut.duration(200)}
+    >
       <Channel
         channel={channel}
         initializeOnMount={false}
@@ -236,7 +242,7 @@ function AppContent() {
           bottomSheetOptions={bottomSheetOptions}
         />
       </Channel>
-    </View>
+    </Animated.View>
   );
 }
 
