@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-clipboard/clipboard": "^1.16.3",
     "@op-engineering/op-sqlite": "^15.0.7",
     "@react-native-community/netinfo": "^11.4.1",
     "@react-navigation/drawer": "^7.7.4",

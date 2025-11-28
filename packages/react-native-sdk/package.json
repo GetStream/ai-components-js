@@ -64,12 +64,14 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
+    "@react-native-clipboard/clipboard": "^1.16.3",
     "@shopify/react-native-skia": "^2.3.10",
     "@types/lodash": "4.17.20",
     "@types/node": "^24",
     "@types/react": "19.2.2",
     "@types/react-syntax-highlighter": "^15.5.13",
     "concurrently": "catalog:",
+    "expo-clipboard": "^8.0.7",
     "expo-image-picker": "^17.0.8",
     "react": "19.1.1",
     "react-native": "^0.82.1",
@@ -90,10 +92,26 @@
     "react-native-gesture-handler": ">=2.18.0",
     "react-native-reanimated": ">=3.16.0",
     "react-native-svg": ">=15.8.0",
-    "react-syntax-highlighter": ">=15.0.0"
+    "react-syntax-highlighter": ">=15.0.0",
+    "react-native-image-picker": ">=7.1.2",
+    "@react-native-clipboard/clipboard": ">=1.14.1",
+    "expo-image-picker": "*",
+    "expo-clipboard": "*"
   },
   "peerDependenciesMeta": {
     "expo": {
+      "optional": true
+    },
+    "react-native-image-picker": {
+      "optional": true
+    },
+    "expo-image-picker": {
+      "optional": true
+    },
+    "@react-native-clipboard/clipboard": {
+      "optional": true
+    },
+    "expo-clipboard": {
       "optional": true
     }
   },

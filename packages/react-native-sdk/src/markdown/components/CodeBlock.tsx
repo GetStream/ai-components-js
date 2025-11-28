@@ -6,6 +6,8 @@ import React, { type PropsWithChildren, useCallback, useMemo } from 'react';
 import Chart from '../../charts/Chart';
 import { parseJsonChart } from '../../charts';
 import { parseMermaid } from '../../charts';
+import { useStableCallback } from '../../internal/hooks/useStableCallback.ts';
+import { setClipboardString } from '../../services/clipboard-service';
 
 export const CodeBlockCopyButton = ({
   onPress,
@@ -25,8 +27,13 @@ const areEqual = (prev: MarkdownComponentProps, next: MarkdownComponentProps) =>
 
 export const CodeBlock = React.memo(
   ({ styles, node }: MarkdownComponentProps) => {
-    console.log('CODEBLOCK RERENDER', node.content);
     const text = useMemo(() => node.content?.trim(), [node.content]);
+
+    const copyText = useStableCallback(() => {
+      if (setClipboardString) {
+        setClipboardString(text);
+      }
+    });
 
     const CodeTag = useCallback(
       ({ children }: PropsWithChildren) => (
@@ -41,10 +48,10 @@ export const CodeBlock = React.memo(
       () => (
         <View style={styles.codeBlockHeaderContainer}>
           <Text style={styles.codeBlockHeaderTitle}>{node.lang}</Text>
-          <CodeBlockCopyButton />
+          <CodeBlockCopyButton onPress={copyText} />
         </View>
       ),
-      [styles, node.lang],
+      [styles, node.lang, copyText],
     );
 
     const CodeBlockWrapper = useCallback(

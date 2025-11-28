@@ -2525,6 +2525,34 @@ PODS:
     - React-perflogger (= 0.82.1)
     - React-utils (= 0.82.1)
     - SocketRocket
+  - RNCClipboard (1.16.3):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - RNFS (2.20.0):
     - React-Core
   - RNGestureHandler (2.29.0):
@@ -2853,7 +2881,7 @@ PODS:
     - SocketRocket
     - Yoga
   - SocketRocket (0.7.1)
-  - stream-chat-react-native (8.9.1):
+  - stream-chat-react-native (8.10.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2964,6 +2992,7 @@ DEPENDENCIES:
   - ReactAppDependencyProvider (from `build/generated/ios`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -3137,6 +3166,8 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCClipboard:
+    :path: "../node_modules/@react-native-clipboard/clipboard"
   RNFS:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
@@ -3234,6 +3265,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: a45ef34bb22dc1c9b2ac1f74167d9a28af961176
   ReactCodegen: d292b26d13b2a48a9d09480d3f7ad4ff2a63af05
   ReactCommon: 804dc80944fa90b86800b43c871742ec005ca424
+  RNCClipboard: 4b58c780f63676367640f23c8e114e9bd0cf86ac
   RNFS: 89de7d7f4c0f6bafa05343c578f61118c8282ed8
   RNGestureHandler: 6859520a21304f0bedf0643d0cf0beade47c83f2
   RNReanimated: 3f410efa6f0737a9dc1da97e9c1d0f69e48019e9
@@ -3241,7 +3273,7 @@ SPEC CHECKSUMS:
   RNSVG: 005860704c95493cd23a417dfbeb76dcd8bb7042
   RNWorklets: 5e7c2c52d972ff95b5d781b16f9c68d0f6f3a3a6
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  stream-chat-react-native: 08719b9746c82bb42ba26febf0890620b01c726e
+  stream-chat-react-native: 1483471a433524a6f6eb88c262b2846c79eec400
   Yoga: 689c8e04277f3ad631e60fe2a08e41d411daf8eb
 
 PODFILE CHECKSUM: 0c9822f13eeec43181dedef6df03a52c9b59ce3b
