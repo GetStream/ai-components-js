@@ -33,11 +33,27 @@ pnpm examples:build:all
 # Test all packages
 pnpm packages:test:all
 
+# Test a specific package
+pnpm --filter @stream-io/ai-chat-react test
+pnpm --filter ./packages/react-native-sdk test
+
 # Lint everything
 pnpm lint:all
 
 # Format code
 pnpm prettier:fix-all
+```
+
+### Running Examples
+
+```bash
+# React example (Vite dev server)
+cd examples/react-example
+pnpm dev
+
+# Next.js chatbot example
+cd examples/nextjs-ai-chatbot
+pnpm dev
 ```
 
 ### Package-Specific Development
@@ -140,6 +156,10 @@ The monorepo uses a shared `tsconfig.root.json` with strict settings:
 
 Individual packages extend this config.
 
+## Dependency Management
+
+This monorepo uses pnpm workspaces with a catalog system (defined in `pnpm-workspace.yaml`). Common dependencies like `typescript`, `vite`, and `vitest` are pinned in the catalog to ensure version consistency across packages. Reference catalog versions with `"dependency": "catalog:"` in package.json files.
+
 ## Testing
 
 Tests use Vitest (configured via `pnpm-workspace.yaml` catalog). Run tests from package directories or use `pnpm packages:test:all`.
@@ -151,3 +171,18 @@ GitHub Actions workflow (`.github/workflows/ci.yml`) runs on PRs:
 2. Run `pnpm packages:test:all`
 
 Changesets workflow handles automated publishing.
+
+## Publishing and Privacy
+
+**IMPORTANT:** All packages are currently marked as `"private": true` in their package.json files to prevent accidental publishing. Before release, ensure:
+- Package privacy settings are updated appropriately
+- No sensitive credentials or API keys exist in example apps
+- Example apps remain private if they contain demo tokens
+
+## Additional Guidelines
+
+See `AGENTS.md` for additional repository conventions including:
+- Coding style and naming conventions (PascalCase components, `use` prefix for hooks)
+- Commit message format (`feat(scope): summary (#PR)`)
+- Pull request requirements (problem statement, testing proof, visuals for UI changes)
+- Security best practices for credentials and environment variables

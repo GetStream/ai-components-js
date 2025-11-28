@@ -47,16 +47,6 @@ export default tseslint.config(
       'object-shorthand': 'warn',
       'prefer-const': 'warn',
       'require-await': 'off',
-      'sort-imports': [
-        'error',
-        {
-          allowSeparatedGroups: true,
-          ignoreCase: true,
-          ignoreDeclarationSort: true,
-          ignoreMemberSort: false,
-          memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
-        },
-      ],
       'sort-keys': 'off',
       'valid-typeof': 'error',
       'max-classes-per-file': 'off',
