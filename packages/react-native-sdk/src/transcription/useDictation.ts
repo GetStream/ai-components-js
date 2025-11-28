@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { PermissionsAndroid, Platform } from 'react-native';
 import { AIDictation } from '../native/AIDictation';
-import type {
-  DictationError,
-  DictationResult,
-  DictationStateValue,
-} from '../native-specs/NativeAIDictation';
+import type { DictationResult } from '../native-specs/NativeAIDictation';
+import { useStableCallback } from '../internal/hooks/useStableCallback';
+import { type DictationStoreState, store } from '../store/dictation/store';
+import { useStateStore } from '@stream-io/state-store/react-bindings';
 
 type StartOptions = {
   language?: string;
@@ -13,8 +12,13 @@ type StartOptions = {
   silenceTimeoutMs?: number;
 };
 
-// TODO: a generic utility can be created for ensuring permissions
-async function ensureAndroidPermission(): Promise<boolean> {
+const DEFAULT_OPTIONS = {
+  language: 'en-US',
+  interimResults: true,
+  silenceTimeoutMs: 2500,
+};
+
+const ensureAndroidRecordingPermissions = async (): Promise<boolean> => {
   if (Platform.OS !== 'android') return true;
 
   const granted = await PermissionsAndroid.request(
@@ -22,35 +26,37 @@ async function ensureAndroidPermission(): Promise<boolean> {
   );
 
   return granted === PermissionsAndroid.RESULTS.GRANTED;
-}
+};
+
+const selector = ({ isRecording }: DictationStoreState) => ({
+  isRecording,
+});
 
 // TODO: add proper jsdocs
-export const useDictation = (defaultOptions?: StartOptions) => {
-  const [state, setState] = useState<DictationStateValue>('idle');
-  const [transcript, setTranscript] = useState('');
-  const [error, setError] = useState<DictationError | null>(null);
-  const [isRecording, setIsRecording] = useState(false);
+export const useDictation = (
+  defaultOptions: StartOptions = DEFAULT_OPTIONS,
+) => {
+  const { isRecording } = useStateStore(store, selector);
 
   useEffect(() => {
     const unsubscribeResult = AIDictation.addResultListener(
       (result: DictationResult) => {
-        setTranscript(result.text);
-        if (result.isFinal) {
-          setIsRecording(false);
-          setState('idle');
-        }
+        store.partialNext({
+          transcript: result.text,
+          ...(result.isFinal ? { isRecording: false, state: 'idle' } : {}),
+        });
       },
     );
 
     const unsubscribeState = AIDictation.addStateListener(({ state: next }) => {
-      setState(next);
-      setIsRecording(next === 'listening' || next === 'starting');
+      store.partialNext({
+        state: next,
+        isRecording: next === 'listening' || next === 'starting',
+      });
     });
 
-    const unsubscribeError = AIDictation.addErrorListener((err) => {
-      setError(err);
-      setIsRecording(false);
-      setState('idle');
+    const unsubscribeError = AIDictation.addErrorListener((error) => {
+      store.partialNext({ error, isRecording: false, state: 'idle' });
     });
 
     return () => {
@@ -62,22 +68,21 @@ export const useDictation = (defaultOptions?: StartOptions) => {
 
   const start = useCallback(
     async (override?: StartOptions) => {
-      const hasPerm = await ensureAndroidPermission();
-      if (!hasPerm) {
-        setError({
-          code: 'NO_PERMISSION',
-          message: 'Microphone permission not granted',
+      const hasPermission = await ensureAndroidRecordingPermissions();
+      if (!hasPermission) {
+        store.partialNext({
+          error: {
+            code: 'NO_PERMISSION',
+            message: 'Microphone permission not granted',
+          },
         });
         return;
       }
 
-      setError(null);
-      setTranscript('');
+      store.partialNext({ error: null, transcript: '' });
 
       // TODO: this should be configurable from the outside
       const opts: StartOptions = {
-        interimResults: true,
-        silenceTimeoutMs: 2500,
         ...defaultOptions,
         ...override,
       };
@@ -95,13 +100,18 @@ export const useDictation = (defaultOptions?: StartOptions) => {
     AIDictation.cancel();
   }, []);
 
+  const toggle = useStableCallback(() => {
+    if (isRecording) {
+      stop();
+    } else {
+      void start();
+    }
+  });
+
   return {
-    state,
-    transcript,
-    error,
-    isRecording,
     start,
     stop,
+    toggle,
     cancel,
   };
 };

@@ -1,9 +1,4 @@
-import {
-  type BottomSheetState,
-  closeSheet,
-  openSheet,
-  store,
-} from '../../store/bottom-sheet-state-store';
+import { type BottomSheetState, closeSheet, openSheet, store } from './store';
 import { useStateStore } from '@stream-io/state-store/react-bindings';
 import { useStableCallback } from '../../internal/hooks/useStableCallback';
 

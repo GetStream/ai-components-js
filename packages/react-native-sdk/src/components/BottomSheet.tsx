@@ -25,8 +25,8 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { useBottomSheetState } from './hooks/useBottomSheetState';
-import { closeSheet as closeSheetInternal } from '../store/bottom-sheet-state-store';
+import { useBottomSheetState } from '../store/bottom-sheet/useBottomSheetState';
+import { closeSheet as closeSheetInternal } from '../store/bottom-sheet/store';
 
 type Props = PropsWithChildren;
 

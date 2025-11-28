@@ -4,29 +4,26 @@ import type {
   AIMessageComposerProps,
   BottomSheetOption,
 } from './MessageComposer';
-import { setHeight } from '../store/bottom-sheet-state-store';
+import { setHeight } from '../store/bottom-sheet/store';
 import { Camera } from '../internal/icons/Camera';
 import { Picture } from '../internal/icons/Picture';
 import { Folder } from '../internal/icons/Folder';
-import type { AbstractMediaPickerService } from '../services/media-picker-service/AbstractMediaPickerService';
 import { withCloseSheet } from './utils/withCloseSheet';
+import { useMessageComposerContext } from '../contexts/message-composer-context';
 
 type BottomSheetContentProps = Pick<
   AIMessageComposerProps,
-  'bottomSheetInsets' | 'bottomSheetOptions'
-> & { mediaPickerService?: AbstractMediaPickerService };
+  'bottomSheetOptions'
+>;
 
 export const BottomSheetContent = ({
-  bottomSheetInsets,
   bottomSheetOptions,
-  mediaPickerService,
 }: BottomSheetContentProps) => {
+  const { mediaPickerService } = useMessageComposerContext();
+
   return (
     <ScrollView
-      contentContainerStyle={[
-        styles.contentContainer,
-        { paddingBottom: 16 + (bottomSheetInsets?.bottom ?? 0) },
-      ]}
+      contentContainerStyle={[styles.contentContainer]}
       showsVerticalScrollIndicator={false}
       onContentSizeChange={(_, height) => setHeight(height)}
     >
@@ -116,6 +113,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: 16,
     paddingTop: 12,
+    paddingBottom: 16,
   },
   quickActionsCard: {
     flexDirection: 'row',
