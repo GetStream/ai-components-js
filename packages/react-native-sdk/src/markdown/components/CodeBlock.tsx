@@ -20,71 +20,78 @@ export const CodeBlockCopyButton = ({
   </Pressable>
 );
 
-export const CodeBlock = ({ styles, node }: MarkdownComponentProps) => {
-  const text = useMemo(() => node.content?.trim(), [node.content]);
+const areEqual = (prev: MarkdownComponentProps, next: MarkdownComponentProps) =>
+  prev.node.content === next.node.content;
 
-  const CodeTag = useCallback(
-    ({ children }: PropsWithChildren) => (
-      <View style={styles.codeBlockContainer}>
-        <Text style={styles.codeBlock}>{children}</Text>
-      </View>
-    ),
-    [styles],
-  );
+export const CodeBlock = React.memo(
+  ({ styles, node }: MarkdownComponentProps) => {
+    console.log('CODEBLOCK RERENDER', node.content);
+    const text = useMemo(() => node.content?.trim(), [node.content]);
 
-  const CodeBlockHeader = useCallback(
-    () => (
-      <View style={styles.codeBlockHeaderContainer}>
-        <Text style={styles.codeBlockHeaderTitle}>{node.lang}</Text>
-        <CodeBlockCopyButton />
-      </View>
-    ),
-    [styles, node.lang],
-  );
+    const CodeTag = useCallback(
+      ({ children }: PropsWithChildren) => (
+        <View style={styles.codeBlockContainer}>
+          <Text style={styles.codeBlock}>{children}</Text>
+        </View>
+      ),
+      [styles],
+    );
 
-  const CodeBlockWrapper = useCallback(
-    ({ children }: PropsWithChildren) => (
-      <View style={styles.codeBlockWrapper}>
-        <CodeBlockHeader />
-        <MarkdownReactiveScrollView>{children}</MarkdownReactiveScrollView>
-      </View>
-    ),
-    [CodeBlockHeader, styles.codeBlockWrapper],
-  );
+    const CodeBlockHeader = useCallback(
+      () => (
+        <View style={styles.codeBlockHeaderContainer}>
+          <Text style={styles.codeBlockHeaderTitle}>{node.lang}</Text>
+          <CodeBlockCopyButton />
+        </View>
+      ),
+      [styles, node.lang],
+    );
 
-  if (node.lang === 'mermaid') {
-    try {
-      const parsed = parseMermaid(text);
-      if (parsed) {
-        return <Chart spec={parsed} />;
+    const CodeBlockWrapper = useCallback(
+      ({ children }: PropsWithChildren) => (
+        <View style={styles.codeBlockWrapper}>
+          <CodeBlockHeader />
+          <MarkdownReactiveScrollView>{children}</MarkdownReactiveScrollView>
+        </View>
+      ),
+      [CodeBlockHeader, styles.codeBlockWrapper],
+    );
+
+    if (node.lang === 'mermaid') {
+      try {
+        const parsed = parseMermaid(text);
+        if (parsed) {
+          return <Chart spec={parsed} />;
+        }
+      } catch (_e) {
+        /* do nothing */
       }
-    } catch (_e) {
-      /* do nothing */
     }
-  }
 
-  if (node.lang === 'json') {
-    try {
-      const parsed = parseJsonChart(text);
-      if (parsed) {
-        return <Chart spec={parsed} />;
+    if (node.lang === 'json') {
+      try {
+        const parsed = parseJsonChart(text);
+        if (parsed) {
+          return <Chart spec={parsed} />;
+        }
+      } catch (_e) {
+        /* do nothing */
       }
-    } catch (_e) {
-      /* do nothing */
     }
-  }
 
-  return (
-    <SyntaxHighlighter
-      language={node.lang}
-      highlighter={'prism'}
-      CodeTag={CodeTag}
-      PreTag={CodeBlockWrapper}
-    >
-      {text}
-    </SyntaxHighlighter>
-  );
-};
+    return (
+      <SyntaxHighlighter
+        language={node.lang}
+        highlighter={'prism'}
+        CodeTag={CodeTag}
+        PreTag={CodeBlockWrapper}
+      >
+        {text}
+      </SyntaxHighlighter>
+    );
+  },
+  areEqual,
+);
 
 export const renderCodeBlock: RuleRenderFunction = ({
   node,

@@ -34,6 +34,7 @@ import {
   mergeThemes,
   Message,
   MessageList,
+  MessageProps,
   OverlayProvider,
   ThemeProvider,
   useChannelsContext,
@@ -173,7 +174,7 @@ const DrawerNavigator = () => (
   </Drawer.Navigator>
 );
 
-function AppContent() {
+const AppContent = () => {
   const { channel } = useAppContext();
   const { bottom } = useSafeAreaInsets();
 
@@ -187,6 +188,27 @@ function AppContent() {
     }),
     [safeAreaInsets],
   );
+
+  const preSendMessageRequest = useStableCallback(async ({ localMessage }) => {
+    if (!channel) {
+      return;
+    }
+
+    if (!channel.initialized) {
+      await channel.watch({
+        created_by_id: localMessage.user_id,
+      });
+    }
+
+    if (
+      !Object.keys(channel.state.watchers).some((watcher) =>
+        watcher.startsWith('ai-bot'),
+      ) &&
+      channel.id
+    ) {
+      await startAI(channel.id);
+    }
+  });
 
   if (!channel) {
     return null;
@@ -202,26 +224,12 @@ function AppContent() {
       <Channel
         channel={channel}
         initializeOnMount={false}
-        preSendMessageRequest={async ({ localMessage }) => {
-          if (channel && !channel.initialized) {
-            await channel.watch({
-              created_by_id: localMessage.user_id,
-            });
-          }
-          if (
-            !Object.keys(channel.state.watchers).some((watcher) =>
-              watcher.startsWith('ai-bot'),
-            ) &&
-            channel.id
-          ) {
-            await startAI(channel.id);
-          }
-        }}
+        // @ts-expect-error This will be fixed upstream, the type is wrong
+        preSendMessageRequest={preSendMessageRequest}
         StreamingMessageView={StreamingMessageView}
         Message={CustomMessage}
-        // MessageText={MessageText}
-        MessageAvatar={() => null}
-        MessageFooter={() => null}
+        MessageAvatar={RenderNull}
+        MessageFooter={RenderNull}
         enableSwipeToReply={false}
         EmptyStateIndicator={EmptyStateIndicator}
         allowSendBeforeAttachmentsUpload={true}
@@ -236,15 +244,11 @@ function AppContent() {
         />
         <AITypingIndicatorView />
         {/*<MessageInput />*/}
-        <MessageComposerAI
-          key={channel.cid}
-          bottomSheetInsets={insets}
-          bottomSheetOptions={bottomSheetOptions}
-        />
+        <MessageComposerAI bottomSheetOptions={bottomSheetOptions} />
       </Channel>
     </Animated.View>
   );
-}
+};
 
 const bottomSheetOptions = [
   {
@@ -279,7 +283,7 @@ const bottomSheetOptions = [
   },
 ];
 
-const CustomMessage = (props) => {
+const CustomMessage = (props: MessageProps) => {
   const { theme } = useTheme();
   const isFromBot = props.message.ai_generated;
 
@@ -322,14 +326,15 @@ const StreamingMessageView = () => {
   );
 };
 
-const MessageComposerAI = (props: AIMessageComposerProps) => {
+const MessageComposerAI = (
+  props: Pick<AIMessageComposerProps, 'bottomSheetOptions'>,
+) => {
   const messageComposer = useMessageComposer();
   const { sendMessage } = useMessageInputContext();
 
   const serializeToMessage = useStableCallback(
     async ({ text, attachments }: { text: string; attachments?: any[] }) => {
       messageComposer.textComposer.setText(text);
-      console.log('TEST: ', attachments);
       if (attachments && attachments.length > 0) {
         const localAttachments = await Promise.all(
           attachments.map((a) =>
@@ -337,11 +342,6 @@ const MessageComposerAI = (props: AIMessageComposerProps) => {
           ),
         );
         messageComposer.attachmentManager.upsertAttachments(localAttachments);
-        // console.log(
-        //   'TEST2: ',
-        //   localAttachments,
-        //   messageComposer.attachmentManager.attachments,
-        // );
       }
 
       await sendMessage();
@@ -365,5 +365,7 @@ const EmptyStateIndicator = () => (
     </Text>
   </View>
 );
+
+const RenderNull = () => null;
 
 export default App;
