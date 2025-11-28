@@ -1,7 +1,7 @@
 {
-  "name": "@stream-io/ai-components-js",
+  "name": "@stream-io/ai-js",
   "private": true,
-  "description": "AI Components Monorepo",
+  "description": "JS AI Monorepo",
   "scripts": {
     "packages:build:all": "pnpm -r --filter './packages/**' run build",
     "packages:test:all": "pnpm -r --filter './packages/**' run test",

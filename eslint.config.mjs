@@ -7,7 +7,7 @@ import reactHooksPlugin from 'eslint-plugin-react-hooks';
 
 export default tseslint.config(
   {
-    ignores: ['**/node_modules/**', '**/build/**', '**/dist/**'],
+    ignores: ['**/node_modules', '**/build', '**/dist'],
   },
   {
     name: 'default',
@@ -97,6 +97,7 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'error',
+      'jsx-quotes': 'off', // deprecated rule, handled by prettier anyway
     },
   },
 );
