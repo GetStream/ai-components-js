@@ -22,4 +22,6 @@ export const dictationStore = new StateStore<DictationStoreState>(
   DEFAULT_STATE,
 );
 
-export const reset = () => dictationStore.next(DEFAULT_STATE);
+const reset = () => dictationStore.next(DEFAULT_STATE);
+
+export const dictationStoreApi = { reset };

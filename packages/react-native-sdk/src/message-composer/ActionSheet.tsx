@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import type {
   AIMessageComposerProps,
   BottomSheetOption,
 } from './MessageComposer';
-import { setHeight } from '../store/bottom-sheet/store';
+import { sheetStoreApi } from '../store';
 import { Camera } from '../internal/icons/Camera';
 import { Picture } from '../internal/icons/Picture';
 import { Folder } from '../internal/icons/Folder';
@@ -21,11 +21,16 @@ export const BottomSheetContent = ({
 }: BottomSheetContentProps) => {
   const { mediaPickerService } = useMessageComposerContext();
 
+  const onContentSizeChange = useCallback(
+    (_: unknown, height: number) => sheetStoreApi.setHeight(height),
+    [],
+  );
+
   return (
     <ScrollView
       contentContainerStyle={[styles.contentContainer]}
       showsVerticalScrollIndicator={false}
-      onContentSizeChange={(_, height) => setHeight(height)}
+      onContentSizeChange={onContentSizeChange}
     >
       <View style={styles.quickActionsCard}>
         <QuickActionButton

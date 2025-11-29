@@ -1,10 +1,10 @@
-import { openSheet } from '../store/bottom-sheet/store';
+import { sheetStoreApi } from '../store';
 import { Pressable, StyleSheet, Text } from 'react-native';
 import React from 'react';
 import { PILL_HEIGHT } from './MessageComposer';
 
 export const AttachmentButton = () => (
-  <Pressable style={styles.roundButton} onPress={openSheet}>
+  <Pressable style={styles.roundButton} onPress={sheetStoreApi.openSheet}>
     <Text style={styles.attachIcon}>+</Text>
   </Pressable>
 );
