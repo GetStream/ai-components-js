@@ -231,11 +231,12 @@ const AppContent = () => {
         preSendMessageRequest={preSendMessageRequest}
         StreamingMessageView={StreamingMessageView}
         Message={CustomMessage}
-        MessageAvatar={RenderNull}
-        MessageFooter={RenderNull}
         enableSwipeToReply={false}
         EmptyStateIndicator={EmptyStateIndicator}
         allowSendBeforeAttachmentsUpload={true}
+        NetworkDownIndicator={RenderNull}
+        MessageAvatar={RenderNull}
+        MessageFooter={RenderNull}
       >
         <MessageList
           additionalFlatListProps={{

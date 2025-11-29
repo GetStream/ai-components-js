@@ -1,4 +1,4 @@
-import { type DictationStoreState, store } from './store';
+import { dictationStore, type DictationStoreState } from './store';
 import { useStateStore } from '@stream-io/state-store/react-bindings';
 
 const selector = ({ state, isRecording, error }: DictationStoreState) => ({
@@ -7,4 +7,4 @@ const selector = ({ state, isRecording, error }: DictationStoreState) => ({
   error,
 });
 
-export const useDictationState = () => useStateStore(store, selector);
+export const useDictationState = () => useStateStore(dictationStore, selector);

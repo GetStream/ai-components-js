@@ -18,6 +18,8 @@ const DEFAULT_STATE: DictationStoreState = {
   error: null,
 };
 
-export const store = new StateStore<DictationStoreState>(DEFAULT_STATE);
+export const dictationStore = new StateStore<DictationStoreState>(
+  DEFAULT_STATE,
+);
 
-export const reset = () => store.next(DEFAULT_STATE);
+export const reset = () => dictationStore.next(DEFAULT_STATE);

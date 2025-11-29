@@ -11,13 +11,13 @@ const DEFAULT_STATE: BottomSheetState = {
   height: Number.MAX_SAFE_INTEGER,
 };
 
-export const store = new StateStore<BottomSheetState>(DEFAULT_STATE);
+export const sheetStore = new StateStore<BottomSheetState>(DEFAULT_STATE);
 
 export const openSheet = () => {
   Keyboard.dismiss();
-  store.partialNext({ open: true });
+  sheetStore.partialNext({ open: true });
 };
 
-export const closeSheet = () => store.partialNext(DEFAULT_STATE);
+export const closeSheet = () => sheetStore.partialNext(DEFAULT_STATE);
 
-export const setHeight = (height: number) => store.partialNext({ height });
+export const setHeight = (height: number) => sheetStore.partialNext({ height });

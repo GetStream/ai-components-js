@@ -3,7 +3,10 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { SendUp } from '../internal/icons/SendUp';
 import { Mic } from '../internal/icons/Mic';
 import React, { useEffect } from 'react';
-import { type DictationStoreState, store } from '../store/dictation/store';
+import {
+  dictationStore,
+  type DictationStoreState,
+} from '../store/dictation/store';
 import { useStateStore } from '@stream-io/state-store/react-bindings';
 import { useDictation } from '../transcription/useDictation';
 import { useComposerHasText } from '../store/composer/useComposerHasText';
@@ -21,7 +24,7 @@ export const ActionButton = ({
 }: Pick<AIMessageComposerProps, 'isGenerating' | 'stopGenerating'>) => {
   const { cancel, toggle } = useDictation();
   const { hasText } = useComposerHasText();
-  const { isRecording } = useStateStore(store, selector);
+  const { isRecording } = useStateStore(dictationStore, selector);
   const { sendMessage } = useMessageComposerContext();
 
   useEffect(() => {

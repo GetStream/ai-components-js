@@ -3,7 +3,7 @@ import { PermissionsAndroid, Platform } from 'react-native';
 import { AIDictation } from '../native/AIDictation';
 import type { DictationResult } from '../native-specs/NativeAIDictation';
 import { useStableCallback } from '../internal/hooks/useStableCallback';
-import { type DictationStoreState, store } from '../store/dictation/store';
+import { dictationStore, type DictationStoreState } from '../store';
 import { useStateStore } from '@stream-io/state-store/react-bindings';
 
 type StartOptions = {
@@ -36,12 +36,12 @@ const selector = ({ isRecording }: DictationStoreState) => ({
 export const useDictation = (
   defaultOptions: StartOptions = DEFAULT_OPTIONS,
 ) => {
-  const { isRecording } = useStateStore(store, selector);
+  const { isRecording } = useStateStore(dictationStore, selector);
 
   useEffect(() => {
     const unsubscribeResult = AIDictation.addResultListener(
       (result: DictationResult) => {
-        store.partialNext({
+        dictationStore.partialNext({
           transcript: result.text,
           ...(result.isFinal ? { isRecording: false, state: 'idle' } : {}),
         });
@@ -49,14 +49,14 @@ export const useDictation = (
     );
 
     const unsubscribeState = AIDictation.addStateListener(({ state: next }) => {
-      store.partialNext({
+      dictationStore.partialNext({
         state: next,
         isRecording: next === 'listening' || next === 'starting',
       });
     });
 
     const unsubscribeError = AIDictation.addErrorListener((error) => {
-      store.partialNext({ error, isRecording: false, state: 'idle' });
+      dictationStore.partialNext({ error, isRecording: false, state: 'idle' });
     });
 
     return () => {
@@ -70,7 +70,7 @@ export const useDictation = (
     async (override?: StartOptions) => {
       const hasPermission = await ensureAndroidRecordingPermissions();
       if (!hasPermission) {
-        store.partialNext({
+        dictationStore.partialNext({
           error: {
             code: 'NO_PERMISSION',
             message: 'Microphone permission not granted',
@@ -79,7 +79,7 @@ export const useDictation = (
         return;
       }
 
-      store.partialNext({ error: null, transcript: '' });
+      dictationStore.partialNext({ error: null, transcript: '' });
 
       // TODO: this should be configurable from the outside
       const opts: StartOptions = {

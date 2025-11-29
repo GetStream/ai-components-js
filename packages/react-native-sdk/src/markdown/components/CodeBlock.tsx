@@ -7,7 +7,7 @@ import Chart from '../../charts/Chart';
 import { parseJsonChart } from '../../charts';
 import { parseMermaid } from '../../charts';
 import { useStableCallback } from '../../internal/hooks/useStableCallback.ts';
-import { setClipboardString } from '../../services/clipboard-service';
+import { setClipboardString } from '../../services';
 
 export const CodeBlockCopyButton = ({
   onPress,
