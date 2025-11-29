@@ -5,6 +5,7 @@
   "description": "React Native SDK for AI Components",
   "main": "./dist/commonjs/index.js",
   "types": "./dist/typescript/index.d.ts",
+  "homepage": "https://github.com/GetStream/ai-components-js.git",
   "exports": {
     ".": {
       "react-native": {
@@ -63,19 +64,22 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
+    "@react-native-clipboard/clipboard": "^1.16.3",
     "@shopify/react-native-skia": "^2.3.10",
     "@types/lodash": "4.17.20",
     "@types/node": "^24",
     "@types/react": "19.2.2",
     "@types/react-syntax-highlighter": "^15.5.13",
     "concurrently": "catalog:",
+    "expo-clipboard": "^8.0.7",
     "expo-image-picker": "^17.0.8",
-    "react": "19.2.0",
+    "react": "19.1.1",
     "react-native": "^0.82.1",
     "react-native-builder-bob": "0.40.14",
     "react-native-gesture-handler": "^2.29.0",
     "react-native-image-picker": "^8.2.1",
     "react-native-reanimated": "^4.1.3",
+    "react-native-svg": "^15.15.0",
     "rimraf": "^6.0.1",
     "typescript": "catalog:",
     "victory-native": "^41.20.2",
@@ -88,10 +92,26 @@
     "react-native-gesture-handler": ">=2.18.0",
     "react-native-reanimated": ">=3.16.0",
     "react-native-svg": ">=15.8.0",
-    "react-syntax-highlighter": ">=15.0.0"
+    "react-syntax-highlighter": ">=15.0.0",
+    "react-native-image-picker": ">=7.1.2",
+    "@react-native-clipboard/clipboard": ">=1.14.1",
+    "expo-image-picker": "*",
+    "expo-clipboard": "*"
   },
   "peerDependenciesMeta": {
     "expo": {
+      "optional": true
+    },
+    "react-native-image-picker": {
+      "optional": true
+    },
+    "expo-image-picker": {
+      "optional": true
+    },
+    "@react-native-clipboard/clipboard": {
+      "optional": true
+    },
+    "expo-clipboard": {
       "optional": true
     }
   },
@@ -106,7 +126,7 @@
   },
   "codegenConfig": {
     "name": "AiComponentsReactNative",
-    "type": "components",
+    "type": "all",
     "jsSrcsDir": "src/native-specs",
     "android": {
       "javaPackageName": "com.streamio.aicomponents.renderkit"
