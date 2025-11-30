@@ -1,18 +1,17 @@
 import Animated, { ZoomIn, ZoomOut } from 'react-native-reanimated';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { SendUp } from '../internal/icons/SendUp';
-import { Mic } from '../internal/icons/Mic';
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
   dictationStore,
   type DictationStoreState,
   useComposerHasText,
 } from '../store';
 import { useStateStore } from '@stream-io/state-store/react-bindings';
-import { useDictation } from '../transcription/useDictation';
 import { useMessageComposerContext, useTheme } from '../contexts';
 import type { AIMessageComposerProps } from './MessageComposer.tsx';
 import { CircleStop } from '../internal/icons/CircleStop.tsx';
+import { SpeechToTextButton } from './SpeechToTextButton.tsx';
 
 const selector = ({ isRecording }: DictationStoreState) => ({
   isRecording,
@@ -22,23 +21,16 @@ export const ActionButton = ({
   isGenerating,
   stopGenerating,
 }: Pick<AIMessageComposerProps, 'isGenerating' | 'stopGenerating'>) => {
-  const { cancel, toggle } = useDictation();
   const { hasText } = useComposerHasText();
   const { isRecording } = useStateStore(dictationStore, selector);
   const { sendMessage } = useMessageComposerContext();
   const {
     theme: {
-      colors: { black, grey, white, accent_blue },
-      composer: { iconButton, stopGeneratingIcon, sendIcon, micIcon },
+      colors: { black, white },
+      composer: { iconButton, stopGeneratingIcon, sendIcon },
     },
   } = useTheme();
   const styles = useStyles();
-
-  useEffect(() => {
-    return () => {
-      cancel();
-    };
-  }, [cancel]);
 
   if (isGenerating) {
     return (
@@ -72,21 +64,7 @@ export const ActionButton = ({
       </Pressable>
     </Animated.View>
   ) : (
-    <Animated.View
-      key={'mic-button'}
-      entering={ZoomIn.duration(250)}
-      exiting={ZoomOut.duration(250)}
-    >
-      <Pressable style={[styles.iconButton, iconButton]} onPress={toggle}>
-        <View style={[styles.micIcon, micIcon]}>
-          <Mic
-            size={32}
-            viewBox={`0 0 ${32} ${28}`}
-            fill={isRecording ? accent_blue : grey}
-          />
-        </View>
-      </Pressable>
-    </Animated.View>
+    <SpeechToTextButton />
   );
 };
 

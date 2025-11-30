@@ -47,6 +47,7 @@ import {
   useStableCallback,
   useTheme,
   ThemeProvider,
+  isLocalUrl,
 } from 'stream-chat-react-native';
 import { AppProvider, useAppContext } from './contexts/AppContext.tsx';
 import {
@@ -180,6 +181,14 @@ const DrawerNavigator = () => (
   </Drawer.Navigator>
 );
 
+const additionalFlatListProps = {
+  maintainVisibleContentPosition: {
+    minIndexForVisible: 0,
+    autoscrollToTopThreshold: 0,
+  },
+  ListHeaderComponent: null,
+};
+
 const AppContent = () => {
   const { channel } = useAppContext();
   const { bottom } = useSafeAreaInsets();
@@ -193,6 +202,7 @@ const AppContent = () => {
       await channel.watch({
         created_by_id: localMessage.user_id,
       });
+      await channel.update({ name: localMessage.text });
     }
 
     if (
@@ -230,14 +240,7 @@ const AppContent = () => {
         MessageAvatar={RenderNull}
         MessageFooter={RenderNull}
       >
-        <MessageList
-          additionalFlatListProps={{
-            maintainVisibleContentPosition: {
-              minIndexForVisible: 0,
-              autoscrollToTopThreshold: 0,
-            },
-          }}
-        />
+        <MessageList additionalFlatListProps={additionalFlatListProps} />
         <AITypingIndicatorView />
         <MessageComposerAI bottomSheetOptions={bottomSheetOptions} />
       </Channel>
@@ -280,11 +283,26 @@ const bottomSheetOptions = [
 
 const CustomMessage = (props: MessageProps) => {
   const { theme } = useTheme();
-  const isFromBot = props.message.ai_generated;
+  const { message } = props;
+  const isFromBot = message.ai_generated;
+  const hasPendingAttachments = (message.attachments ?? []).some(
+    (attachment) =>
+      (attachment.image_url && isLocalUrl(attachment.image_url)) ||
+      (attachment.asset_url && isLocalUrl(attachment.asset_url)),
+  );
 
   const modifiedTheme = useMemo(() => {
     if (!isFromBot) {
-      return theme;
+      return mergeThemes({
+        theme,
+        style: {
+          messageSimple: {
+            wrapper: {
+              opacity: hasPendingAttachments ? 0.5 : 1,
+            },
+          },
+        },
+      });
     }
 
     return mergeThemes({
@@ -302,7 +320,8 @@ const CustomMessage = (props: MessageProps) => {
         },
       },
     });
-  }, [theme, isFromBot]);
+  }, [theme, isFromBot, hasPendingAttachments]);
+
   return (
     <ThemeProvider mergedStyle={modifiedTheme}>
       <Message {...props} />
@@ -310,12 +329,10 @@ const CustomMessage = (props: MessageProps) => {
   );
 };
 
-const w = Dimensions.get('window').width - 32;
-
 const StreamingMessageView = () => {
   const { message } = useMessageContext();
   return (
-    <View style={{ width: w, paddingLeft: 16 }}>
+    <View style={{ width: '100%', paddingHorizontal: 16 }}>
       <MarkdownRichText text={message.text ?? ''} />
     </View>
   );
