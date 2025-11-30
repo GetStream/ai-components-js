@@ -60,6 +60,19 @@ export type Theme = {
     stopGeneratingIcon: ViewStyle;
     iconButton: ViewStyle;
   };
+  sheet: {
+    contentContainer: ViewStyle;
+    quickActionsCard: ViewStyle;
+    divider: ViewStyle;
+    listSection: ViewStyle;
+    quickAction: ViewStyle;
+    quickActionLabel: TextStyle;
+    listItem: ViewStyle;
+    listIcon: ViewStyle;
+    listTextContainer: ViewStyle;
+    listTitle: TextStyle;
+    listSubtitle: TextStyle;
+  };
 };
 
 export const defaultTheme: Theme = {
@@ -122,5 +135,18 @@ export const defaultTheme: Theme = {
     sendIcon: {},
     stopGeneratingIcon: {},
     iconButton: {},
+  },
+  sheet: {
+    contentContainer: {},
+    quickActionsCard: {},
+    divider: {},
+    listSection: {},
+    quickAction: {},
+    quickActionLabel: {},
+    listItem: {},
+    listIcon: {},
+    listTextContainer: {},
+    listTitle: {},
+    listSubtitle: {},
   },
 };
