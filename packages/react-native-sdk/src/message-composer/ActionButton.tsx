@@ -9,7 +9,7 @@ import {
 } from '../store';
 import { useStateStore } from '@stream-io/state-store/react-bindings';
 import { useMessageComposerContext, useTheme } from '../contexts';
-import type { AIMessageComposerProps } from './MessageComposer';
+import type { AIMessageComposerProps } from './ComposerView';
 import { CircleStop } from '../internal/icons/CircleStop';
 import { SpeechToTextButton } from './SpeechToTextButton';
 

@@ -1,2 +1,2 @@
-export * from './message-composer-context';
+export * from './composer-context.tsx';
 export * from './theme-context';

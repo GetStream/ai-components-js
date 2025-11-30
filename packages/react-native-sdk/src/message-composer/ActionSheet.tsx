@@ -3,7 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import type {
   AIMessageComposerProps,
   BottomSheetOption,
-} from './MessageComposer';
+} from './ComposerView.tsx';
 import { sheetStoreApi } from '../store';
 import { Camera } from '../internal/icons/Camera';
 import { Picture } from '../internal/icons/Picture';

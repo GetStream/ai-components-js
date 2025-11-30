@@ -11,7 +11,6 @@ import {
   View,
   Text,
   Alert,
-  Dimensions,
 } from 'react-native';
 import {
   SafeAreaProvider,
@@ -63,10 +62,10 @@ import {
 } from 'stream-chat';
 import { startAI } from './http/requests.ts';
 import {
-  MarkdownRichText,
-  AIMessageComposer,
-  AIMessageComposerProps,
+  StreamingMessageView,
+  ComposerView,
   StreamTheme,
+  type ComposerViewProps,
 } from '@stream-io/ai-components-react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
@@ -231,7 +230,7 @@ const AppContent = () => {
         initializeOnMount={false}
         // @ts-expect-error This will be fixed upstream, the type is wrong
         preSendMessageRequest={preSendMessageRequest}
-        StreamingMessageView={StreamingMessageView}
+        StreamingMessageView={CustomStreamingMessageView}
         Message={CustomMessage}
         enableSwipeToReply={false}
         EmptyStateIndicator={EmptyStateIndicator}
@@ -329,17 +328,17 @@ const CustomMessage = (props: MessageProps) => {
   );
 };
 
-const StreamingMessageView = () => {
+const CustomStreamingMessageView = () => {
   const { message } = useMessageContext();
   return (
     <View style={{ width: '100%', paddingHorizontal: 16 }}>
-      <MarkdownRichText text={message.text ?? ''} />
+      <StreamingMessageView text={message.text ?? ''} />
     </View>
   );
 };
 
 const MessageComposerAI = (
-  props: Pick<AIMessageComposerProps, 'bottomSheetOptions'>,
+  props: Pick<ComposerViewProps, 'bottomSheetOptions'>,
 ) => {
   const messageComposer = useMessageComposer();
   const { sendMessage } = useMessageInputContext();
@@ -384,7 +383,7 @@ const MessageComposerAI = (
   );
 
   return (
-    <AIMessageComposer
+    <ComposerView
       {...props}
       bottomSheetInsets={insets}
       onSendMessage={serializeToMessage}

@@ -14,7 +14,7 @@ import { AttachmentButton } from './AttachmentButton';
 import { ActionButton } from './ActionButton';
 import { MediaPreviewList } from './MediaPreviewList';
 import {
-  MessageComposerProvider,
+  ComposerProvider,
   useMessageComposerContext,
   useTheme,
 } from '../contexts';
@@ -36,7 +36,7 @@ export type BottomSheetInsets = {
   right: number;
 };
 
-export type AIMessageComposerProps = {
+export type ComposerViewProps = {
   bottomSheetOptions: BottomSheetOption[];
   onSendMessage: (opts: {
     text: string;
@@ -50,12 +50,12 @@ export type AIMessageComposerProps = {
   state?: StateStore<MessageComposerState>;
 };
 
-export const MessageComposerUI = ({
+export const ComposerViewUI = ({
   bottomSheetOptions = [],
   bottomSheetInsets,
   isGenerating,
   stopGenerating,
-}: AIMessageComposerProps) => {
+}: ComposerViewProps) => {
   const {
     theme: {
       composer: { container, containerRow, inputPillContainer, inputPill },
@@ -125,14 +125,14 @@ export const AIMessageInput = () => {
   );
 };
 
-export const AIMessageComposer = (props: AIMessageComposerProps) => (
-  <MessageComposerProvider
+export const ComposerView = (props: ComposerViewProps) => (
+  <ComposerProvider
     onSendMessage={props.onSendMessage}
     mediaPickerService={props.mediaPickerService}
     state={props.state}
   >
-    <MessageComposerUI {...props} />
-  </MessageComposerProvider>
+    <ComposerViewUI {...props} />
+  </ComposerProvider>
 );
 
 const useStyles = () => {

@@ -45,7 +45,7 @@ export const useStreamingMessage = ({
   return { streamedMessageText };
 };
 
-export const MarkdownRichText = ({
+export const StreamingMessageView = ({
   text,
   paragraphNumberOfLines,
   rules,
