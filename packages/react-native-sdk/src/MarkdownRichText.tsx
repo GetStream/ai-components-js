@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { generateMarkdownText } from './markdown';
 import { Markdown } from './markdown';
-import type { MarkdownRules, MarkdownStyle } from './markdown';
+import type { MarkdownRules } from './markdown';
 import { Linking } from 'react-native';
 
 import { useStableCallback } from './internal/hooks/useStableCallback';
@@ -49,13 +49,11 @@ export const MarkdownRichText = ({
   text,
   paragraphNumberOfLines,
   rules,
-  styles: markdownStyles,
   onLink: onLinkParam,
 }: {
   text: string;
   paragraphNumberOfLines?: number;
   rules?: MarkdownRules;
-  styles?: MarkdownStyle;
   onLink?: (url: string) => void;
 }) => {
   const markdownText = useMemo(() => generateMarkdownText(text), [text]);
@@ -75,7 +73,6 @@ export const MarkdownRichText = ({
   return (
     <Markdown
       rules={rules}
-      styles={markdownStyles}
       onLink={onLink}
       paragraphNumberOfLines={paragraphNumberOfLines}
     >

@@ -9,20 +9,17 @@ import SimpleMarkdown, {
 } from '@khanacademy/simple-markdown';
 import { getLocalRules } from '../rules';
 import { View } from 'react-native';
+import { useTheme } from '../../contexts';
 
 const UnmemoizedMarkdown = (props: PropsWithChildren<MarkdownProps>) => {
   const {
-    onLink,
-    rules: rulesProp,
-    styles: stylesProp,
-    paragraphNumberOfLines,
-    children,
-  } = props;
+    theme: { markdown },
+  } = useTheme();
 
-  const mergedStyles = useMemo(
-    () => merge({}, styles, stylesProp),
-    [stylesProp],
-  );
+  const { onLink, rules: rulesProp, paragraphNumberOfLines, children } = props;
+
+  const mergedStyles = useMemo(() => merge({}, styles, markdown), [markdown]);
+
   const localRules = useMemo(
     () =>
       merge(
@@ -59,7 +56,7 @@ const UnmemoizedMarkdown = (props: PropsWithChildren<MarkdownProps>) => {
 
   const tree = useMemo(() => renderer(toRender), [renderer, toRender]);
 
-  return <View style={[styles.view, stylesProp?.view]}>{tree}</View>;
+  return <View style={[styles.view, markdown.view]}>{tree}</View>;
 };
 
 const areEqual = (prevProps: PropsWithChildren, nextProps: PropsWithChildren) =>

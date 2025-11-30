@@ -37,7 +37,6 @@ import {
   MessageList,
   MessageProps,
   OverlayProvider,
-  ThemeProvider,
   useAIState,
   useChannelContext,
   useChannelsContext,
@@ -47,6 +46,7 @@ import {
   useMessageInputContext,
   useStableCallback,
   useTheme,
+  ThemeProvider,
 } from 'stream-chat-react-native';
 import { AppProvider, useAppContext } from './contexts/AppContext.tsx';
 import {
@@ -65,6 +65,9 @@ import {
   MarkdownRichText,
   AIMessageComposer,
   AIMessageComposerProps,
+  StreamTheme,
+  DeepPartial,
+  Theme,
 } from '@stream-io/ai-components-react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
@@ -88,19 +91,21 @@ function App() {
   return (
     <SafeAreaProvider>
       <AppProvider client={chatClient}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <OverlayProvider value={{ style: chatTheme }}>
-            <Chat
-              client={chatClient}
-              isMessageAIGenerated={isMessageAIGenerated}
-              enableOfflineSupport={false}
-            >
-              <NavigationContainer>
-                <DrawerNavigator />
-              </NavigationContainer>
-            </Chat>
-          </OverlayProvider>
-        </GestureHandlerRootView>
+        <StreamTheme>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <OverlayProvider value={{ style: chatTheme }}>
+              <Chat
+                client={chatClient}
+                isMessageAIGenerated={isMessageAIGenerated}
+                enableOfflineSupport={false}
+              >
+                <NavigationContainer>
+                  <DrawerNavigator />
+                </NavigationContainer>
+              </Chat>
+            </OverlayProvider>
+          </GestureHandlerRootView>
+        </StreamTheme>
       </AppProvider>
     </SafeAreaProvider>
   );
