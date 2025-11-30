@@ -9,7 +9,7 @@ import { Camera } from '../internal/icons/Camera';
 import { Picture } from '../internal/icons/Picture';
 import { Folder } from '../internal/icons/Folder';
 import { withCloseSheet } from './utils/withCloseSheet';
-import { useMessageComposerContext } from '../contexts/message-composer-context';
+import { useMessageComposerContext } from '../contexts';
 
 type BottomSheetContentProps = Pick<
   AIMessageComposerProps,

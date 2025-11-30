@@ -1,4 +1,5 @@
 import type { MarkdownStyle } from './markdown';
+import type { ImageStyle, TextStyle, ViewStyle } from 'react-native';
 
 export const colors = {
   accent_blue: '#005FFF',
@@ -16,6 +17,7 @@ export const colors = {
   code_block: '#DDDDDD',
   disabled: '#B4BBBA',
   grey: '#7A7A7A',
+  grey_neutral: '#9E9E9E',
   grey_dark: '#72767E',
   grey_gainsboro: '#DBDBDB',
   grey_whisper: '#ECEBEB',
@@ -40,8 +42,24 @@ export const colors = {
 export type Theme = {
   colors: typeof colors & { [key: string]: string };
   markdown: MarkdownStyle;
-  // Index signature for additional dynamic properties
-  // [component: string]: any;
+  composer: {
+    container: ViewStyle;
+    containerRow: ViewStyle;
+    inputPillHeight: number;
+    inputPillContainer: ViewStyle;
+    inputPill: ViewStyle;
+    textInput: TextStyle;
+    roundButton: ViewStyle;
+    attachIcon: TextStyle;
+    mediaPreviewStyle: ViewStyle;
+    mediaPreviewContentContainerStyle: ViewStyle;
+    mediaPreviewImage: ImageStyle;
+    mediaPreviewRemoveButton: ViewStyle;
+    micIcon: ViewStyle;
+    sendIcon: ViewStyle;
+    stopGeneratingIcon: ViewStyle;
+    iconButton: ViewStyle;
+  };
 };
 
 export const defaultTheme: Theme = {
@@ -86,5 +104,23 @@ export const defaultTheme: Theme = {
     tableRowCell: {},
     tableHeader: {},
     tableHeaderCell: {},
+  },
+  composer: {
+    container: {},
+    containerRow: {},
+    inputPillHeight: 48,
+    inputPillContainer: {},
+    inputPill: {},
+    textInput: {},
+    roundButton: {},
+    attachIcon: {},
+    mediaPreviewStyle: {},
+    mediaPreviewContentContainerStyle: {},
+    mediaPreviewImage: {},
+    mediaPreviewRemoveButton: {},
+    micIcon: {},
+    sendIcon: {},
+    stopGeneratingIcon: {},
+    iconButton: {},
   },
 };

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Platform, StyleSheet, TextInput, View } from 'react-native';
 import { BottomSheet } from '../components/BottomSheet';
 import { BottomSheetContent } from './ActionSheet';
@@ -16,6 +16,7 @@ import { MediaPreviewList } from './MediaPreviewList';
 import {
   MessageComposerProvider,
   useMessageComposerContext,
+  useTheme,
 } from '../contexts';
 import { useComposerText } from '../store';
 import type { StateStore } from '@stream-io/state-store';
@@ -45,32 +46,49 @@ export const MessageComposerUI = ({
   bottomSheetOptions = [],
   isGenerating,
   stopGenerating,
-}: AIMessageComposerProps) => (
-  <View pointerEvents={'box-none'} style={styles.container}>
-    <View style={styles.row}>
-      <AttachmentButton />
+}: AIMessageComposerProps) => {
+  const {
+    theme: {
+      composer: { container, containerRow, inputPillContainer, inputPill },
+    },
+  } = useTheme();
+  const styles = useStyles();
 
-      <Animated.View
-        style={styles.inputPillContainer}
-        layout={LinearTransition.duration(150)}
-      >
-        <MediaPreviewList />
-        <View style={styles.inputPill}>
-          <MessageInput />
-          <ActionButton
-            isGenerating={isGenerating}
-            stopGenerating={stopGenerating}
-          />
-        </View>
-      </Animated.View>
+  return (
+    <View pointerEvents={'box-none'} style={[styles.container, container]}>
+      <View style={[styles.row, containerRow]}>
+        <AttachmentButton />
+
+        <Animated.View
+          style={[styles.inputPillContainer, inputPillContainer]}
+          layout={LinearTransition.duration(150)}
+        >
+          <MediaPreviewList />
+          <View style={[styles.inputPill, inputPill]}>
+            <AIMessageInput />
+            <ActionButton
+              isGenerating={isGenerating}
+              stopGenerating={stopGenerating}
+            />
+          </View>
+        </Animated.View>
+      </View>
+      <BottomSheet>
+        <BottomSheetContent bottomSheetOptions={bottomSheetOptions} />
+      </BottomSheet>
     </View>
-    <BottomSheet>
-      <BottomSheetContent bottomSheetOptions={bottomSheetOptions} />
-    </BottomSheet>
-  </View>
-);
+  );
+};
 
-export const MessageInput = () => {
+export const AIMessageInput = () => {
+  const {
+    theme: {
+      colors: { grey_neutral },
+      composer: { textInput },
+    },
+  } = useTheme();
+  const styles = useStyles();
+
   const { error, isRecording } = useDictationState();
   const { text } = useComposerText();
   const { transcript } = useDictationTranscript();
@@ -87,8 +105,8 @@ export const MessageInput = () => {
       value={text}
       onChangeText={setText}
       placeholder={'Ask anything'}
-      placeholderTextColor={'#9E9E9E'}
-      style={styles.textInput}
+      placeholderTextColor={grey_neutral}
+      style={[styles.textInput, textInput]}
       multiline
       underlineColorAndroid={'transparent'}
     />
@@ -105,48 +123,51 @@ export const AIMessageComposer = (props: AIMessageComposerProps) => (
   </MessageComposerProvider>
 );
 
-export const PILL_HEIGHT = 48;
+const useStyles = () => {
+  const { theme } = useTheme();
 
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-  },
-  plusIcon: {
-    backgroundColor: '#555',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  inputPill: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    maxHeight: PILL_HEIGHT * 3,
-  },
-  inputPillContainer: {
-    flex: 1,
-    minHeight: PILL_HEIGHT,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: PILL_HEIGHT / 2,
-    backgroundColor: '#F5F5F5',
-    paddingHorizontal: 14,
-    paddingVertical: Platform.OS === 'ios' ? 10 : 6,
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowOffset: { width: 0, height: 1 },
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  textInput: {
-    flex: 1,
-    fontSize: 16,
-    color: '#111',
-    paddingVertical: 0,
-    paddingHorizontal: 0,
-    marginRight: 24,
-  },
-});
+  return useMemo(() => {
+    const { colors, composer } = theme;
+
+    const pillHeight = composer.inputPillHeight;
+
+    return StyleSheet.create({
+      container: {
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+      },
+      row: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+      },
+      inputPill: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        maxHeight: pillHeight * 3,
+      },
+      inputPillContainer: {
+        flex: 1,
+        minHeight: pillHeight,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: pillHeight / 2,
+        backgroundColor: colors.white_smoke,
+        paddingHorizontal: 14,
+        paddingVertical: Platform.OS === 'ios' ? 10 : 6,
+        shadowColor: colors.black,
+        shadowOpacity: 0.08,
+        shadowOffset: { width: 0, height: 1 },
+        shadowRadius: 4,
+        elevation: 2,
+      },
+      textInput: {
+        flex: 1,
+        fontSize: 16,
+        color: colors.black,
+        paddingVertical: 0,
+        paddingHorizontal: 0,
+        marginRight: 24,
+      },
+    });
+  }, [theme]);
+};
