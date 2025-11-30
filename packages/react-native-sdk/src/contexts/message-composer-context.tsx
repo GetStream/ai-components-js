@@ -17,7 +17,7 @@ export type MessageComposerContext = {
 };
 
 export type MessageComposerContextProps = PropsWithChildren<
-  Pick<AIMessageComposerProps, 'onSendMessage'>
+  Pick<AIMessageComposerProps, 'onSendMessage' | 'mediaPickerService' | 'state'>
 >;
 
 export const MessageComposerContext = React.createContext<
@@ -26,12 +26,16 @@ export const MessageComposerContext = React.createContext<
 
 export const MessageComposerProvider = ({
   onSendMessage,
+  mediaPickerService: mediaPickerServiceOverride,
+  state: stateOverride,
   children,
 }: MessageComposerContextProps) => {
-  const [mediaPickerService] = useState(() =>
-    MediaPickerService ? new MediaPickerService() : undefined,
+  const [mediaPickerService] = useState(
+    () =>
+      mediaPickerServiceOverride ??
+      (MediaPickerService ? new MediaPickerService() : undefined),
   );
-  const [state] = useState(() => createNewComposerStore());
+  const [state] = useState(() => stateOverride ?? createNewComposerStore());
 
   const setText = useStableCallback((text: string) =>
     state.partialNext({ text }),

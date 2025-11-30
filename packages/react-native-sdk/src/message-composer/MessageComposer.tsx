@@ -4,7 +4,10 @@ import { BottomSheet } from '../components/BottomSheet';
 import { BottomSheetContent } from './ActionSheet';
 
 import Animated, { LinearTransition } from 'react-native-reanimated';
-import { type MediaPickerState } from '../services/media-picker-service/AbstractMediaPickerService';
+import type {
+  AbstractMediaPickerService,
+  MediaPickerState,
+} from '../services/media-picker-service/AbstractMediaPickerService';
 import { useDictationState } from '../store/dictation/useDictationState';
 import { useDictationTranscript } from '../store/dictation/useDictationTranscript';
 import { AttachmentButton } from './AttachmentButton';
@@ -13,8 +16,10 @@ import { MediaPreviewList } from './MediaPreviewList';
 import {
   MessageComposerProvider,
   useMessageComposerContext,
-} from '../contexts/message-composer-context';
-import { useComposerText } from '../store/composer/useComposerText';
+} from '../contexts';
+import { useComposerText } from '../store';
+import type { StateStore } from '@stream-io/state-store';
+import type { MessageComposerState } from '../store';
 
 export type BottomSheetOption = {
   title: string;
@@ -32,6 +37,8 @@ export type AIMessageComposerProps = {
   }) => Promise<void>;
   isGenerating: boolean;
   stopGenerating: () => Promise<void>;
+  mediaPickerService?: AbstractMediaPickerService;
+  state?: StateStore<MessageComposerState>;
 };
 
 export const MessageComposerUI = ({
@@ -63,7 +70,7 @@ export const MessageComposerUI = ({
   </View>
 );
 
-const MessageInput = () => {
+export const MessageInput = () => {
   const { error, isRecording } = useDictationState();
   const { text } = useComposerText();
   const { transcript } = useDictationTranscript();
@@ -89,7 +96,11 @@ const MessageInput = () => {
 };
 
 export const AIMessageComposer = (props: AIMessageComposerProps) => (
-  <MessageComposerProvider onSendMessage={props.onSendMessage}>
+  <MessageComposerProvider
+    onSendMessage={props.onSendMessage}
+    mediaPickerService={props.mediaPickerService}
+    state={props.state}
+  >
     <MessageComposerUI {...props} />
   </MessageComposerProvider>
 );
@@ -99,7 +110,7 @@ export const PILL_HEIGHT = 48;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 12,
-    paddingBottom: 8,
+    paddingVertical: 8,
   },
   row: {
     flexDirection: 'row',
