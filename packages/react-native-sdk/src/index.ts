@@ -4,6 +4,7 @@ export * from './syntax-highlighting';
 export * from './charts';
 export * from './message-composer';
 export * from './StreamingMessageView';
+export * from './AITypingIndicatorView';
 
 // components
 export * from './components';

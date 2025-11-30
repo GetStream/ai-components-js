@@ -15,6 +15,7 @@ export const colors = {
   transparent: 'transparent',
   white: '#FFFFFF',
   white_smoke: '#F2F2F2',
+  shimmer: '#FFFFFF',
 };
 
 export type Theme = {
@@ -50,6 +51,9 @@ export type Theme = {
     listTextContainer: ViewStyle;
     listTitle: TextStyle;
     listSubtitle: TextStyle;
+  };
+  aiTypingIndicatorView: {
+    text: TextStyle;
   };
 };
 
@@ -126,5 +130,8 @@ export const defaultTheme: Theme = {
     listTextContainer: {},
     listTitle: {},
     listSubtitle: {},
+  },
+  aiTypingIndicatorView: {
+    text: {},
   },
 };

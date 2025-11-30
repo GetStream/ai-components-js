@@ -21,7 +21,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import React, { useCallback, useMemo } from 'react';
 import {
   AIStates,
-  AITypingIndicatorView,
   Channel,
   ChannelList,
   ChannelPreviewMessengerProps,
@@ -65,6 +64,7 @@ import {
   StreamingMessageView,
   ComposerView,
   StreamTheme,
+  AITypingIndicatorView,
   type ComposerViewProps,
 } from '@stream-io/ai-components-react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
@@ -240,7 +240,7 @@ const AppContent = () => {
         MessageFooter={RenderNull}
       >
         <MessageList additionalFlatListProps={additionalFlatListProps} />
-        <AITypingIndicatorView />
+        <AIThinkingIndicatorView />
         <MessageComposerAI bottomSheetOptions={bottomSheetOptions} />
       </Channel>
     </Animated.View>
@@ -280,14 +280,44 @@ const bottomSheetOptions = [
   },
 ];
 
+const AIThinkingIndicatorView = () => {
+  const { channel } = useChannelContext();
+  const { aiState } = useAIState(channel);
+
+  const allowedStates = {
+    [AIStates.Thinking]: 'Thinking about the question...',
+    [AIStates.Generating]: 'Generating a response...',
+    [AIStates.ExternalSources]: 'Checking external sources...',
+  };
+
+  if (aiState === AIStates.Idle || aiState === AIStates.Error) {
+    return null;
+  }
+
+  return (
+    <View
+      style={{
+        paddingHorizontal: 24,
+        paddingVertical: 12,
+      }}
+    >
+      <AITypingIndicatorView text={allowedStates[aiState]} />
+    </View>
+  );
+};
+
 const CustomMessage = (props: MessageProps) => {
   const { theme } = useTheme();
   const { message } = props;
   const isFromBot = message.ai_generated;
-  const hasPendingAttachments = (message.attachments ?? []).some(
-    (attachment) =>
-      (attachment.image_url && isLocalUrl(attachment.image_url)) ||
-      (attachment.asset_url && isLocalUrl(attachment.asset_url)),
+  const hasPendingAttachments = useMemo(
+    () =>
+      (message.attachments ?? []).some(
+        (attachment) =>
+          (attachment.image_url && isLocalUrl(attachment.image_url)) ||
+          (attachment.asset_url && isLocalUrl(attachment.asset_url)),
+      ),
+    [message.attachments],
   );
 
   const modifiedTheme = useMemo(() => {

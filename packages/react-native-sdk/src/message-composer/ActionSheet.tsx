@@ -1,9 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import type {
-  AIMessageComposerProps,
-  BottomSheetOption,
-} from './ComposerView.tsx';
+import type { BottomSheetOption, ComposerViewProps } from './ComposerView';
 import { sheetStoreApi } from '../store';
 import { Camera } from '../internal/icons/Camera';
 import { Picture } from '../internal/icons/Picture';
@@ -11,7 +8,7 @@ import { withCloseSheet } from './utils/withCloseSheet';
 import { useMessageComposerContext, useTheme } from '../contexts';
 
 type BottomSheetContentProps = Pick<
-  AIMessageComposerProps,
+  ComposerViewProps,
   'bottomSheetOptions' | 'bottomSheetInsets'
 >;
 
