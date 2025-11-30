@@ -29,6 +29,7 @@ export type ThemeContextValue = {
 
 export const mergeThemes = (params: MergedThemesParams) => {
   const { style, theme } = params;
+  // TODO: Use structured-clone here or something similar.
   const finalTheme = (
     !theme || Object.keys(theme).length === 0
       ? JSON.parse(JSON.stringify(defaultTheme))
