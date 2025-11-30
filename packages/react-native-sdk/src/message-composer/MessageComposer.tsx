@@ -29,6 +29,13 @@ export type BottomSheetOption = {
   Icon?: React.ComponentType;
 };
 
+export type BottomSheetInsets = {
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+};
+
 export type AIMessageComposerProps = {
   bottomSheetOptions: BottomSheetOption[];
   onSendMessage: (opts: {
@@ -38,12 +45,14 @@ export type AIMessageComposerProps = {
   }) => Promise<void>;
   isGenerating: boolean;
   stopGenerating: () => Promise<void>;
+  bottomSheetInsets?: BottomSheetInsets;
   mediaPickerService?: AbstractMediaPickerService;
   state?: StateStore<MessageComposerState>;
 };
 
 export const MessageComposerUI = ({
   bottomSheetOptions = [],
+  bottomSheetInsets,
   isGenerating,
   stopGenerating,
 }: AIMessageComposerProps) => {
@@ -74,7 +83,10 @@ export const MessageComposerUI = ({
         </Animated.View>
       </View>
       <BottomSheet>
-        <BottomSheetContent bottomSheetOptions={bottomSheetOptions} />
+        <BottomSheetContent
+          bottomSheetOptions={bottomSheetOptions}
+          bottomSheetInsets={bottomSheetInsets}
+        />
       </BottomSheet>
     </View>
   );

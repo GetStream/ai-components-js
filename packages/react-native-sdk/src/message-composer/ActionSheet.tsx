@@ -12,11 +12,12 @@ import { useMessageComposerContext, useTheme } from '../contexts';
 
 type BottomSheetContentProps = Pick<
   AIMessageComposerProps,
-  'bottomSheetOptions'
+  'bottomSheetOptions' | 'bottomSheetInsets'
 >;
 
 export const BottomSheetContent = ({
   bottomSheetOptions,
+  bottomSheetInsets,
 }: BottomSheetContentProps) => {
   const {
     theme: {
@@ -32,9 +33,18 @@ export const BottomSheetContent = ({
     [],
   );
 
+  const insetStyle = useMemo(
+    () => ({ paddingBottom: 16 + (bottomSheetInsets?.bottom ?? 0) }),
+    [bottomSheetInsets],
+  );
+
   return (
     <ScrollView
-      contentContainerStyle={[styles.contentContainer, contentContainer]}
+      contentContainerStyle={[
+        styles.contentContainer,
+        insetStyle,
+        contentContainer,
+      ]}
       showsVerticalScrollIndicator={false}
       onContentSizeChange={onContentSizeChange}
     >
@@ -148,7 +158,6 @@ const useStyles = () => {
       contentContainer: {
         paddingHorizontal: 16,
         paddingTop: 12,
-        paddingBottom: 16,
       },
       quickActionsCard: {
         flexDirection: 'row',

@@ -334,8 +334,20 @@ const MessageComposerAI = (
     () => channel?.stopAIResponse(),
     [channel],
   );
+
   const isGenerating = [AIStates.Thinking, AIStates.Generating].includes(
     aiState,
+  );
+
+  const safeAreaInsets = useSafeAreaInsets();
+  const insets = useMemo(
+    () => ({
+      ...safeAreaInsets,
+      bottom:
+        safeAreaInsets.bottom +
+        (Platform.OS === 'android' ? (StatusBar.currentHeight ?? 0) * 2 : 0),
+    }),
+    [safeAreaInsets],
   );
 
   const serializeToMessage = useStableCallback(
@@ -357,6 +369,7 @@ const MessageComposerAI = (
   return (
     <AIMessageComposer
       {...props}
+      bottomSheetInsets={insets}
       onSendMessage={serializeToMessage}
       isGenerating={isGenerating}
       stopGenerating={stopGenerating}
