@@ -9,7 +9,7 @@ import SimpleMarkdown, {
 import { getLocalRules } from '../rules';
 import { View } from 'react-native';
 import { useTheme } from '../../contexts';
-import { getLocalStyles } from '../styles.ts';
+import { getLocalStyles } from '../styles';
 
 const UnmemoizedMarkdown = (props: PropsWithChildren<MarkdownProps>) => {
   const { theme } = useTheme();

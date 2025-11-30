@@ -1,12 +1,12 @@
 import Animated, { ZoomIn, ZoomOut } from 'react-native-reanimated';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Mic } from '../internal/icons/Mic.tsx';
+import { Mic } from '../internal/icons/Mic';
 import React, { useEffect } from 'react';
-import { useDictation } from '../transcription/useDictation.ts';
+import { useDictation } from '../transcription/useDictation';
 import { useTheme } from '../contexts';
 import { useStateStore } from '@stream-io/state-store/react-bindings';
 import { dictationStore, type DictationStoreState } from '../store';
-import type { DictationStartOptions } from '../native-specs/NativeAIDictation.ts';
+import type { DictationStartOptions } from '../native-specs/NativeAIDictation';
 
 const selector = ({ isRecording }: DictationStoreState) => ({
   isRecording,

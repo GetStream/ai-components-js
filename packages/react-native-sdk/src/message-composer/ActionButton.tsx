@@ -9,9 +9,9 @@ import {
 } from '../store';
 import { useStateStore } from '@stream-io/state-store/react-bindings';
 import { useMessageComposerContext, useTheme } from '../contexts';
-import type { AIMessageComposerProps } from './MessageComposer.tsx';
-import { CircleStop } from '../internal/icons/CircleStop.tsx';
-import { SpeechToTextButton } from './SpeechToTextButton.tsx';
+import type { AIMessageComposerProps } from './MessageComposer';
+import { CircleStop } from '../internal/icons/CircleStop';
+import { SpeechToTextButton } from './SpeechToTextButton';
 
 const selector = ({ isRecording }: DictationStoreState) => ({
   isRecording,
