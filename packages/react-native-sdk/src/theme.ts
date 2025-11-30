@@ -1,4 +1,3 @@
-import { type TextStyle, type ViewStyle } from 'react-native';
 import type { MarkdownStyle } from './markdown';
 
 export const colors = {
@@ -39,12 +38,14 @@ export const colors = {
 };
 
 export type Theme = {
+  colors: typeof colors & { [key: string]: string };
   markdown: MarkdownStyle;
   // Index signature for additional dynamic properties
   // [component: string]: any;
 };
 
 export const defaultTheme: Theme = {
+  colors,
   markdown: {
     autolink: {},
     blockQuoteSection: {},

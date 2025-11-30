@@ -38,48 +38,42 @@ export const MessageComposerUI = ({
   bottomSheetOptions = [],
   isGenerating,
   stopGenerating,
-}: AIMessageComposerProps) => {
+}: AIMessageComposerProps) => (
+  <View pointerEvents={'box-none'} style={styles.container}>
+    <View style={styles.row}>
+      <AttachmentButton />
+
+      <Animated.View
+        style={styles.inputPillContainer}
+        layout={LinearTransition.duration(150)}
+      >
+        <MediaPreviewList />
+        <View style={styles.inputPill}>
+          <MessageInput />
+          <ActionButton
+            isGenerating={isGenerating}
+            stopGenerating={stopGenerating}
+          />
+        </View>
+      </Animated.View>
+    </View>
+    <BottomSheet>
+      <BottomSheetContent bottomSheetOptions={bottomSheetOptions} />
+    </BottomSheet>
+  </View>
+);
+
+const MessageInput = () => {
   const { error, isRecording } = useDictationState();
+  const { text } = useComposerText();
   const { transcript } = useDictationTranscript();
-  const { setText, mediaPickerService } = useMessageComposerContext();
+  const { setText } = useMessageComposerContext();
 
   useEffect(() => {
     if (isRecording && !error) {
       setText(transcript);
     }
   }, [isRecording, transcript, error, setText]);
-
-  return (
-    <>
-      <View pointerEvents={'box-none'} style={styles.absoluteContainer}>
-        <View style={styles.row}>
-          <AttachmentButton />
-
-          <Animated.View
-            style={styles.inputPillContainer}
-            layout={LinearTransition.duration(150)}
-          >
-            <MediaPreviewList mediaPickerService={mediaPickerService} />
-            <View style={styles.inputPill}>
-              <MessageInput />
-              <ActionButton
-                isGenerating={isGenerating}
-                stopGenerating={stopGenerating}
-              />
-            </View>
-          </Animated.View>
-        </View>
-        <BottomSheet>
-          <BottomSheetContent bottomSheetOptions={bottomSheetOptions} />
-        </BottomSheet>
-      </View>
-    </>
-  );
-};
-
-const MessageInput = () => {
-  const { text } = useComposerText();
-  const { setText } = useMessageComposerContext();
 
   return (
     <TextInput
@@ -103,7 +97,7 @@ export const AIMessageComposer = (props: AIMessageComposerProps) => (
 export const PILL_HEIGHT = 48;
 
 const styles = StyleSheet.create({
-  absoluteContainer: {
+  container: {
     paddingHorizontal: 12,
     paddingBottom: 8,
   },

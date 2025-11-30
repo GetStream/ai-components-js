@@ -66,8 +66,6 @@ import {
   AIMessageComposer,
   AIMessageComposerProps,
   StreamTheme,
-  DeepPartial,
-  Theme,
 } from '@stream-io/ai-components-react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
@@ -185,17 +183,6 @@ const DrawerNavigator = () => (
 const AppContent = () => {
   const { channel } = useAppContext();
   const { bottom } = useSafeAreaInsets();
-
-  const safeAreaInsets = useSafeAreaInsets();
-  const insets = useMemo(
-    () => ({
-      ...safeAreaInsets,
-      bottom:
-        safeAreaInsets.bottom +
-        (Platform.OS === 'android' ? (StatusBar.currentHeight ?? 0) * 2 : 0),
-    }),
-    [safeAreaInsets],
-  );
 
   const preSendMessageRequest = useStableCallback(async ({ localMessage }) => {
     if (!channel) {

@@ -1,4 +1,3 @@
-import type { AbstractMediaPickerService } from '../services/media-picker-service/AbstractMediaPickerService';
 import { useMediaPickerState } from '../services/media-picker-service/hooks/useMediaPickerState';
 import { Image, Pressable, ScrollView, StyleSheet } from 'react-native';
 import Animated, {
@@ -8,12 +7,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Close } from '../internal/icons/Close';
 import React from 'react';
+import { useMessageComposerContext } from '../contexts';
 
-export const MediaPreviewList = ({
-  mediaPickerService,
-}: {
-  mediaPickerService?: AbstractMediaPickerService;
-}) => {
+export const MediaPreviewList = () => {
+  const { mediaPickerService } = useMessageComposerContext();
   const { attachments } =
     useMediaPickerState({ service: mediaPickerService }) ?? {};
 
