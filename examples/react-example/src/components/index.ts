@@ -5,3 +5,4 @@ export { EmptyState } from './EmptyState';
 export { MessageBubble } from './MessageBubble';
 export { MessageInputBar } from './MessageInputBar';
 export { Sidebar, SidebarHeader, ChannelPreviewItem } from './Sidebar';
+export { TopNavBar } from './TopNavBar';

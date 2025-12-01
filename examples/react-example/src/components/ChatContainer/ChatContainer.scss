@@ -6,36 +6,6 @@
   width: 100%;
   position: relative;
 
-  &__hamburger {
-    display: none;
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    z-index: 100;
-    background-color: var(--ai-demo-bg-secondary);
-    border: 1px solid var(--ai-demo-border);
-    border-radius: 8px;
-    padding: 0.5rem;
-    cursor: pointer;
-    color: var(--ai-demo-text-primary);
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background-color: var(--ai-demo-bg-tertiary);
-    }
-
-    .material-symbols-outlined {
-      font-size: 1.5rem;
-      display: block;
-    }
-
-    @media (max-width: 768px) {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-
   /* Override Stream Chat Channel styles */
   .str-chat__channel {
     flex: 1;
