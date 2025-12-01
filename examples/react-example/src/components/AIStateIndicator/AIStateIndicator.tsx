@@ -31,7 +31,7 @@ export const AIStateIndicator = () => {
     [channel.state.last_message_at],
   );
 
-  if (aiState !== AIStates.Thinking) return null;
+  if (![AIStates.Generating, AIStates.Thinking].includes(aiState)) return null;
 
   return (
     <div className="ai-demo-state-indicator">
