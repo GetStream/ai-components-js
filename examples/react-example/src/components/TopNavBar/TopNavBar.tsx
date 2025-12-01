@@ -1,4 +1,5 @@
 import { useChannelStateContext } from 'stream-chat-react';
+import { useTheme } from '../../contexts/ThemeContext';
 import './TopNavBar.scss';
 
 interface TopNavBarProps {
@@ -7,6 +8,7 @@ interface TopNavBarProps {
 
 export const TopNavBar = ({ onToggleSidebar }: TopNavBarProps) => {
   const { channel } = useChannelStateContext();
+  const { theme, toggleTheme } = useTheme();
 
   const conversationTitle = channel?.data?.summary ?? channel?.id ?? 'New Chat';
 
@@ -23,7 +25,16 @@ export const TopNavBar = ({ onToggleSidebar }: TopNavBarProps) => {
 
       <h1 className="ai-demo-top-nav__title">{conversationTitle}</h1>
 
-      <div className="ai-demo-top-nav__spacer" />
+      <button
+        className="ai-demo-top-nav__theme-btn"
+        onClick={toggleTheme}
+        type="button"
+        aria-label="Toggle theme"
+      >
+        <span className="material-symbols-rounded">
+          {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+        </span>
+      </button>
     </div>
   );
 };

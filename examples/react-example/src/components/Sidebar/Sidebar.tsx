@@ -1,6 +1,7 @@
 import type { ChannelFilters, ChannelOptions, ChannelSort } from 'stream-chat';
 import { ChannelList, ChannelPreview } from 'stream-chat-react';
 import { SidebarHeader } from './SidebarHeader';
+import { SidebarFooter } from './SidebarFooter';
 import { ChannelPreviewItem } from './ChannelPreviewItem';
 import './Sidebar.scss';
 
@@ -39,6 +40,7 @@ export const Sidebar = ({
             sort={sort}
           />
         </div>
+        <SidebarFooter />
       </div>
     </>
   );

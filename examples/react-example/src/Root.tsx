@@ -4,6 +4,7 @@ import type {
   ChannelSort,
 } from 'stream-chat';
 import { AIChatApp } from './components/AIChatApp';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 const params = new Proxy(new URLSearchParams(window.location.search), {
   get: (searchParams, property) => searchParams.get(property as string),
@@ -32,15 +33,17 @@ const sort: ChannelSort = { pinned_at: 1, last_message_at: -1, updated_at: -1 };
 
 const App = () => {
   return (
-    <AIChatApp
-      apiKey={apiKey}
-      userToken={userToken}
-      userId={userId}
-      filters={filters}
-      options={options}
-      sort={sort}
-      initialChannelId={conversationId}
-    />
+    <ThemeProvider>
+      <AIChatApp
+        apiKey={apiKey}
+        userToken={userToken}
+        userId={userId}
+        filters={filters}
+        options={options}
+        sort={sort}
+        initialChannelId={conversationId}
+      />
+    </ThemeProvider>
   );
 };
 
