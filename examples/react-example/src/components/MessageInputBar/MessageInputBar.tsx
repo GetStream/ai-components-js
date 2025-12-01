@@ -1,3 +1,4 @@
+import { type Channel } from 'stream-chat';
 import { AIMessageComposer } from '@stream-io/ai-chat-react';
 import {
   useChannelActionContext,
@@ -5,6 +6,24 @@ import {
   useMessageComposer,
 } from 'stream-chat-react';
 import './MessageInputBar.scss';
+
+const startAiAgent = async (channel: Channel, model: string | File | null) => {
+  await fetch(
+    'https://stream-nodejs-ai-e5d85ed5ce6f.herokuapp.com/start-ai-agent',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        channel_id: channel.id,
+        channel_type: channel.type,
+        platform: 'openai',
+        model,
+      }),
+    },
+  );
+};
 
 export const MessageInputBar = () => {
   const { updateMessage, sendMessage } = useChannelActionContext();
@@ -35,6 +54,13 @@ export const MessageInputBar = () => {
           composer.clear();
 
           if (channel.initialized) {
+            const isAiAgentActive = Object.keys(channel.state.watchers).some(
+              (userId) => userId.startsWith('ai-bot'),
+            );
+            if (!isAiAgentActive) {
+              await startAiAgent(channel, model);
+            }
+
             await sendMessage(d);
           } else {
             updateMessage(d?.localMessage);
@@ -42,21 +68,7 @@ export const MessageInputBar = () => {
             await channel.watch();
 
             // TODO: wrap in retry (in case channel creation takes longer)
-            await fetch(
-              'https://stream-nodejs-ai-e5d85ed5ce6f.herokuapp.com/start-ai-agent',
-              {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  channel_id: channel.id,
-                  channel_type: channel.type,
-                  platform: 'openai',
-                  model,
-                }),
-              },
-            );
+            await startAiAgent(channel, model);
 
             await sendMessage(d);
           }
