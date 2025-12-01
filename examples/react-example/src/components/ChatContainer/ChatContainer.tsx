@@ -1,9 +1,4 @@
-import {
-  Channel,
-  MessageList,
-  Window,
-  MessageInput,
-} from 'stream-chat-react';
+import { Channel, MessageList, Window, MessageInput } from 'stream-chat-react';
 import { EmptyState } from '../EmptyState';
 import { MessageBubble } from '../MessageBubble';
 import { MessageInputBar } from '../MessageInputBar';
@@ -22,6 +17,10 @@ export const ChatContainer = ({ onToggleSidebar }: ChatContainerProps) => {
         initializeOnMount={false}
         EmptyPlaceholder={<EmptyState />}
         Message={MessageBubble}
+        /* @ts-expect-error: `null` isn't in the types yet */
+        UnreadMessagesNotification={null}
+        /* @ts-expect-error: `null` isn't in the types yet */
+        UnreadMessagesSeparator={null}
       >
         <TopNavBar onToggleSidebar={onToggleSidebar} />
         <Window>

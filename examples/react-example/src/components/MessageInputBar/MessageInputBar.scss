@@ -22,7 +22,7 @@
 
     &:focus-within {
       border-color: var(--ai-demo-accent);
-      background-color: #3a3a3a;
+      background-color: var(--ai-demo-bg-tertiary);
       box-shadow: 0 0 0 1px rgba(16, 163, 127, 0.2);
     }
   }
@@ -51,35 +51,32 @@
     color: var(--ai-demo-text-primary) !important;
   }
 
-  .aicr__ai-message-composer__form__model-selector {
-    margin-bottom: 0.5rem;
+  .aicr__ai-message-composer__select {
+    background-color: var(--ai-demo-bg-tertiary);
+    color: var(--ai-demo-text-primary);
+    border-color: var(--ai-demo-border);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    font-family: var(--ai-demo-font-family);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
 
-    select {
+    &:hover {
       background-color: var(--ai-demo-bg-tertiary);
+      border-color: var(--ai-demo-accent);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--ai-demo-accent);
+      box-shadow: 0 0 0 1px rgba(16, 163, 127, 0.2);
+      background-color: var(--ai-demo-bg-tertiary);
+    }
+
+    option {
+      background-color: var(--ai-demo-bg-primary);
       color: var(--ai-demo-text-primary);
-      border: 1px solid var(--ai-demo-border);
-      border-radius: 8px;
-      padding: 0.5rem 0.75rem;
-      font-family: var(--ai-demo-font-family);
-      font-size: 0.875rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-
-      &:hover {
-        background-color: #3a3a3a;
-        border-color: var(--ai-demo-accent);
-      }
-
-      &:focus {
-        outline: none;
-        border-color: var(--ai-demo-accent);
-        box-shadow: 0 0 0 1px rgba(16, 163, 127, 0.2);
-      }
-
-      option {
-        background-color: var(--ai-demo-bg-primary);
-        color: var(--ai-demo-text-primary);
-      }
     }
   }
 
