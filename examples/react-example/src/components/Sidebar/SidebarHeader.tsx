@@ -37,7 +37,6 @@ export const SidebarHeader = () => {
         onClick={handleNewChat}
         type="button"
       >
-        <span className="material-symbols-outlined">add</span>
         <span>New chat</span>
       </button>
     </div>

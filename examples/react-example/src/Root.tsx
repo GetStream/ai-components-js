@@ -20,6 +20,7 @@ const parseUserIdFromToken = (token: string) => {
 const apiKey = params.key ?? (import.meta.env.VITE_STREAM_KEY as string);
 const userToken = params.ut ?? (import.meta.env.VITE_USER_TOKEN as string);
 const userId = parseUserIdFromToken(userToken);
+const conversationId = params.conversation_id ?? undefined;
 
 const filters: ChannelFilters = {
   members: { $in: [userId] },
@@ -38,6 +39,7 @@ const App = () => {
       filters={filters}
       options={options}
       sort={sort}
+      initialChannelId={conversationId}
     />
   );
 };
