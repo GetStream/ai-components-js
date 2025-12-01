@@ -11,7 +11,6 @@ import {
   View,
   Text,
   Alert,
-  Dimensions,
 } from 'react-native';
 import {
   SafeAreaProvider,
@@ -22,7 +21,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import React, { useCallback, useMemo } from 'react';
 import {
   AIStates,
-  AITypingIndicatorView,
   Channel,
   ChannelList,
   ChannelPreviewMessengerProps,
@@ -37,7 +35,6 @@ import {
   MessageList,
   MessageProps,
   OverlayProvider,
-  ThemeProvider,
   useAIState,
   useChannelContext,
   useChannelsContext,
@@ -47,6 +44,8 @@ import {
   useMessageInputContext,
   useStableCallback,
   useTheme,
+  ThemeProvider,
+  isLocalUrl,
 } from 'stream-chat-react-native';
 import { AppProvider, useAppContext } from './contexts/AppContext.tsx';
 import {
@@ -62,9 +61,11 @@ import {
 } from 'stream-chat';
 import { startAI } from './http/requests.ts';
 import {
-  MarkdownRichText,
-  AIMessageComposer,
-  AIMessageComposerProps,
+  StreamingMessageView,
+  ComposerView,
+  StreamTheme,
+  AITypingIndicatorView,
+  type ComposerViewProps,
 } from '@stream-io/ai-components-react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
@@ -88,19 +89,21 @@ function App() {
   return (
     <SafeAreaProvider>
       <AppProvider client={chatClient}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <OverlayProvider value={{ style: chatTheme }}>
-            <Chat
-              client={chatClient}
-              isMessageAIGenerated={isMessageAIGenerated}
-              enableOfflineSupport={false}
-            >
-              <NavigationContainer>
-                <DrawerNavigator />
-              </NavigationContainer>
-            </Chat>
-          </OverlayProvider>
-        </GestureHandlerRootView>
+        <StreamTheme>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <OverlayProvider value={{ style: chatTheme }}>
+              <Chat
+                client={chatClient}
+                isMessageAIGenerated={isMessageAIGenerated}
+                enableOfflineSupport={false}
+              >
+                <NavigationContainer>
+                  <DrawerNavigator />
+                </NavigationContainer>
+              </Chat>
+            </OverlayProvider>
+          </GestureHandlerRootView>
+        </StreamTheme>
       </AppProvider>
     </SafeAreaProvider>
   );
@@ -177,20 +180,17 @@ const DrawerNavigator = () => (
   </Drawer.Navigator>
 );
 
+const additionalFlatListProps = {
+  maintainVisibleContentPosition: {
+    minIndexForVisible: 0,
+    autoscrollToTopThreshold: 0,
+  },
+  ListHeaderComponent: null,
+};
+
 const AppContent = () => {
   const { channel } = useAppContext();
   const { bottom } = useSafeAreaInsets();
-
-  const safeAreaInsets = useSafeAreaInsets();
-  const insets = useMemo(
-    () => ({
-      ...safeAreaInsets,
-      bottom:
-        safeAreaInsets.bottom +
-        (Platform.OS === 'android' ? (StatusBar.currentHeight ?? 0) * 2 : 0),
-    }),
-    [safeAreaInsets],
-  );
 
   const preSendMessageRequest = useStableCallback(async ({ localMessage }) => {
     if (!channel) {
@@ -201,6 +201,7 @@ const AppContent = () => {
       await channel.watch({
         created_by_id: localMessage.user_id,
       });
+      await channel.update({ name: localMessage.text });
     }
 
     if (
@@ -229,7 +230,7 @@ const AppContent = () => {
         initializeOnMount={false}
         // @ts-expect-error This will be fixed upstream, the type is wrong
         preSendMessageRequest={preSendMessageRequest}
-        StreamingMessageView={StreamingMessageView}
+        StreamingMessageView={CustomStreamingMessageView}
         Message={CustomMessage}
         enableSwipeToReply={false}
         EmptyStateIndicator={EmptyStateIndicator}
@@ -238,15 +239,8 @@ const AppContent = () => {
         MessageAvatar={RenderNull}
         MessageFooter={RenderNull}
       >
-        <MessageList
-          additionalFlatListProps={{
-            maintainVisibleContentPosition: {
-              minIndexForVisible: 0,
-              autoscrollToTopThreshold: 0,
-            },
-          }}
-        />
-        <AITypingIndicatorView />
+        <MessageList additionalFlatListProps={additionalFlatListProps} />
+        <AIThinkingIndicatorView />
         <MessageComposerAI bottomSheetOptions={bottomSheetOptions} />
       </Channel>
     </Animated.View>
@@ -286,13 +280,58 @@ const bottomSheetOptions = [
   },
 ];
 
+const AIThinkingIndicatorView = () => {
+  const { channel } = useChannelContext();
+  const { aiState } = useAIState(channel);
+
+  const allowedStates = {
+    [AIStates.Thinking]: 'Thinking about the question...',
+    [AIStates.Generating]: 'Generating a response...',
+    [AIStates.ExternalSources]: 'Checking external sources...',
+  };
+
+  if (aiState === AIStates.Idle || aiState === AIStates.Error) {
+    return null;
+  }
+
+  return (
+    <View
+      style={{
+        paddingHorizontal: 24,
+        paddingVertical: 12,
+      }}
+    >
+      <AITypingIndicatorView text={allowedStates[aiState]} />
+    </View>
+  );
+};
+
 const CustomMessage = (props: MessageProps) => {
   const { theme } = useTheme();
-  const isFromBot = props.message.ai_generated;
+  const { message } = props;
+  const isFromBot = message.ai_generated;
+  const hasPendingAttachments = useMemo(
+    () =>
+      (message.attachments ?? []).some(
+        (attachment) =>
+          (attachment.image_url && isLocalUrl(attachment.image_url)) ||
+          (attachment.asset_url && isLocalUrl(attachment.asset_url)),
+      ),
+    [message.attachments],
+  );
 
   const modifiedTheme = useMemo(() => {
     if (!isFromBot) {
-      return theme;
+      return mergeThemes({
+        theme,
+        style: {
+          messageSimple: {
+            wrapper: {
+              opacity: hasPendingAttachments ? 0.5 : 1,
+            },
+          },
+        },
+      });
     }
 
     return mergeThemes({
@@ -310,7 +349,8 @@ const CustomMessage = (props: MessageProps) => {
         },
       },
     });
-  }, [theme, isFromBot]);
+  }, [theme, isFromBot, hasPendingAttachments]);
+
   return (
     <ThemeProvider mergedStyle={modifiedTheme}>
       <Message {...props} />
@@ -318,19 +358,17 @@ const CustomMessage = (props: MessageProps) => {
   );
 };
 
-const w = Dimensions.get('window').width - 32;
-
-const StreamingMessageView = () => {
+const CustomStreamingMessageView = () => {
   const { message } = useMessageContext();
   return (
-    <View style={{ width: w, paddingLeft: 16 }}>
-      <MarkdownRichText text={message.text ?? ''} />
+    <View style={{ width: '100%', paddingHorizontal: 16 }}>
+      <StreamingMessageView text={message.text ?? ''} />
     </View>
   );
 };
 
 const MessageComposerAI = (
-  props: Pick<AIMessageComposerProps, 'bottomSheetOptions'>,
+  props: Pick<ComposerViewProps, 'bottomSheetOptions'>,
 ) => {
   const messageComposer = useMessageComposer();
   const { sendMessage } = useMessageInputContext();
@@ -342,8 +380,20 @@ const MessageComposerAI = (
     () => channel?.stopAIResponse(),
     [channel],
   );
+
   const isGenerating = [AIStates.Thinking, AIStates.Generating].includes(
     aiState,
+  );
+
+  const safeAreaInsets = useSafeAreaInsets();
+  const insets = useMemo(
+    () => ({
+      ...safeAreaInsets,
+      bottom:
+        safeAreaInsets.bottom +
+        (Platform.OS === 'android' ? (StatusBar.currentHeight ?? 0) * 2 : 0),
+    }),
+    [safeAreaInsets],
   );
 
   const serializeToMessage = useStableCallback(
@@ -363,8 +413,9 @@ const MessageComposerAI = (
   );
 
   return (
-    <AIMessageComposer
+    <ComposerView
       {...props}
+      bottomSheetInsets={insets}
       onSendMessage={serializeToMessage}
       isGenerating={isGenerating}
       stopGenerating={stopGenerating}

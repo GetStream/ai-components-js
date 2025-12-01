@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, ReactNode, useMemo, useState } from 'react';
+import React, { PropsWithChildren, useMemo, useState } from 'react';
 import { Channel, StreamChat } from 'stream-chat';
 import { chatUserId } from '../chatConfig.ts';
 
@@ -11,8 +11,6 @@ export const AppContext = React.createContext<AppContextValue>({
   setChannel: () => {},
   channel: undefined,
 });
-
-// nanoid.ts
 
 // Same alphabet nanoid uses (URL-safe)
 const ALPHABET =
