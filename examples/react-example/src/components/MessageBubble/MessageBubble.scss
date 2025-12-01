@@ -19,7 +19,7 @@
       background-color: var(--ai-demo-bg-tertiary);
       border-radius: 18px;
       padding: 0.5rem 0.75rem;
-      max-width: 80%;
+      min-width: 50%;
       width: auto;
     }
   }
@@ -85,12 +85,11 @@
     padding: 0.25rem 0;
 
     &--user .ai-demo-message__bubble {
-      max-width: 85%;
       padding: 0.5rem 0.75rem;
     }
 
     &--ai .ai-demo-message__bubble {
-      max-width: 85%;
+      min-width: 60%;
       padding: 0.5rem 0.75rem;
     }
   }
