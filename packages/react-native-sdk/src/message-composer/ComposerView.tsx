@@ -20,7 +20,7 @@ import {
 } from '../contexts';
 import { useComposerText } from '../store';
 import type { StateStore } from '@stream-io/state-store';
-import type { MessageComposerState } from '../store';
+import type { ComposerState } from '../store';
 
 export type BottomSheetOption = {
   title: string;
@@ -37,17 +37,17 @@ export type BottomSheetInsets = {
 };
 
 export type ComposerViewProps = {
-  bottomSheetOptions: BottomSheetOption[];
   onSendMessage: (opts: {
     text: string;
     attachments?: MediaPickerState['assets'];
     custom?: Record<string, unknown>;
   }) => Promise<void>;
-  isGenerating: boolean;
-  stopGenerating: () => Promise<void>;
+  bottomSheetOptions?: BottomSheetOption[];
+  isGenerating?: boolean;
+  stopGenerating?: () => Promise<void>;
   bottomSheetInsets?: BottomSheetInsets;
   mediaPickerService?: AbstractMediaPickerService;
-  state?: StateStore<MessageComposerState>;
+  state?: StateStore<ComposerState>;
 };
 
 export const ComposerViewUI = ({

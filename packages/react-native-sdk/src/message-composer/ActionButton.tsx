@@ -9,7 +9,7 @@ import {
 } from '../store';
 import { useStateStore } from '@stream-io/state-store/react-bindings';
 import { useMessageComposerContext, useTheme } from '../contexts';
-import type { AIMessageComposerProps } from './ComposerView';
+import type { ComposerViewProps } from './ComposerView';
 import { CircleStop } from '../internal/icons/CircleStop';
 import { SpeechToTextButton } from './SpeechToTextButton';
 
@@ -20,7 +20,7 @@ const selector = ({ isRecording }: DictationStoreState) => ({
 export const ActionButton = ({
   isGenerating,
   stopGenerating,
-}: Pick<AIMessageComposerProps, 'isGenerating' | 'stopGenerating'>) => {
+}: Pick<ComposerViewProps, 'isGenerating' | 'stopGenerating'>) => {
   const { hasText } = useComposerHasText();
   const { isRecording } = useStateStore(dictationStore, selector);
   const { sendMessage } = useMessageComposerContext();

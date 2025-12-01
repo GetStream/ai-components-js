@@ -1,13 +1,13 @@
 import React, { type PropsWithChildren, useMemo, useState } from 'react';
 import type { AbstractMediaPickerService } from '../services/media-picker-service/AbstractMediaPickerService';
-import { createNewComposerStore, type MessageComposerState } from '../store';
+import { type ComposerState, createNewComposerStore } from '../store';
 import { MediaPickerService } from '../services';
 import type { StateStore } from '@stream-io/state-store';
 import { useStableCallback } from '../internal/hooks/useStableCallback';
 import type { ComposerViewProps } from '../message-composer';
 
 export type ComposerContext = {
-  state: StateStore<MessageComposerState>;
+  state: StateStore<ComposerState>;
   setText: (text: string) => void | Promise<void>;
   sendMessage: () => void | Promise<void>;
   mediaPickerService?: AbstractMediaPickerService;

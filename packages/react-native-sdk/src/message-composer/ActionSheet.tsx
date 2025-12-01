@@ -58,7 +58,7 @@ export const BottomSheetContent = ({
         />
       </View>
 
-      {bottomSheetOptions.length > 0 ? (
+      {bottomSheetOptions && bottomSheetOptions.length > 0 ? (
         <>
           <View style={[styles.divider, divider]} />
           <View style={[styles.listSection, listSection]}>

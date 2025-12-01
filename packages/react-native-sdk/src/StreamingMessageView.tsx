@@ -50,16 +50,22 @@ export const StreamingMessageView = ({
   paragraphNumberOfLines,
   rules,
   onLink: onLinkParam,
+  letterInterval,
+  renderingLetterCount,
 }: {
   text: string;
   paragraphNumberOfLines?: number;
   rules?: MarkdownRules;
   onLink?: (url: string) => void;
+  letterInterval?: number;
+  renderingLetterCount?: number;
 }) => {
   const markdownText = useMemo(() => generateMarkdownText(text), [text]);
 
   const { streamedMessageText } = useStreamingMessage({
     text: markdownText ?? '',
+    letterInterval,
+    renderingLetterCount,
   });
 
   const onLink = useStableCallback((url: string) =>
