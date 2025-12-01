@@ -2,12 +2,12 @@ import {
   Channel,
   MessageList,
   Window,
-  AIStateIndicator,
   MessageInput,
 } from 'stream-chat-react';
 import { EmptyState } from '../EmptyState';
 import { MessageBubble } from '../MessageBubble';
 import { MessageInputBar } from '../MessageInputBar';
+import { AIStateIndicator } from '../AIStateIndicator';
 import './ChatContainer.scss';
 
 interface ChatContainerProps {

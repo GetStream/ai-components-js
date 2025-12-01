@@ -1,4 +1,5 @@
 export { AIChatApp } from './AIChatApp';
+export { AIStateIndicator } from './AIStateIndicator';
 export { ChatContainer } from './ChatContainer';
 export { EmptyState } from './EmptyState';
 export { MessageBubble } from './MessageBubble';
