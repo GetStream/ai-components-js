@@ -1,6 +1,6 @@
 {
-  "name": "@stream-io/ai-components-react-native",
-  "version": "1.0.0",
+  "name": "@stream-io/chat-react-native-ai",
+  "version": "0.0.0",
   "private": true,
   "description": "React Native SDK for AI Components",
   "main": "./dist/commonjs/index.js",
@@ -9,7 +9,7 @@
   "exports": {
     ".": {
       "react-native": {
-        "import": "./src/index.ts",
+        "import": "./dist/module/index.js",
         "require": "./dist/commonjs/index.js"
       },
       "default": "./dist/module/index.js",
