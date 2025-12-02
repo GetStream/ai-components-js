@@ -1,5 +1,11 @@
 # @stream-io/chat-react-native-ai
 
+## 0.1.1
+
+### Patch Changes
+
+- b09525e: Added README.md
+
 ## 0.1.0
 
 ### Minor Changes
