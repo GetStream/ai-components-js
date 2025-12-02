@@ -1,15 +1,14 @@
 {
-  "name": "@stream-io/ai-components-react-native",
-  "version": "1.0.0",
-  "private": true,
-  "description": "React Native SDK for AI Components",
+  "name": "@stream-io/chat-react-native-ai",
+  "version": "0.0.0",
+  "description": "React Native SDK for Chat AI Components",
   "main": "./dist/commonjs/index.js",
   "types": "./dist/typescript/index.d.ts",
   "homepage": "https://github.com/GetStream/ai-components-js.git",
   "exports": {
     ".": {
       "react-native": {
-        "import": "./src/index.ts",
+        "import": "./dist/module/index.js",
         "require": "./dist/commonjs/index.js"
       },
       "default": "./dist/module/index.js",
@@ -35,6 +34,7 @@
     "!**/.*"
   ],
   "scripts": {
+    "prepublishOnly": "pnpm run build",
     "build": "pnpm run clean && bob build",
     "start": "tsc --project tsconfig.json --watch",
     "eslint": "eslint 'src/**/*.{js,ts,tsx}' --max-warnings 0",

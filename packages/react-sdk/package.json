@@ -1,6 +1,6 @@
 {
-  "name": "@stream-io/ai-chat-react",
-  "version": "1.0.0",
+  "name": "@stream-io/chat-react-ai",
+  "version": "0.0.0",
   "private": true,
   "description": "React Chat SDK for AI Components",
   "main": "./dist/cjs/index.js",

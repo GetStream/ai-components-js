@@ -16,7 +16,7 @@
     "@react-navigation/drawer": "^7.7.4",
     "@react-navigation/native": "^7.1.21",
     "@shopify/react-native-skia": "^2.4.2",
-    "@stream-io/ai-components-react-native": "workspace:^",
+    "@stream-io/chat-react-native-ai": "workspace:^",
     "react": "19.1.1",
     "react-native": "0.82.1",
     "react-native-fs": "^2.20.0",
