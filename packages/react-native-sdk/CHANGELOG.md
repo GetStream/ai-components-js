@@ -1,5 +1,11 @@
 # @stream-io/chat-react-native-ai
 
+## 0.1.2
+
+### Patch Changes
+
+- fd0f1ee: Include missing codegen files and update README.md
+
 ## 0.1.1
 
 ### Patch Changes
