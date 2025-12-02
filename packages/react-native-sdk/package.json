@@ -34,6 +34,7 @@
     "!**/.*"
   ],
   "scripts": {
+    "prepublishOnly": "pnpm run build",
     "build": "pnpm run clean && bob build",
     "start": "tsc --project tsconfig.json --watch",
     "eslint": "eslint 'src/**/*.{js,ts,tsx}' --max-warnings 0",
