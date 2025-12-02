@@ -34,7 +34,7 @@ pnpm examples:build:all
 pnpm packages:test:all
 
 # Test a specific package
-pnpm --filter @stream-io/ai-chat-react test
+pnpm --filter @stream-io/chat-react-ai test
 pnpm --filter ./packages/react-native-sdk test
 
 # Lint everything
@@ -143,7 +143,7 @@ Both React and React Native SDKs use `@stream-io/state-store` for component stat
 - Both: `react-syntax-highlighter` for code blocks
 
 **Styling:**
-- React SDK: SCSS files compiled to CSS, consumers import from `@stream-io/ai-chat-react/styles/*`
+- React SDK: SCSS files compiled to CSS, consumers import from `@stream-io/chat-react-ai/styles/*`
 - React Native: StyleSheet-based, no external styles
 
 ## TypeScript Configuration
