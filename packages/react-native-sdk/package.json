@@ -1,8 +1,7 @@
 {
   "name": "@stream-io/chat-react-native-ai",
   "version": "0.0.0",
-  "private": true,
-  "description": "React Native SDK for AI Components",
+  "description": "React Native SDK for Chat AI Components",
   "main": "./dist/commonjs/index.js",
   "types": "./dist/typescript/index.d.ts",
   "homepage": "https://github.com/GetStream/ai-components-js.git",
