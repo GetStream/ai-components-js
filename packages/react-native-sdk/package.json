@@ -1,6 +1,6 @@
 {
   "name": "@stream-io/chat-react-native-ai",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "React Native SDK for Chat AI Components",
   "main": "./dist/commonjs/index.js",
   "types": "./dist/typescript/index.d.ts",
