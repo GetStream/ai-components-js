@@ -66,7 +66,7 @@ import {
   StreamTheme,
   AITypingIndicatorView,
   type ComposerViewProps,
-} from '@stream-io/ai-components-react-native';
+} from '@stream-io/chat-react-native-ai';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
 const Drawer = createDrawerNavigator();
