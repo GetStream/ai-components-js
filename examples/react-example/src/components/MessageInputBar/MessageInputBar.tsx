@@ -1,6 +1,11 @@
 import { AIMessageComposer } from '@stream-io/chat-react-ai';
 import { useEffect } from 'react';
-import { isImageFile, type Channel, type UploadRequestFn } from 'stream-chat';
+import {
+  isImageFile,
+  type Channel,
+  type LocalUploadAttachment,
+  type UploadRequestFn,
+} from 'stream-chat';
 import {
   useAttachmentsForPreview,
   useChannelActionContext,
@@ -51,17 +56,17 @@ export const MessageInputBar = () => {
 
           const files = input?.files ?? null;
 
-          if (files && files.length > 0) {
+          if (files) {
             composer.attachmentManager.uploadFiles(files);
           }
         }}
         onSubmit={async (e) => {
           const event = e;
-          const target = (event.currentTarget ??
-            event.target) as HTMLFormElement | null;
           event.preventDefault();
 
-          const formData = new FormData(event.currentTarget);
+          const target = event.currentTarget;
+
+          const formData = new FormData(target);
 
           const message = formData.get('message');
           const model = formData.get('model');
@@ -72,7 +77,7 @@ export const MessageInputBar = () => {
 
           if (!composedData) return;
 
-          target?.reset();
+          target.reset();
           composer.clear();
 
           updateMessage(composedData?.localMessage);
@@ -89,20 +94,25 @@ export const MessageInputBar = () => {
         }}
       >
         <AIMessageComposer.AttachmentPreview>
-          {attachments.map(({ localMetadata, thumb_url }) => (
+          {attachments.map((attachment) => (
             <AIMessageComposer.AttachmentPreview.Item
-              key={localMetadata.id}
-              file={localMetadata.file as File}
-              state={localMetadata.uploadState}
+              key={attachment.localMetadata.id}
+              file={attachment.localMetadata.file as File}
+              state={attachment.localMetadata.uploadState}
               imagePreviewSource={
-                thumb_url || (localMetadata.previewUri as string)
+                attachment.thumb_url ||
+                (attachment.localMetadata.previewUri as string)
               }
               onDelete={() => {
                 composer.attachmentManager.removeAttachments([
-                  localMetadata.id,
+                  attachment.localMetadata.id,
                 ]);
               }}
-              // TODO: onRetry
+              onRetry={() => {
+                composer.attachmentManager.uploadAttachment(
+                  attachment as LocalUploadAttachment,
+                );
+              }}
             />
           ))}
         </AIMessageComposer.AttachmentPreview>

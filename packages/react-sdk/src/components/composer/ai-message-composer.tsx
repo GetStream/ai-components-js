@@ -205,6 +205,10 @@ type AIMessageComposerProps = ComponentPropsWithoutRef<'form'> & {
    * @default true
    */
   resetAttachmentsOnSelect?: boolean;
+  nameMapping?: {
+    message?: string;
+    attachments?: string;
+  };
 };
 
 interface AIMessageComposer {
@@ -222,6 +226,7 @@ export const AIMessageComposer: AIMessageComposer = ({
   onChange,
   onReset,
   resetAttachmentsOnSelect = true,
+  nameMapping,
   ...restProps
 }) => {
   const [stateStore] = useState(
@@ -234,9 +239,13 @@ export const AIMessageComposer: AIMessageComposer = ({
 
       const inputElement = e.target as unknown as HTMLInputElement;
 
+      const messageName = nameMapping?.message ?? 'message';
+      const attachmentsName = nameMapping?.attachments ?? 'attachments';
+
       const files =
-        inputElement.name === 'attachments' ? inputElement.files : null;
-      const text = inputElement.name === 'message' ? inputElement.value : null;
+        inputElement.name === attachmentsName ? inputElement.files : null;
+      const text =
+        inputElement.name === messageName ? inputElement.value : null;
 
       stateStore.next((currentState) => {
         const newState = { ...currentState };
@@ -270,7 +279,7 @@ export const AIMessageComposer: AIMessageComposer = ({
       if (
         resetAttachmentsOnSelect &&
         inputElement.type === 'file' &&
-        inputElement.name === 'attachments'
+        inputElement.name === attachmentsName
       ) {
         inputElement.value = '';
       }
@@ -309,6 +318,7 @@ const TextInput = (props: ComponentPropsWithoutRef<'input'>) => {
       className="aicr__ai-message-composer__text-input"
       autoComplete="off"
       type="text"
+      name="message"
       placeholder="Ask a question..."
       {...props}
     />
