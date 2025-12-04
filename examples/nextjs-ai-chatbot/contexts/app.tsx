@@ -53,7 +53,7 @@ function AppProviderInner({ children }: { children: ReactNode }) {
   const chat = useMemo(() => {
     return new Chat({
       transport: new DefaultChatTransport({
-        api: '/api/chats',
+        api: '/api.ts/chats',
         prepareSendMessagesRequest({ messages }) {
           return {
             body: {

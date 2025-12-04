@@ -24,8 +24,8 @@ npm install @stream-io/ai-sdk-storage
 import { createStreamStorageClient } from '@stream-io/ai-sdk-storage';
 
 const { streamStorage, aiSDKStreamStorage } = createStreamStorageClient({
-  apiKey: 'your-stream-api-key',
-  apiSecret: 'your-stream-api-secret',
+  apiKey: 'your-stream-api.ts-key',
+  apiSecret: 'your-stream-api.ts-secret',
   botUserId: 'ai-bot', // optional, defaults to 'ai-bot'
   adminUserId: 'admin', // optional, defaults to 'admin'
 });
@@ -34,8 +34,8 @@ const { streamStorage, aiSDKStreamStorage } = createStreamStorageClient({
 ### 2. Environment Variables
 
 ```bash
-STREAM_API_KEY=your-stream-api-key
-STREAM_API_SECRET=your-stream-api-secret
+STREAM_API_KEY=your-stream-api.ts-key
+STREAM_API_SECRET=your-stream-api.ts-secret
 STREAM_BOT_USER_ID=ai-bot # optional
 STREAM_ADMIN_USER_ID=admin # optional
 ```

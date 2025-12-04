@@ -15,7 +15,7 @@ export function useTranscriber(options: Options = {}) {
   const {
     silenceMs = 700,
     threshold = 0.05,
-    transcribeUrl = '/api/transcribe',
+    transcribeUrl = '/api.ts/transcribe',
     minAudioDuration = 500,
     shouldTranscribe = (blob, duration) => {
       return duration >= minAudioDuration && blob.size > 25000;
