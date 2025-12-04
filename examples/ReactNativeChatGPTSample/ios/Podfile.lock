@@ -1,5 +1,5 @@
 PODS:
-  - AIComponentsReactNative (1.0.0):
+  - AIComponentsReactNative (0.1.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -36,7 +36,7 @@ PODS:
   - hermes-engine (0.82.1):
     - hermes-engine/Pre-built (= 0.82.1)
   - hermes-engine/Pre-built (0.82.1)
-  - op-sqlite (15.0.7):
+  - op-sqlite (15.1.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -1956,7 +1956,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-skia (2.4.2):
+  - react-native-skia (2.4.6):
     - boost
     - DoubleConversion
     - fast_float
@@ -2913,7 +2913,7 @@ PODS:
   - Yoga (0.0.0)
 
 DEPENDENCIES:
-  - "AIComponentsReactNative (from `../node_modules/@stream-io/ai-components-react-native`)"
+  - "AIComponentsReactNative (from `../node_modules/@stream-io/chat-react-native-ai`)"
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - fast_float (from `../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
@@ -3010,7 +3010,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   AIComponentsReactNative:
-    :path: "../node_modules/@stream-io/ai-components-react-native"
+    :path: "../node_modules/@stream-io/chat-react-native-ai"
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   DoubleConversion:
@@ -3186,7 +3186,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AIComponentsReactNative: f1ab4e56b2b507228fb619834f40fb9cf32b58fa
+  AIComponentsReactNative: b59c5f7bb5bd8c87bea02ca1402dda546695b059
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6
@@ -3194,7 +3194,7 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 273e30e7fb618279934b0b95ffab60ecedb7acf5
-  op-sqlite: b4931f1bc7fe4c1ce24befbcddf79f6a65fd51ed
+  op-sqlite: e4b81c12e1c0cd8b27d824e0eeef96f0a400d53e
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: f17e2ebc07876ca9ab8eb6e4b0a4e4647497ae3a
   RCTRequired: e2c574c1b45231f7efb0834936bd609d75072b63
@@ -3232,7 +3232,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: 0314366753615115fa55c3cc937ac44cb7e75702
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-safe-area-context: c00143b4823773bba23f2f19f85663ae89ceb460
-  react-native-skia: ea75e0191029ae2037f90747b4aa59bef6a10b35
+  react-native-skia: d456cedf4893e54f243bd40f6ecbf5cc7185fb85
   React-NativeModulesApple: 46690a0fe94ec28fc6fc686ec797b911d251ded0
   React-oscompat: 95875e81f5d4b3c7b2c888d5bd2c9d83450d8bdb
   React-perflogger: 2e229bf33e42c094fd64516d89ec1187a2b79b5b

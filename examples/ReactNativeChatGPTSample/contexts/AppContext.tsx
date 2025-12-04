@@ -12,16 +12,9 @@ export const AppContext = React.createContext<AppContextValue>({
   channel: undefined,
 });
 
-// Same alphabet nanoid uses (URL-safe)
 const ALPHABET =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz-';
 
-/**
- * Pseudo-random nanoid clone.
- * Default length = 21 (same as nanoid)
- *
- * NOT cryptographically secure — perfect for client-side IDs.
- */
 export function nanoid(size: number = 21): string {
   let id = '';
   for (let i = 0; i < size; i++) {
@@ -31,16 +24,16 @@ export function nanoid(size: number = 21): string {
   return id;
 }
 
+export const createChannel = (client: StreamChat) =>
+  client.channel('messaging', nanoid(), {
+    members: [chatUserId],
+  });
+
 export const AppProvider = ({
   client,
   children,
 }: PropsWithChildren<{ client: StreamChat }>) => {
-  const [channel, setChannel] = useState<Channel>(() => {
-    const c = client.channel('messaging', nanoid(), {
-      members: [chatUserId],
-    });
-    return c;
-  });
+  const [channel, setChannel] = useState<Channel>(() => createChannel(client));
 
   const contextValue = useMemo(() => ({ channel, setChannel }), [channel]);
 

@@ -1,81 +1,48 @@
 import { NavigationContainer } from '@react-navigation/native';
-import {
-  createDrawerNavigator,
-  DrawerContentComponentProps,
-} from '@react-navigation/drawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import {
-  Platform,
-  Pressable,
-  StatusBar,
-  View,
-  Text,
-  Alert,
-} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   SafeAreaProvider,
-  SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import React, { useCallback, useMemo } from 'react';
+import React from 'react';
 import {
-  AIStates,
-  Channel,
-  ChannelList,
-  ChannelPreviewMessengerProps,
   Chat,
-  Copy,
-  DownloadArrow,
-  DownloadCloud,
-  Edit,
-  Flag,
-  mergeThemes,
-  Message,
-  MessageList,
-  MessageProps,
   OverlayProvider,
-  useAIState,
-  useChannelContext,
-  useChannelsContext,
   useCreateChatClient,
-  useMessageComposer,
-  useMessageContext,
-  useMessageInputContext,
-  useStableCallback,
-  useTheme,
-  ThemeProvider,
-  isLocalUrl,
 } from 'stream-chat-react-native';
-import { AppProvider, useAppContext } from './contexts/AppContext.tsx';
+import { AppProvider } from './contexts/AppContext.tsx';
 import {
   chatApiKey,
   chatUserId,
   chatUserName,
   chatUserToken,
 } from './chatConfig.ts';
-import {
-  ChannelSort,
-  LocalMessage,
-  Channel as ChannelClass,
-} from 'stream-chat';
-import { startAI } from './http/requests.ts';
-import {
-  StreamingMessageView,
-  ComposerView,
-  StreamTheme,
-  AITypingIndicatorView,
-  type ComposerViewProps,
-} from '@stream-io/chat-react-native-ai';
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import { StreamTheme } from '@stream-io/chat-react-native-ai';
+import { MenuDrawer } from './screens/MenuDrawer.tsx';
+import { LocalMessage } from 'stream-chat';
+import { ChatContent } from './screens/ChatContent.tsx';
 
 const Drawer = createDrawerNavigator();
 
-const chatTheme = {};
+const DrawerNavigator = () => (
+  <Drawer.Navigator
+    drawerContent={MenuDrawer}
+    screenOptions={{
+      drawerStyle: {
+        width: 300,
+      },
+    }}
+  >
+    <Drawer.Screen name="Chat" component={ChatContent} />
+  </Drawer.Navigator>
+);
 
 const isMessageAIGenerated = (message: LocalMessage) => !!message.ai_generated;
 
-function App() {
+const App = () => {
   const chatClient = useCreateChatClient({
     apiKey: chatApiKey,
     tokenOrProvider: chatUserToken,
@@ -90,12 +57,11 @@ function App() {
     <SafeAreaProvider>
       <AppProvider client={chatClient}>
         <StreamTheme>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <OverlayProvider value={{ style: chatTheme }}>
+          <GestureHandlerRootView style={styles.container}>
+            <OverlayProvider>
               <Chat
                 client={chatClient}
                 isMessageAIGenerated={isMessageAIGenerated}
-                enableOfflineSupport={false}
               >
                 <NavigationContainer>
                   <DrawerNavigator />
@@ -107,338 +73,10 @@ function App() {
       </AppProvider>
     </SafeAreaProvider>
   );
-}
-
-const filters = {
-  members: {
-    $in: [chatUserId],
-  },
 };
 
-const sort: ChannelSort = { last_updated: -1 };
-
-const ChannelPreview = (props: ChannelPreviewMessengerProps) => {
-  const channel = props.channel;
-  const { onSelect } = useChannelsContext();
-  const onPress = useStableCallback(() => {
-    onSelect?.(channel);
-  });
-  return (
-    <Pressable
-      style={({ pressed }) => ({
-        paddingVertical: 8,
-        paddingHorizontal: 12,
-        opacity: pressed ? 0.6 : 1,
-      })}
-      onPress={onPress}
-    >
-      <Text style={{ fontSize: 15, fontWeight: 'bold' }} numberOfLines={1}>
-        {channel.data?.name ?? channel.cid}
-      </Text>
-    </Pressable>
-  );
-};
-
-const MenuDrawer = ({ navigation }: DrawerContentComponentProps) => {
-  const { setChannel } = useAppContext();
-  const onSelect = useStableCallback((channel: ChannelClass) => {
-    setChannel(channel);
-    navigation.closeDrawer();
-  });
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View
-        style={{
-          marginHorizontal: 12,
-          paddingVertical: 16,
-          borderBottomWidth: 1,
-          borderBottomColor: 'grey',
-        }}
-      >
-        <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Conversations</Text>
-      </View>
-      <ChannelList
-        filters={filters}
-        sort={sort}
-        onSelect={onSelect}
-        Preview={ChannelPreview}
-      />
-    </SafeAreaView>
-  );
-};
-
-const DrawerNavigator = () => (
-  <Drawer.Navigator
-    drawerContent={MenuDrawer}
-    screenOptions={{
-      drawerStyle: {
-        width: 300,
-      },
-    }}
-  >
-    <Drawer.Screen name="Chat" component={AppContent} />
-  </Drawer.Navigator>
-);
-
-const additionalFlatListProps = {
-  maintainVisibleContentPosition: {
-    minIndexForVisible: 0,
-    autoscrollToTopThreshold: 0,
-  },
-  ListHeaderComponent: null,
-};
-
-const AppContent = () => {
-  const { channel } = useAppContext();
-  const { bottom } = useSafeAreaInsets();
-
-  const preSendMessageRequest = useStableCallback(async ({ localMessage }) => {
-    if (!channel) {
-      return;
-    }
-
-    if (!channel.initialized) {
-      await channel.watch({
-        created_by_id: localMessage.user_id,
-      });
-      await channel.update({ name: localMessage.text });
-    }
-
-    if (
-      !Object.keys(channel.state.watchers).some((watcher) =>
-        watcher.startsWith('ai-bot'),
-      ) &&
-      channel.id
-    ) {
-      await startAI(channel.id);
-    }
-  });
-
-  if (!channel) {
-    return null;
-  }
-
-  return (
-    <Animated.View
-      key={channel.id}
-      style={{ flex: 1, paddingBottom: bottom, backgroundColor: '#fcfcfc' }}
-      entering={FadeIn.duration(200)}
-      exiting={FadeOut.duration(200)}
-    >
-      <Channel
-        channel={channel}
-        initializeOnMount={false}
-        // @ts-expect-error This will be fixed upstream, the type is wrong
-        preSendMessageRequest={preSendMessageRequest}
-        StreamingMessageView={CustomStreamingMessageView}
-        Message={CustomMessage}
-        enableSwipeToReply={false}
-        EmptyStateIndicator={EmptyStateIndicator}
-        allowSendBeforeAttachmentsUpload={true}
-        NetworkDownIndicator={RenderNull}
-        MessageAvatar={RenderNull}
-        MessageFooter={RenderNull}
-      >
-        <MessageList additionalFlatListProps={additionalFlatListProps} />
-        <AIThinkingIndicatorView />
-        <MessageComposerAI bottomSheetOptions={bottomSheetOptions} />
-      </Channel>
-    </Animated.View>
-  );
-};
-
-const bottomSheetOptions = [
-  {
-    title: 'Create Image',
-    subtitle: 'Visualize anything',
-    action: () => Alert.alert('Pressed on Create Image !'),
-    Icon: DownloadArrow,
-  },
-  {
-    title: 'Thinking',
-    subtitle: 'Think longer for better answers',
-    action: () => Alert.alert('Pressed on Thinking !'),
-    Icon: Flag,
-  },
-  {
-    title: 'Deep research',
-    subtitle: 'Get a detailed report',
-    action: () => Alert.alert('Pressed on Deep research !'),
-    Icon: DownloadCloud,
-  },
-  {
-    title: 'Web search',
-    subtitle: 'Find real-time news and info',
-    action: () => Alert.alert('Pressed on Web search !'),
-    Icon: Copy,
-  },
-  {
-    title: 'Study and learn',
-    subtitle: 'Learn a new concept',
-    action: () => Alert.alert('Pressed on Study and learn !'),
-    Icon: Edit,
-  },
-];
-
-const AIThinkingIndicatorView = () => {
-  const { channel } = useChannelContext();
-  const { aiState } = useAIState(channel);
-
-  const allowedStates = {
-    [AIStates.Thinking]: 'Thinking about the question...',
-    [AIStates.Generating]: 'Generating a response...',
-    [AIStates.ExternalSources]: 'Checking external sources...',
-  };
-
-  if (aiState === AIStates.Idle || aiState === AIStates.Error) {
-    return null;
-  }
-
-  return (
-    <View
-      style={{
-        paddingHorizontal: 24,
-        paddingVertical: 12,
-      }}
-    >
-      <AITypingIndicatorView text={allowedStates[aiState]} />
-    </View>
-  );
-};
-
-const CustomMessage = (props: MessageProps) => {
-  const { theme } = useTheme();
-  const { message } = props;
-  const isFromBot = message.ai_generated;
-  const hasPendingAttachments = useMemo(
-    () =>
-      (message.attachments ?? []).some(
-        (attachment) =>
-          (attachment.image_url && isLocalUrl(attachment.image_url)) ||
-          (attachment.asset_url && isLocalUrl(attachment.asset_url)),
-      ),
-    [message.attachments],
-  );
-
-  const modifiedTheme = useMemo(() => {
-    if (!isFromBot) {
-      return mergeThemes({
-        theme,
-        style: {
-          messageSimple: {
-            wrapper: {
-              opacity: hasPendingAttachments ? 0.5 : 1,
-            },
-          },
-        },
-      });
-    }
-
-    return mergeThemes({
-      theme,
-      style: {
-        messageSimple: {
-          content: {
-            containerInner: {
-              backgroundColor: 'transparent',
-              borderRadius: 0,
-              borderColor: 'transparent',
-            },
-            textContainer: { maxWidth: '100%' },
-          },
-        },
-      },
-    });
-  }, [theme, isFromBot, hasPendingAttachments]);
-
-  return (
-    <ThemeProvider mergedStyle={modifiedTheme}>
-      <Message {...props} />
-    </ThemeProvider>
-  );
-};
-
-const CustomStreamingMessageView = () => {
-  const { message } = useMessageContext();
-  return (
-    <View style={{ width: '100%', paddingHorizontal: 16 }}>
-      <StreamingMessageView text={message.text ?? ''} />
-    </View>
-  );
-};
-
-const MessageComposerAI = (
-  props: Pick<ComposerViewProps, 'bottomSheetOptions'>,
-) => {
-  const messageComposer = useMessageComposer();
-  const { sendMessage } = useMessageInputContext();
-  const { channel } = useChannelContext();
-
-  const { aiState } = useAIState(channel);
-
-  const stopGenerating = useCallback(
-    () => channel?.stopAIResponse(),
-    [channel],
-  );
-
-  const isGenerating = [AIStates.Thinking, AIStates.Generating].includes(
-    aiState,
-  );
-
-  const safeAreaInsets = useSafeAreaInsets();
-  const insets = useMemo(
-    () => ({
-      ...safeAreaInsets,
-      bottom:
-        safeAreaInsets.bottom +
-        (Platform.OS === 'android' ? (StatusBar.currentHeight ?? 0) * 2 : 0),
-    }),
-    [safeAreaInsets],
-  );
-
-  const serializeToMessage = useStableCallback(
-    async ({ text, attachments }: { text: string; attachments?: any[] }) => {
-      messageComposer.textComposer.setText(text);
-      if (attachments && attachments.length > 0) {
-        const localAttachments = await Promise.all(
-          attachments.map((a) =>
-            messageComposer.attachmentManager.fileToLocalUploadAttachment(a),
-          ),
-        );
-        messageComposer.attachmentManager.upsertAttachments(localAttachments);
-      }
-
-      await sendMessage();
-    },
-  );
-
-  return (
-    <ComposerView
-      {...props}
-      bottomSheetInsets={insets}
-      onSendMessage={serializeToMessage}
-      isGenerating={isGenerating}
-      stopGenerating={stopGenerating}
-    />
-  );
-};
-
-const EmptyStateIndicator = () => (
-  <View
-    style={{
-      flex: 1,
-      width: '100%',
-      backgroundColor: 'transparent',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }}
-  >
-    <Text style={{ fontSize: 24, fontWeight: 'bold' }}>
-      What can I help with ?
-    </Text>
-  </View>
-);
-
-const RenderNull = () => null;
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+});
 
 export default App;
