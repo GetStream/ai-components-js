@@ -220,7 +220,7 @@ export const ChatContent = () => {
       <Channel
         channel={channel}
         initializeOnMount={false}
-        // @ts-expect-error
+        // @ts-expect-error will be fixed upstream
         preSendMessageRequest={preSendMessageRequest}
         StreamingMessageView={CustomStreamingMessageView}
         Message={CustomMessage}

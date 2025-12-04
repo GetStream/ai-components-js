@@ -1,5 +1,6 @@
-import React, { PropsWithChildren, useMemo, useState } from 'react';
-import { Channel, StreamChat } from 'stream-chat';
+import type { PropsWithChildren } from 'react';
+import React, { useMemo, useState } from 'react';
+import type { Channel, StreamChat } from 'stream-chat';
 import { chatUserId } from '../chatConfig';
 
 export type AppContextValue = {

@@ -12,7 +12,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppProvider } from '../contexts/AppContext';
 import { StreamTheme } from '@stream-io/chat-react-native-ai';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { LocalMessage } from 'stream-chat';
+import type { LocalMessage } from 'stream-chat';
 import { MenuDrawer } from '../screens/MenuDrawer';
 
 const isMessageAIGenerated = (message: LocalMessage) => !!message.ai_generated;
