@@ -77,6 +77,8 @@ You can do this by adding it to your `app.json`/`app.config.[js|ts]` file like s
     ],
 ```
 
+If you're using a bare `Expo` workflow, you may do the manual steps for `iOS` and `Android` mentioned before.
+
 ## Optional features
 
 Additionally, you may also include the optional dependencies that enable pluggable features.
