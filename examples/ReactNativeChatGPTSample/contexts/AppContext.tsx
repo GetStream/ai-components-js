@@ -15,14 +15,14 @@ export const AppContext = React.createContext<AppContextValue>({
 const ALPHABET =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz-';
 
-export function nanoid(size: number = 21): string {
+export const nanoid = (size: number = 21): string => {
   let id = '';
   for (let i = 0; i < size; i++) {
     const r = Math.floor(Math.random() * ALPHABET.length);
     id += ALPHABET[r];
   }
   return id;
-}
+};
 
 export const createChannel = (client: StreamChat) =>
   client.channel('messaging', nanoid(), {
