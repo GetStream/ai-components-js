@@ -1,10 +1,42 @@
 .ai-demo-message-input-bar {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   padding: 1.5rem;
   background-color: var(--ai-demo-bg-primary);
   color: var(--ai-demo-text-primary);
   border-top: 1px solid var(--ai-demo-border);
+
+  .ai-demo-rate-limit-message {
+    width: 100%;
+    max-width: 900px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    background-color: rgba(255, 193, 7, 0.1);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    border-radius: 12px;
+    color: var(--ai-demo-text-primary);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+
+    display: flex;
+    gap: 8px;
+  }
+
+  [data-theme='dark'] & .rate-limit-message {
+    background-color: rgba(255, 193, 7, 0.15);
+  }
+
+  /* Disabled state styles */
+  fieldset:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    * {
+      pointer-events: none;
+    }
+  }
 
   /* Override AIMessageComposer styles */
   .aicr__ai-message-composer__form {
@@ -76,25 +108,14 @@
     }
   }
 
-  .aicr__ai-message-composer__form__submit-btn {
-    background-color: var(--ai-demo-accent);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 0.5rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
+  /* Button hover states */
+  .aicr__ai-message-composer__round-button {
     &:hover:not(:disabled) {
-      background-color: var(--ai-demo-accent-hover);
+      background-color: var(--ai-demo-bg-tertiary) !important;
     }
 
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+    &[aria-pressed='true'] {
+      background-color: rgba(0, 95, 255, 0.2) !important;
     }
   }
 
@@ -111,4 +132,8 @@
       padding: 0.5rem 0.75rem;
     }
   }
+}
+
+[data-theme='dark'] .aicr__ai-message-composer__select {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' height='10px' width='15px'%3E%3Ctext x='0' y='10' fill='white'%3E%E2%96%BE%3C/text%3E%3C/svg%3E");
 }

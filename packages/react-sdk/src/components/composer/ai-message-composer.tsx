@@ -4,15 +4,20 @@ import {
   type ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
 import { customAlphabet } from 'nanoid';
+import clsx from 'clsx';
 import { StateStore } from '@stream-io/state-store';
 import { useStateStore } from '@stream-io/state-store/react-bindings';
 
 import { AttachmentPreview } from './attachment-preview';
-import { useSpeechToText } from './use-speech-to-text';
+import {
+  useSpeechToText,
+  type UseSpeechToTextOptions,
+} from './use-speech-to-text';
 import { useStableCallback } from '../../hooks/use-stable-callback';
 
 const nanoId = customAlphabet('abcdefghijklmnopqrstuvwxyz0123456789', 15);
@@ -23,6 +28,7 @@ const FileInput = ({
 }: ComponentPropsWithoutRef<'input'> & {
   labelProps?: ComponentPropsWithoutRef<'label'>;
 }) => {
+  const { disabled } = useIsDisabled();
   return (
     <WithStableId>
       {({ id }) => (
@@ -33,6 +39,7 @@ const FileInput = ({
             type="file"
             id={id}
             {...restProps}
+            disabled={disabled}
           />
           <label
             className="aicr__ai-message-composer__round-button"
@@ -67,11 +74,13 @@ export type AIMessageComposerStore = {
     meta?: Record<string, any>;
   }[];
   text: string;
+  disabled?: boolean;
 };
 
 const initialStoreState: AIMessageComposerStore = {
   attachments: [],
   text: '',
+  disabled: false,
 };
 
 const AIMessageComposerContext = createContext<
@@ -197,6 +206,24 @@ export const useText = () => {
   return { text, setText };
 };
 
+export const useIsDisabled = () => {
+  const store = useAIMessageComposerContext();
+  const selector = useCallback(
+    (currentState: AIMessageComposerStore) => ({
+      disabled: currentState.disabled,
+    }),
+    [],
+  );
+
+  const setDisabled = useCallback(
+    (disabled: boolean) => store.partialNext({ disabled }),
+    [store],
+  );
+
+  const { disabled } = useStateStore(store, selector);
+  return { disabled, setDisabled };
+};
+
 type AIMessageComposerProps = ComponentPropsWithoutRef<'form'> & {
   /**
    * Resets a value of an input with name `attachments` and of type `file` when user selects files so that
@@ -209,6 +236,11 @@ type AIMessageComposerProps = ComponentPropsWithoutRef<'form'> & {
     message?: string;
     attachments?: string;
   };
+
+  /**
+   * Disables the composer.
+   */
+  disabled?: boolean;
 };
 
 interface AIMessageComposer {
@@ -227,11 +259,16 @@ export const AIMessageComposer: AIMessageComposer = ({
   onReset,
   resetAttachmentsOnSelect = true,
   nameMapping,
+  disabled,
   ...restProps
 }) => {
   const [stateStore] = useState(
     () => new StateStore<AIMessageComposerStore>(initialStoreState),
   );
+
+  useEffect(() => {
+    stateStore.partialNext({ disabled });
+  }, [disabled, stateStore]);
 
   const handleChange = useStableCallback(
     (e: React.ChangeEvent<HTMLFormElement>) => {
@@ -307,6 +344,7 @@ const noop = () => {};
 
 const TextInput = (props: ComponentPropsWithoutRef<'input'>) => {
   const { text } = useText();
+  const { disabled } = useIsDisabled();
 
   return (
     <input
@@ -321,12 +359,18 @@ const TextInput = (props: ComponentPropsWithoutRef<'input'>) => {
       name="message"
       placeholder="Ask a question..."
       {...props}
+      disabled={disabled}
     />
   );
 };
 
-const SpeechToTextButton = (props: ComponentPropsWithoutRef<'button'>) => {
+const SpeechToTextButton = (
+  props: ComponentPropsWithoutRef<'button'> & {
+    options?: UseSpeechToTextOptions;
+  },
+) => {
   const { setText } = useText();
+  const { disabled } = useIsDisabled();
 
   const { startListening, stopListening, isListening } = useSpeechToText({
     onTranscript: setText,
@@ -347,23 +391,40 @@ const SpeechToTextButton = (props: ComponentPropsWithoutRef<'button'>) => {
       aria-label="speech-to-text"
       type="button"
       {...props}
+      disabled={disabled}
     >
       <span className="material-symbols-rounded">mic</span>
     </button>
   );
 };
 
-const SubmitButton = (props: ComponentPropsWithoutRef<'button'>) => {
+const SubmitButton = (
+  props: ComponentPropsWithoutRef<'button'> & { active?: boolean },
+) => {
+  const { disabled } = useIsDisabled();
   return (
     <button
-      className="aicr__ai-message-composer__round-button"
+      className={clsx(
+        'aicr__ai-message-composer__round-button',
+        props.active && 'aicr__ai-message-composer__round-button--active',
+      )}
       type="submit"
       {...props}
+      disabled={disabled}
     >
       <span className="material-symbols-rounded">send</span>
     </button>
   );
 };
+
+const availableModels = [
+  { platform: 'openai', value: 'gpt-4o-mini', label: 'GPT-4o mini' },
+  { platform: 'openai', value: 'gpt-4o', label: 'GPT-4o' },
+] as const;
+
+const [defaultModel] = availableModels;
+
+const defaultPlatformModel = `${defaultModel.platform}|${defaultModel.value}`;
 
 const ModelSelect = (
   props: ComponentPropsWithoutRef<'select'> & { options?: ReactNode },
@@ -371,18 +432,23 @@ const ModelSelect = (
   const {
     options = (
       <>
-        <option value="gpt-5">GPT-5</option>
-        <option value="gpt-4o">GPT-4o</option>
+        {availableModels.map((model) => (
+          <option key={model.value} value={`${model.platform}|${model.value}`}>
+            {model.label}
+          </option>
+        ))}
       </>
     ),
     ...restProps
   } = props;
 
+  const { disabled } = useIsDisabled();
   return (
     <select
       className="aicr__ai-message-composer__select"
-      defaultValue="gpt-5"
+      defaultValue={defaultPlatformModel}
       {...restProps}
+      disabled={disabled}
     >
       {options}
     </select>

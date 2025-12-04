@@ -1,7 +1,7 @@
 'use client';
 
 import { AIMessageComposer } from '@stream-io/chat-react-ai';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   isImageFile,
   type Channel,
@@ -15,7 +15,12 @@ import {
   useChatContext,
   useMessageComposer,
 } from 'stream-chat-react';
-import { startAiAgent } from '@/components/api';
+import { startAiAgent, summarizeConversation } from '@/components/api';
+import {
+  checkRateLimit,
+  recordMessage,
+  formatTimeRemaining,
+} from '@/components/rateLimitUtils';
 import './MessageInputBar.scss';
 
 const isWatchedByAI = (channel: Channel) => {
@@ -31,6 +36,31 @@ export const MessageInputBar = () => {
   const composer = useMessageComposer();
 
   const { attachments } = useAttachmentsForPreview();
+  const [selectedPlatformModel, setSelectedPlatformModel] = useState<string>();
+  const [rateLimitState, setRateLimitState] = useState<{
+    isLimited: boolean;
+    resetTime: number | null;
+    remainingMessages: number;
+  }>({
+    isLimited: false,
+    resetTime: null,
+    remainingMessages: 10,
+  });
+
+  // Check rate limit when channel changes or on mount
+  useEffect(() => {
+    if (!channel?.id) return;
+
+    const updateRateLimit = () => {
+      const state = checkRateLimit(channel.id!);
+      setRateLimitState(state);
+    };
+
+    updateRateLimit();
+
+    const interval = setInterval(updateRateLimit, 60000);
+    return () => clearInterval(interval);
+  }, [channel?.id]);
 
   useEffect(() => {
     if (!composer) return;
@@ -50,7 +80,17 @@ export const MessageInputBar = () => {
 
   return (
     <div className="ai-demo-message-input-bar">
+      {rateLimitState.isLimited && rateLimitState.resetTime && (
+        <div className="ai-demo-rate-limit-message">
+          <span className="material-symbols-rounded">info</span>
+          <span>
+            Limit reached, 10 messages per conversation. Resets in{' '}
+            <strong>{formatTimeRemaining(rateLimitState.resetTime)}</strong>.
+          </span>
+        </div>
+      )}
       <AIMessageComposer
+        disabled={rateLimitState.isLimited}
         onChange={(e) => {
           const input = e.currentTarget.elements.namedItem(
             'attachments',
@@ -66,12 +106,16 @@ export const MessageInputBar = () => {
           const event = e;
           event.preventDefault();
 
+          // Check rate limit before processing
+          if (rateLimitState.isLimited) return;
+
           const target = event.currentTarget;
 
           const formData = new FormData(target);
 
           const message = formData.get('message');
-          const model = formData.get('model');
+          const platformModel = formData.get('platform-model');
+          setSelectedPlatformModel(platformModel as string);
 
           composer.textComposer.setText(message as string);
 
@@ -88,11 +132,36 @@ export const MessageInputBar = () => {
             await channel.watch();
           }
 
+          const [platform, model] = (platformModel as string).split('|');
+
           if (!isWatchedByAI(channel)) {
-            await startAiAgent(channel, model);
+            await startAiAgent(channel, model, platform);
           }
 
           await sendMessage(composedData);
+
+          // Record message after successful send
+          recordMessage(channel.id!);
+
+          // Update rate limit state
+          const newState = checkRateLimit(channel.id!);
+          setRateLimitState(newState);
+
+          if (
+            typeof channel.data?.summary !== 'string' ||
+            !channel.data.summary.length
+          ) {
+            const summary = await summarizeConversation(
+              message as string,
+            ).catch(() => {
+              console.warn('Failed to summarize conversation');
+              return null;
+            });
+
+            if (typeof summary === 'string' && summary.length > 0) {
+              await channel.update({ summary });
+            }
+          }
         }}
       >
         <AIMessageComposer.AttachmentPreview>
@@ -130,10 +199,13 @@ export const MessageInputBar = () => {
           <div style={{ display: 'flex', gap: '.25rem', alignItems: 'center' }}>
             <AIMessageComposer.FileInput name="attachments" />
             <AIMessageComposer.SpeechToTextButton />
-            <AIMessageComposer.ModelSelect name="model" />
+            <AIMessageComposer.ModelSelect
+              name="platform-model"
+              value={selectedPlatformModel}
+            />
           </div>
 
-          <AIMessageComposer.SubmitButton />
+          <AIMessageComposer.SubmitButton active={attachments.length > 0} />
         </div>
       </AIMessageComposer>
     </div>
