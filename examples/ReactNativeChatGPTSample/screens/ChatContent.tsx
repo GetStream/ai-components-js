@@ -27,6 +27,7 @@ import {
 } from '@stream-io/chat-react-native-ai';
 import { useCallback, useMemo } from 'react';
 import { bottomSheetOptions } from '../bottomSheetOptions.ts';
+import { LocalMessage } from 'stream-chat';
 
 const CustomMessage = (props: MessageProps) => {
   const { theme } = useTheme();
@@ -67,8 +68,6 @@ const CustomMessage = (props: MessageProps) => {
       }),
     [theme, isFromBot, hasPendingAttachments],
   );
-
-  console.log('TEST: ', props.message);
 
   return (
     <ThemeProvider mergedStyle={modifiedTheme}>
@@ -181,30 +180,32 @@ export const ChatContent = () => {
   const { channel } = useAppContext();
   const { bottom } = useSafeAreaInsets();
 
-  const preSendMessageRequest = useStableCallback(async ({ localMessage }) => {
-    if (!channel) {
-      return;
-    }
+  const preSendMessageRequest = useStableCallback(
+    async ({ localMessage }: { localMessage: LocalMessage }) => {
+      if (!channel) {
+        return;
+      }
 
-    if (!channel.initialized) {
-      await channel.watch({
-        created_by_id: localMessage.user_id,
-      });
-      summarize(localMessage.text).then((response) => {
-        const { summary } = response as { summary: string };
-        channel.update({ name: summary });
-      });
-    }
+      if (!channel.initialized) {
+        await channel.watch({
+          created_by_id: localMessage.user_id,
+        });
+        summarize(localMessage.text ?? '').then((response) => {
+          const { summary } = response as { summary: string };
+          channel.update({ name: summary });
+        });
+      }
 
-    if (
-      !Object.keys(channel.state.watchers).some((watcher) =>
-        watcher.startsWith('ai-bot'),
-      ) &&
-      channel.id
-    ) {
-      await startAI(channel.id);
-    }
-  });
+      if (
+        !Object.keys(channel.state.watchers).some((watcher) =>
+          watcher.startsWith('ai-bot'),
+        ) &&
+        channel.id
+      ) {
+        await startAI(channel.id);
+      }
+    },
+  );
 
   if (!channel) {
     return null;
@@ -220,7 +221,6 @@ export const ChatContent = () => {
       <Channel
         channel={channel}
         initializeOnMount={false}
-        // @ts-expect-error This will be fixed upstream, the type is wrong
         preSendMessageRequest={preSendMessageRequest}
         StreamingMessageView={CustomStreamingMessageView}
         Message={CustomMessage}
