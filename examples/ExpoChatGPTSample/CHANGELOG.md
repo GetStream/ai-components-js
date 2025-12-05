@@ -1,6 +1,6 @@
-# ReactNativeChatGPTSample
+# expochatgptsample
 
-## 0.0.3
+## 1.0.1
 
 ### Patch Changes
 
@@ -8,10 +8,5 @@
   - Fix race condition when no permissions are yet present on ios dictation
   - Include Expo sample app as well
   - Fix wrong dependency graph resolution between RNCLI and Expo sample apps
-
-## 0.0.2
-
-### Patch Changes
-
-- Updated dependencies [e284837]
-  - @stream-io/chat-react-native-ai@0.1.0
+- Updated dependencies [ba28760]
+  - @stream-io/chat-react-native-ai@0.1.3
