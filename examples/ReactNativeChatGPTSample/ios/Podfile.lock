@@ -36,7 +36,7 @@ PODS:
   - hermes-engine (0.82.1):
     - hermes-engine/Pre-built (= 0.82.1)
   - hermes-engine/Pre-built (0.82.1)
-  - op-sqlite (15.1.2):
+  - op-sqlite (15.1.6):
     - boost
     - DoubleConversion
     - fast_float
@@ -1956,7 +1956,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-skia (2.4.6):
+  - react-native-skia (2.4.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -3194,7 +3194,7 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 273e30e7fb618279934b0b95ffab60ecedb7acf5
-  op-sqlite: e4b81c12e1c0cd8b27d824e0eeef96f0a400d53e
+  op-sqlite: 23f8330992fcc9360185480025c328ff3e47a38c
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: f17e2ebc07876ca9ab8eb6e4b0a4e4647497ae3a
   RCTRequired: e2c574c1b45231f7efb0834936bd609d75072b63
@@ -3232,7 +3232,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: 0314366753615115fa55c3cc937ac44cb7e75702
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-safe-area-context: c00143b4823773bba23f2f19f85663ae89ceb460
-  react-native-skia: d456cedf4893e54f243bd40f6ecbf5cc7185fb85
+  react-native-skia: ea75e0191029ae2037f90747b4aa59bef6a10b35
   React-NativeModulesApple: 46690a0fe94ec28fc6fc686ec797b911d251ded0
   React-oscompat: 95875e81f5d4b3c7b2c888d5bd2c9d83450d8bdb
   React-perflogger: 2e229bf33e42c094fd64516d89ec1187a2b79b5b
@@ -3263,15 +3263,15 @@ SPEC CHECKSUMS:
   React-utils: abf37b162f560cd0e3e5d037af30bb796512246d
   React-webperformancenativemodule: 50a57c713a90d27ae3ab947a6c9c8859bcb49709
   ReactAppDependencyProvider: a45ef34bb22dc1c9b2ac1f74167d9a28af961176
-  ReactCodegen: d292b26d13b2a48a9d09480d3f7ad4ff2a63af05
+  ReactCodegen: 428e550037993b5b1f564ce6ed2216d6982ecdf8
   ReactCommon: 804dc80944fa90b86800b43c871742ec005ca424
   RNCClipboard: 4b58c780f63676367640f23c8e114e9bd0cf86ac
   RNFS: 89de7d7f4c0f6bafa05343c578f61118c8282ed8
   RNGestureHandler: 6859520a21304f0bedf0643d0cf0beade47c83f2
-  RNReanimated: 3f410efa6f0737a9dc1da97e9c1d0f69e48019e9
+  RNReanimated: eda3f6ed56f98d732e4548ddbc674c2a09ed8e11
   RNScreens: d821082c6dd1cb397cc0c98b026eeafaa68be479
   RNSVG: 005860704c95493cd23a417dfbeb76dcd8bb7042
-  RNWorklets: 5e7c2c52d972ff95b5d781b16f9c68d0f6f3a3a6
+  RNWorklets: 8cf777f9038ddd1b4cfc6ef1f61b068408ea4e17
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   stream-chat-react-native: 1483471a433524a6f6eb88c262b2846c79eec400
   Yoga: 689c8e04277f3ad631e60fe2a08e41d411daf8eb
