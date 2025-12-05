@@ -13,7 +13,9 @@
       },
       "default": "./dist/module/index.js",
       "types": "./dist/typescript/index.d.ts"
-    }
+    },
+    "./app.plugin": "./app.plugin.js",
+    "./app.plugin.js": "./app.plugin.js"
   },
   "files": [
     "src",
@@ -23,6 +25,8 @@
     "cpp",
     "AIComponentsReactNative.podspec",
     "react-native.config.js",
+    "expo-config-plugin",
+    "app.plugin.js",
     "!ios/build",
     "!android/build",
     "!android/gradle",
@@ -36,7 +40,8 @@
   ],
   "scripts": {
     "prepublishOnly": "pnpm run build",
-    "build": "pnpm run clean && bob build",
+    "build": "pnpm run clean && bob build && pnpm run build:expo-plugin",
+    "build:expo-plugin": "rimraf expo-config-plugin/dist && tsc --project expo-config-plugin/tsconfig.json",
     "start": "tsc --project tsconfig.json --watch",
     "eslint": "eslint 'src/**/*.{js,ts,tsx}' --max-warnings 0",
     "lint": "prettier --list-different 'src/**/*.{js,ts,tsx,json}' && yarn run eslint",
@@ -66,6 +71,7 @@
   },
   "devDependencies": {
     "@react-native-clipboard/clipboard": "^1.16.3",
+    "@expo/config-plugins": "^54.0.3",
     "@shopify/react-native-skia": "^2.3.10",
     "@types/lodash": "4.17.20",
     "@types/node": "^24",
@@ -84,21 +90,22 @@
     "rimraf": "^6.0.1",
     "typescript": "catalog:",
     "victory-native": "^41.20.2",
+    "@tsconfig/node18": "^18.2.6",
     "vitest": "catalog:"
   },
   "peerDependencies": {
+    "@react-native-clipboard/clipboard": ">=1.14.1",
+    "@shopify/react-native-skia": ">=2.0.0",
     "expo": ">=52.0.0",
+    "expo-clipboard": "*",
+    "expo-image-picker": "*",
     "react": ">=17.0.0",
     "react-native": ">=0.76.0",
     "react-native-gesture-handler": ">=2.18.0",
+    "react-native-image-picker": ">=7.1.2",
     "react-native-reanimated": ">=3.16.0",
     "react-native-svg": ">=15.8.0",
-    "victory-native": ">=41.0.0",
-    "@shopify/react-native-skia": ">=2.0.0",
-    "react-native-image-picker": ">=7.1.2",
-    "@react-native-clipboard/clipboard": ">=1.14.1",
-    "expo-image-picker": "*",
-    "expo-clipboard": "*"
+    "victory-native": ">=41.0.0"
   },
   "peerDependenciesMeta": {
     "expo": {

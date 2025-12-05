@@ -1,5 +1,5 @@
 PODS:
-  - AIComponentsReactNative (1.0.0):
+  - AIComponentsReactNative (0.1.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -36,7 +36,7 @@ PODS:
   - hermes-engine (0.82.1):
     - hermes-engine/Pre-built (= 0.82.1)
   - hermes-engine/Pre-built (0.82.1)
-  - op-sqlite (15.0.7):
+  - op-sqlite (15.1.6):
     - boost
     - DoubleConversion
     - fast_float
@@ -2913,7 +2913,7 @@ PODS:
   - Yoga (0.0.0)
 
 DEPENDENCIES:
-  - "AIComponentsReactNative (from `../node_modules/@stream-io/ai-components-react-native`)"
+  - "AIComponentsReactNative (from `../node_modules/@stream-io/chat-react-native-ai`)"
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - fast_float (from `../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
@@ -3010,7 +3010,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   AIComponentsReactNative:
-    :path: "../node_modules/@stream-io/ai-components-react-native"
+    :path: "../node_modules/@stream-io/chat-react-native-ai"
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   DoubleConversion:
@@ -3186,7 +3186,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AIComponentsReactNative: f1ab4e56b2b507228fb619834f40fb9cf32b58fa
+  AIComponentsReactNative: b59c5f7bb5bd8c87bea02ca1402dda546695b059
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6
@@ -3194,7 +3194,7 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 273e30e7fb618279934b0b95ffab60ecedb7acf5
-  op-sqlite: b4931f1bc7fe4c1ce24befbcddf79f6a65fd51ed
+  op-sqlite: 23f8330992fcc9360185480025c328ff3e47a38c
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: f17e2ebc07876ca9ab8eb6e4b0a4e4647497ae3a
   RCTRequired: e2c574c1b45231f7efb0834936bd609d75072b63
@@ -3263,15 +3263,15 @@ SPEC CHECKSUMS:
   React-utils: abf37b162f560cd0e3e5d037af30bb796512246d
   React-webperformancenativemodule: 50a57c713a90d27ae3ab947a6c9c8859bcb49709
   ReactAppDependencyProvider: a45ef34bb22dc1c9b2ac1f74167d9a28af961176
-  ReactCodegen: d292b26d13b2a48a9d09480d3f7ad4ff2a63af05
+  ReactCodegen: 428e550037993b5b1f564ce6ed2216d6982ecdf8
   ReactCommon: 804dc80944fa90b86800b43c871742ec005ca424
   RNCClipboard: 4b58c780f63676367640f23c8e114e9bd0cf86ac
   RNFS: 89de7d7f4c0f6bafa05343c578f61118c8282ed8
   RNGestureHandler: 6859520a21304f0bedf0643d0cf0beade47c83f2
-  RNReanimated: 3f410efa6f0737a9dc1da97e9c1d0f69e48019e9
+  RNReanimated: eda3f6ed56f98d732e4548ddbc674c2a09ed8e11
   RNScreens: d821082c6dd1cb397cc0c98b026eeafaa68be479
   RNSVG: 005860704c95493cd23a417dfbeb76dcd8bb7042
-  RNWorklets: 5e7c2c52d972ff95b5d781b16f9c68d0f6f3a3a6
+  RNWorklets: 8cf777f9038ddd1b4cfc6ef1f61b068408ea4e17
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   stream-chat-react-native: 1483471a433524a6f6eb88c262b2846c79eec400
   Yoga: 689c8e04277f3ad631e60fe2a08e41d411daf8eb

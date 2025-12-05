@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "scheme": "skia",
+    "web": {
+      "output": "static"
+    },
+    "ios": {
+      "bundleIdentifier": "io.getstream.expochatgptsample",
+      "appleTeamId": "EHV7XZLAHA"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let them share with others.",
+          "cameraPermission": "The app accesses your camera to let you take photos and share with others."
+        }
+      ],
+      [
+        "@stream-io/chat-react-native-ai",
+        {
+          "dictationMicrophoneUsageDescription": "$(PRODUCT_NAME) would like to access your microphone to capture your voice.",
+          "dictationSpeechRecognitionUsageDescription": "$(PRODUCT_NAME) would like to access speech recognition to transcribe your voice."
+        }
+      ]
+    ],
+    "name": "ExpoChatGPTSample",
+    "slug": "ExpoChatGPTSample",
+    "android": {
+      "permissions": ["android.permission.RECORD_AUDIO"],
+      "package": "io.getstream.expochatgptsample"
+    }
+  }
+}
