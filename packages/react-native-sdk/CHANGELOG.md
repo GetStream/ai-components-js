@@ -1,5 +1,11 @@
 # @stream-io/chat-react-native-ai
 
+## 0.1.4
+
+### Patch Changes
+
+- 74442e1: Include image in the README.md file
+
 ## 0.1.3
 
 ### Patch Changes
