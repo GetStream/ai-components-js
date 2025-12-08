@@ -1,20 +1,25 @@
-@layer stream, stream-overrides;
+@layer stream, stream-overrides, stream-ai;
 
-@import url("stream-chat-react/dist/css/v2/index.css") layer(stream);
+@import 'material-symbols/rounded.css';
+@import url('stream-chat-react/dist/css/v2/index.css') layer(stream);
+@import url('@stream-io/chat-react-ai/styles/index.css') layer(stream-ai);
+
+@import url('./components/Composer.css');
+@import url('./components/ChannelListItem.css');
 
 :root {
-	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-	line-height: 1.5;
-	font-weight: 400;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
 
-	color-scheme: light dark;
-	color: rgba(255, 255, 255, 0.87);
-	background-color: #242424;
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
 
-	font-synthesis: none;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -23,21 +28,36 @@ body {
 
 #root {
   display: flex;
-  justify-content: stretch;
+  height: 100vh;
 }
 
 @layer stream-overrides {
-  
   .str-chat__channel-list {
-    display: flex;
+    flex-basis: 350px;
     flex-shrink: 1;
-    flex-basis: 400px;
-    height: 100%;
   }
 
   .str-chat__channel {
     flex-grow: 1;
-    flex-shrink: 0;
   }
 
+  .str-chat__message-list-scroll {
+    max-width: 800px;
+    width: 100%;
+  }
+
+  .str-chat__list {
+    display: flex;
+    justify-content: center;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+  }
+
+  .str-chat__message--other .str-chat__message-bubble {
+    max-width: unset;
+  }
+
+  .str-chat__message--other .str-chat__message-inner {
+    margin-inline-end: 0;
+  }
 }

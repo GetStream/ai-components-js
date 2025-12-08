@@ -371,6 +371,15 @@ importers:
       '@stream-io/chat-react-ai':
         specifier: workspace:^
         version: link:../../packages/react-sdk
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      material-symbols:
+        specifier: ^0.40.0
+        version: 0.40.0
+      nanoid:
+        specifier: ^5.1.6
+        version: 5.1.6
       react:
         specifier: ^19.2.0
         version: 19.2.1
