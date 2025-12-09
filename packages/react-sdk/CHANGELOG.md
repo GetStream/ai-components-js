@@ -1,5 +1,11 @@
 # @stream-io/chat-react-ai
 
+## 0.1.2
+
+### Patch Changes
+
+- 83d7bc4: Adjust styling and certain prop types, add `material-symbols` as a peer dep
+
 ## 0.1.1
 
 ### Patch Changes
