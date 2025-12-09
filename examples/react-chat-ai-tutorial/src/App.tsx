@@ -1,20 +1,7 @@
 import type { ChannelFilters, ChannelOptions, ChannelSort } from 'stream-chat';
-import {
-  Chat,
-  Channel,
-  MessageList,
-  useCreateChatClient,
-  ChannelList,
-  Window,
-  MessageInput,
-  useChatContext,
-} from 'stream-chat-react';
-import { Composer } from './components/Composer';
-import { MessageBubble } from './components/MessageBubble';
-import { AIStateIndicator } from './components/AIStateIndicator';
-import { useEffect } from 'react';
-import { nanoid } from 'nanoid';
-import { ChannelListItem } from './components/ChannelListItem';
+import { Chat, useCreateChatClient } from 'stream-chat-react';
+
+import { ChatContent } from './components/ChatContent';
 
 const userToken = import.meta.env.VITE_STREAM_USER_TOKEN;
 const apiKey = import.meta.env.VITE_STREAM_API_KEY;
@@ -43,41 +30,6 @@ const filters: ChannelFilters = {
 const options: ChannelOptions = { limit: 5 };
 const sort: ChannelSort = { pinned_at: 1, last_message_at: -1, updated_at: -1 };
 
-const ChatContent = () => {
-  const { setActiveChannel, client, channel } = useChatContext();
-
-  useEffect(() => {
-    if (!channel) {
-      setActiveChannel(
-        client.channel('messaging', `ai-${nanoid()}`, {
-          members: [client.userID as string],
-          // @ts-expect-error fix - this is a hack that allows a custom upload function to run
-          own_capabilities: ['upload-file'],
-        }),
-      );
-    }
-  }, [channel]);
-
-  return (
-    <>
-      <ChannelList
-        Preview={ChannelListItem}
-        setActiveChannelOnMount={false}
-        filters={filters}
-        sort={sort}
-        options={options}
-      />
-      <Channel initializeOnMount={false} Message={MessageBubble}>
-        <Window>
-          <MessageList />
-          <AIStateIndicator />
-          <MessageInput Input={Composer} />
-        </Window>
-      </Channel>
-    </>
-  );
-};
-
 function App() {
   const chatClient = useCreateChatClient({
     apiKey: apiKey!,
@@ -93,7 +45,7 @@ function App() {
 
   return (
     <Chat client={chatClient}>
-      <ChatContent />
+      <ChatContent filters={filters} sort={sort} options={options} />
     </Chat>
   );
 }
