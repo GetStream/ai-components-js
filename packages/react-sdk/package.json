@@ -51,7 +51,8 @@
   "packageManager": "pnpm@10.13.1",
   "peerDependencies": {
     "react": "^17 || ^18 || ^19",
-    "react-dom": "^17 || ^18 || ^19"
+    "react-dom": "^17 || ^18 || ^19",
+    "material-symbols": "^0.40.0"
   },
   "devDependencies": {
     "@types/node": "^24",
