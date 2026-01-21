@@ -7,6 +7,8 @@ import {
   type UploadRequestFn,
 } from 'stream-chat';
 import {
+  useAIState,
+  AIStates,
   useAttachmentsForPreview,
   useChannelActionContext,
   useChannelStateContext,
@@ -25,6 +27,7 @@ export const Composer = () => {
   const { client } = useChatContext();
   const { updateMessage, sendMessage } = useChannelActionContext();
   const { channel } = useChannelStateContext();
+  const { aiState } = useAIState(channel);
   const composer = useMessageComposer();
 
   const { attachments } = useAttachmentsForPreview();
@@ -148,7 +151,18 @@ export const Composer = () => {
             <AIMessageComposer.ModelSelect name="platform-model" />
           </div>
 
-          <AIMessageComposer.SubmitButton active={attachments.length > 0} />
+          {aiState === AIStates.Idle && (
+            <AIMessageComposer.SubmitButton active={attachments.length > 0} />
+          )}
+
+          {(aiState === AIStates.Thinking ||
+            aiState === AIStates.Generating) && (
+            <button onClick={() => channel.stopAIResponse()} type="button">
+              {aiState === AIStates.Thinking
+                ? 'AI is thinking...'
+                : 'AI is generating...'}
+            </button>
+          )}
         </div>
       </AIMessageComposer>
     </div>
