@@ -1,7 +1,12 @@
-import { StreamingMessage } from '@stream-io/chat-react-ai';
+import { useEffect, useRef } from 'react';
+import {
+  StreamingMessage,
+  type StreamingMessageRef,
+} from '@stream-io/chat-react-ai';
 import {
   Attachment,
   MessageErrorIcon,
+  useChatContext,
   useMessageContext,
 } from 'stream-chat-react';
 import clsx from 'clsx';
@@ -9,6 +14,20 @@ import clsx from 'clsx';
 export const MessageBubble = () => {
   const { message, isMyMessage, highlighted, handleAction } =
     useMessageContext();
+  const { channel } = useChatContext();
+  const ref = useRef<StreamingMessageRef | null>(null);
+
+  useEffect(() => {
+    if (!channel) return;
+
+    const aiIndicatorStopListener = channel.on('ai_indicator.stop', () => {
+      ref.current?.skipAnimation();
+    });
+
+    return () => {
+      aiIndicatorStopListener.unsubscribe();
+    };
+  }, [channel]);
 
   const attachments = message?.attachments || [];
   const hasAttachments = attachments.length > 0;
@@ -37,7 +56,7 @@ export const MessageBubble = () => {
               attachments={attachments}
             />
           )}
-          {message?.text && <StreamingMessage text={message.text} />}
+          {message?.text && <StreamingMessage ref={ref} text={message.text} />}
           <MessageErrorIcon />
         </div>
       </div>
