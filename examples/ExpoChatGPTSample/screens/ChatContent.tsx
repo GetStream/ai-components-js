@@ -29,7 +29,7 @@ import { useCallback, useMemo } from 'react';
 import { bottomSheetOptions } from '../bottomSheetOptions';
 import type { LocalMessage } from 'stream-chat';
 
-const CustomMessage = (props: MessageProps) => {
+export const CustomMessage = (props: MessageProps) => {
   const { theme } = useTheme();
   const { message } = props;
   const isFromBot = message.ai_generated;
@@ -48,7 +48,7 @@ const CustomMessage = (props: MessageProps) => {
       mergeThemes({
         theme,
         style: {
-          messageSimple: isFromBot
+          messageItemView: isFromBot
             ? {
                 content: {
                   containerInner: {
@@ -76,7 +76,7 @@ const CustomMessage = (props: MessageProps) => {
   );
 };
 
-const CustomStreamingMessageView = () => {
+export const CustomStreamingMessageView = () => {
   const { message } = useMessageContext();
   return (
     <View style={styles.streamingMessageViewWrapper}>
@@ -139,7 +139,7 @@ const CustomComposerView = () => {
   );
 };
 
-const EmptyStateIndicator = () => (
+export const EmptyStateIndicator = () => (
   <View style={styles.emptyContainer}>
     <Text style={styles.emptyContainerText}>What can I help with ?</Text>
   </View>
@@ -166,7 +166,7 @@ const CustomAITypingIndicatorView = () => {
   );
 };
 
-const RenderNull = () => null;
+export const RenderNull = () => null;
 
 const additionalFlatListProps = {
   maintainVisibleContentPosition: {
@@ -222,14 +222,8 @@ export const ChatContent = () => {
         channel={channel}
         initializeOnMount={false}
         preSendMessageRequest={preSendMessageRequest}
-        StreamingMessageView={CustomStreamingMessageView}
-        Message={CustomMessage}
         enableSwipeToReply={false}
-        EmptyStateIndicator={EmptyStateIndicator}
         allowSendBeforeAttachmentsUpload={true}
-        NetworkDownIndicator={RenderNull}
-        MessageAvatar={RenderNull}
-        MessageFooter={RenderNull}
       >
         <MessageList additionalFlatListProps={additionalFlatListProps} />
         <CustomAITypingIndicatorView />

@@ -110,6 +110,9 @@ importers:
       react-native-svg:
         specifier: ^15.15.0
         version: 15.15.0(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      react-native-teleport:
+        specifier: ^1.1.3
+        version: 1.1.3(react-dom@19.1.0(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
       react-native-web:
         specifier: ^0.21.0
         version: 0.21.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -117,11 +120,11 @@ importers:
         specifier: 0.6.1
         version: 0.6.1(@babel/core@7.28.4)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
       stream-chat:
-        specifier: ^9.26.1
-        version: 9.26.1
+        specifier: ^9.41.1
+        version: 9.41.1
       stream-chat-expo:
-        specifier: ^8.10.1
-        version: 8.10.1(870300975a6766e9ac38121775371b95)
+        specifier: ^9.0.1
+        version: 9.0.1(5ec9a4c0e729afa26cffe174dfc69265)
       victory-native:
         specifier: ^41.20.2
         version: 41.20.2(f7b633bddb17303f32972434f92457ac)
@@ -192,15 +195,18 @@ importers:
       react-native-svg:
         specifier: ^15.15.0
         version: 15.15.0(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
+      react-native-teleport:
+        specifier: ^1.1.3
+        version: 1.1.3(react-dom@19.2.5(react@19.1.1))(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
       react-native-worklets:
         specifier: ^0.6.1
         version: 0.6.1(@babel/core@7.28.4)(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
       stream-chat:
-        specifier: ^9.26.1
-        version: 9.26.1
+        specifier: ^9.41.1
+        version: 9.41.1
       stream-chat-react-native:
-        specifier: ^8.10.1
-        version: 8.10.1(65fd9abf282a4fc84d3adec34454b1cc)
+        specifier: ^9.0.1
+        version: 9.0.1(c72f3443502df68a8fb76152a970a817)
       victory-native:
         specifier: ^41.20.2
         version: 41.20.2(d3313b35db85f12e40930e37fcd986c1)
@@ -1895,8 +1901,8 @@ packages:
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
 
-  '@gorhom/bottom-sheet@5.2.8':
-    resolution: {integrity: sha512-+N27SMpbBxXZQ/IA2nlEV6RGxL/qSFHKfdFKcygvW+HqPG5jVNb1OqehLQsGfBP+Up42i0gW5ppI+DhpB7UCzA==}
+  '@gorhom/bottom-sheet@5.2.9':
+    resolution: {integrity: sha512-YwieCsEnTQnN2QW4VBKfCGszzxaw2ID7FydusEgqo7qB817fZ45N88kptcuNwZFnnauCjdyzKdrVBWmLmpl9oQ==}
     peerDependencies:
       '@types/react': '*'
       '@types/react-native': '*'
@@ -6429,8 +6435,8 @@ packages:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==}
     engines: {node: '>=10'}
 
-  lodash-es@4.17.21:
-    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+  lodash-es@4.17.23:
+    resolution: {integrity: sha512-kVI48u3PZr38HdYz98UmfPnXl2DXrpdctLrFLCd3kOx1xUkOmpFPx7gCWWM5MPkL/fD8zb+Ph0QzjGFs4+hHWg==}
 
   lodash.debounce@4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
@@ -7531,6 +7537,13 @@ packages:
       react: '*'
       react-native: '*'
 
+  react-native-teleport@1.1.3:
+    resolution: {integrity: sha512-UcW9ZxXAPCn9/gdwvmzfGN79MvphB9SXYivxntDmGmI3oBftKNok7bdTQ3bYdveqKz2rFfh4IWixnLsEgBsCmw==}
+    peerDependencies:
+      react: '*'
+      react-dom: '*'
+      react-native: '*'
+
   react-native-url-polyfill@2.0.0:
     resolution: {integrity: sha512-My330Do7/DvKnEvwQc0WdcBnFPploYKp9CYlefDXzIdEaA+PAhDYllkvGeEroEzvc4Kzzj2O4yVdz8v6fjRvhA==}
     peerDependencies:
@@ -8179,10 +8192,10 @@ packages:
     resolution: {integrity: sha512-uyQK/mx5QjHun80FLJTfaWE7JtwfRMKBLkMne6udYOmvH0CawotVa7TfgYHzAnpphn4+TweIx1QKMnRIbipmUg==}
     engines: {node: '>= 0.10.0'}
 
-  stream-chat-expo@8.10.1:
-    resolution: {integrity: sha512-wdfTtJ2R/C5RXtJR9N4UTRB/4Gjo5ps2G+MoJyS6XCX2JJpzds7HjfME8RMKX+I76ihJoLhCUwrsNnhkY0hroA==}
+  stream-chat-expo@9.0.1:
+    resolution: {integrity: sha512-BgCVaeiZpG/1XDyU9A3nYFYazctkrX/rERSXExVPItHasOfbw/PeZxUow9w8ObH5910oDrTpYePHOPFEs3Q+cg==}
     peerDependencies:
-      expo: '>=51.0.0'
+      expo: '>=52.0.0'
       expo-audio: '*'
       expo-av: '*'
       expo-clipboard: '*'
@@ -8194,6 +8207,7 @@ packages:
       expo-media-library: '*'
       expo-sharing: '*'
       expo-video: '*'
+      react-native: '>=0.76.0'
     peerDependenciesMeta:
       expo-audio:
         optional: true
@@ -8207,6 +8221,8 @@ packages:
         optional: true
       expo-haptics:
         optional: true
+      expo-image-manipulator:
+        optional: true
       expo-image-picker:
         optional: true
       expo-media-library:
@@ -8216,8 +8232,8 @@ packages:
       expo-video:
         optional: true
 
-  stream-chat-react-native-core@8.10.1:
-    resolution: {integrity: sha512-jSfiqOEuXztxBgDcQkbjoBGU9iIgd02A/h1GQLsuzbl8oipPobZWCg981CT5b43lW7g9kIa7i4hlMxG08zJzLA==}
+  stream-chat-react-native-core@9.0.1:
+    resolution: {integrity: sha512-07sJw5L1ZIfInG/GuQzIvcXLtCyR7k+4a4jVPCaVrPnAnJZcHvdVx2nt7eaBuFvqSwN0es6JTSKsoorup3f95w==}
     peerDependencies:
       '@emoji-mart/data': '>=1.1.0'
       '@op-engineering/op-sqlite': '>=14.0.0'
@@ -8226,9 +8242,11 @@ packages:
       emoji-mart: '>=5.4.0'
       react-native: '>=0.73.0'
       react-native-gesture-handler: '>=2.18.0'
+      react-native-keyboard-controller: '>=1.20.2'
       react-native-reanimated: '>=3.16.0'
       react-native-safe-area-context: '>=5.4.1'
       react-native-svg: '>=15.8.0'
+      react-native-teleport: '>=0.5.4'
     peerDependenciesMeta:
       '@emoji-mart/data':
         optional: true
@@ -8238,30 +8256,29 @@ packages:
         optional: true
       emoji-mart:
         optional: true
+      react-native-keyboard-controller:
+        optional: true
 
-  stream-chat-react-native@8.10.1:
-    resolution: {integrity: sha512-pfKPq54XA8Z7ih1colSx/wKUPt7SlVUJnzaqFiY3oRjFFX/y82KRr9z9GNyeFTjbuPoM+UOSxNFvokWoVCtK9g==}
+  stream-chat-react-native@9.0.1:
+    resolution: {integrity: sha512-yr18KGh7Bag7n2OMRDUzGJbjrqcqcRZ/gQHdG2ig6FXIxiW0G2DceZP5ctf8kDGykOxidp9SocnXoRUzb2D/fw==}
     peerDependencies:
-      '@react-native-camera-roll/camera-roll': '>=7.8.0'
-      '@react-native-clipboard/clipboard': '>=1.14.1'
+      '@react-native-camera-roll/camera-roll': '>=7.9.0'
+      '@react-native-clipboard/clipboard': '>=1.16.0'
       '@react-native-documents/picker': '>=10.1.1'
-      '@stream-io/flat-list-mvcp': '>=0.10.3'
-      react-native: '>=0.73.0'
+      react-native: '>=0.76.0'
       react-native-audio-recorder-player: '>=3.6.13'
-      react-native-blob-util: '>=0.21.1'
+      react-native-blob-util: '>=0.22.0'
       react-native-haptic-feedback: '>=2.3.0'
       react-native-image-picker: '>=7.1.2'
       react-native-nitro-sound: '>=0.2.9'
       react-native-share: '>=11.0.0'
-      react-native-video: '>=6.4.2'
+      react-native-video: '>=6.18.0'
     peerDependenciesMeta:
       '@react-native-camera-roll/camera-roll':
         optional: true
       '@react-native-clipboard/clipboard':
         optional: true
       '@react-native-documents/picker':
-        optional: true
-      '@stream-io/flat-list-mvcp':
         optional: true
       react-native-audio-recorder-player:
         optional: true
@@ -8320,10 +8337,6 @@ packages:
 
   stream-chat@9.25.0:
     resolution: {integrity: sha512-i5ZrTT2s1UIpHgHHUKDPFG8qtkjAffZYKiItS4wdj+rqWL3ovNt1X/P35QUvFRAFrawppfPDwpWp3StkpSm8oA==}
-    engines: {node: '>=18'}
-
-  stream-chat@9.26.1:
-    resolution: {integrity: sha512-xi0KHvK42uVeH5w5WK1hXkzZVnfoczzvgCmj0wGY3ATn6Y1sPXjdWZbb/d4w9MDiIdvyqjAlesrwhBVmrQgNJQ==}
     engines: {node: '>=18'}
 
   stream-chat@9.27.1:
@@ -11369,7 +11382,7 @@ snapshots:
       postcss: 8.4.49
       resolve-from: 5.0.0
     optionalDependencies:
-      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
+      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -11461,7 +11474,7 @@ snapshots:
       '@expo/json-file': 10.0.7
       '@react-native/normalize-colors': 0.81.5
       debug: 4.4.3
-      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
+      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
       resolve-from: 5.0.0
       semver: 7.7.3
       xml2js: 0.6.0
@@ -11544,7 +11557,7 @@ snapshots:
 
   '@floating-ui/utils@0.2.10': {}
 
-  '@gorhom/bottom-sheet@5.2.8(@types/react@19.2.14)(react-native-gesture-handler@2.29.0(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native-reanimated@4.1.3(@babel/core@7.28.4)(react-native-worklets@0.6.1(@babel/core@7.28.4)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)':
+  '@gorhom/bottom-sheet@5.2.9(@types/react@19.2.14)(react-native-gesture-handler@2.29.0(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native-reanimated@4.1.3(@babel/core@7.28.4)(react-native-worklets@0.6.1(@babel/core@7.28.4)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@gorhom/portal': 1.0.14(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
       invariant: 2.2.4
@@ -11555,7 +11568,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.14
 
-  '@gorhom/bottom-sheet@5.2.8(@types/react@19.2.7)(react-native-gesture-handler@2.29.0(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1))(react-native-reanimated@4.1.3(@babel/core@7.28.4)(react-native-worklets@0.6.1(@babel/core@7.28.4)(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1))(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1))(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)':
+  '@gorhom/bottom-sheet@5.2.9(@types/react@19.2.7)(react-native-gesture-handler@2.29.0(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1))(react-native-reanimated@4.1.3(@babel/core@7.28.4)(react-native-worklets@0.6.1(@babel/core@7.28.4)(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1))(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1))(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)':
     dependencies:
       '@gorhom/portal': 1.0.14(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
       invariant: 2.2.4
@@ -13535,7 +13548,9 @@ snapshots:
       metro-runtime: 0.83.3
     transitivePeerDependencies:
       - '@babel/core'
+      - bufferutil
       - supports-color
+      - utf-8-validate
     optional: true
 
   '@react-native/normalize-colors@0.74.89': {}
@@ -15093,7 +15108,7 @@ snapshots:
       resolve-from: 5.0.0
     optionalDependencies:
       '@babel/runtime': 7.28.4
-      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
+      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
@@ -16531,16 +16546,17 @@ snapshots:
 
   expo-image-loader@6.0.0(expo@54.0.20):
     dependencies:
-      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
+      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
 
   expo-image-manipulator@14.0.8(expo@54.0.20):
     dependencies:
       expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
       expo-image-loader: 6.0.0(expo@54.0.20)
+    optional: true
 
   expo-image-picker@17.0.8(expo@54.0.20):
     dependencies:
-      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
+      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
       expo-image-loader: 6.0.0(expo@54.0.20)
 
   expo-keep-awake@15.0.7(expo@54.0.20)(react@19.1.0):
@@ -18188,7 +18204,7 @@ snapshots:
     dependencies:
       p-locate: 5.0.0
 
-  lodash-es@4.17.21: {}
+  lodash-es@4.17.23: {}
 
   lodash.debounce@4.0.8: {}
 
@@ -19904,6 +19920,18 @@ snapshots:
       react-native: 0.82.1(@babel/core@7.28.5)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.5))(@types/react@19.2.2)(react@19.1.1)
       warn-once: 0.1.1
 
+  react-native-teleport@1.1.3(react-dom@19.1.0(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+      react-native: 0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0)
+
+  react-native-teleport@1.1.3(react-dom@19.2.5(react@19.1.1))(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1):
+    dependencies:
+      react: 19.1.1
+      react-dom: 19.2.5(react@19.1.1)
+      react-native: 0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1)
+
   react-native-url-polyfill@2.0.0(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0)):
     dependencies:
       react-native: 0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0)
@@ -20960,15 +20988,16 @@ snapshots:
 
   stream-buffers@2.2.0: {}
 
-  stream-chat-expo@8.10.1(870300975a6766e9ac38121775371b95):
+  stream-chat-expo@9.0.1(5ec9a4c0e729afa26cffe174dfc69265):
     dependencies:
       expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
-      expo-image-manipulator: 14.0.8(expo@54.0.20)
       mime: 4.1.0
-      stream-chat-react-native-core: 8.10.1(62dd58242c6be2e586963d1d840a06b0)
+      react-native: 0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0)
+      stream-chat-react-native-core: 9.0.1(45a84c56e0a0e53bb08297a1ee852fc3)
     optionalDependencies:
       expo-clipboard: 8.0.7(expo@54.0.20)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
       expo-file-system: 19.0.17(expo@54.0.20)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))
+      expo-image-manipulator: 14.0.8(expo@54.0.20)
       expo-image-picker: 17.0.8(expo@54.0.20)
     transitivePeerDependencies:
       - '@emoji-mart/data'
@@ -20981,17 +21010,18 @@ snapshots:
       - debug
       - emoji-mart
       - react
-      - react-native
       - react-native-gesture-handler
+      - react-native-keyboard-controller
       - react-native-reanimated
       - react-native-safe-area-context
       - react-native-svg
+      - react-native-teleport
       - typescript
       - utf-8-validate
 
-  stream-chat-react-native-core@8.10.1(62dd58242c6be2e586963d1d840a06b0):
+  stream-chat-react-native-core@9.0.1(45a84c56e0a0e53bb08297a1ee852fc3):
     dependencies:
-      '@gorhom/bottom-sheet': 5.2.8(@types/react@19.2.14)(react-native-gesture-handler@2.29.0(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native-reanimated@4.1.3(@babel/core@7.28.4)(react-native-worklets@0.6.1(@babel/core@7.28.4)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      '@gorhom/bottom-sheet': 5.2.9(@types/react@19.2.14)(react-native-gesture-handler@2.29.0(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native-reanimated@4.1.3(@babel/core@7.28.4)(react-native-worklets@0.6.1(@babel/core@7.28.4)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
       '@react-native-community/netinfo': 11.4.1(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))
       '@ungap/structured-clone': 1.3.0
       dayjs: 1.11.13
@@ -20999,7 +21029,7 @@ snapshots:
       i18next: 25.6.3(typescript@5.9.3)
       intl-pluralrules: 2.0.1
       linkifyjs: 4.3.2
-      lodash-es: 4.17.21
+      lodash-es: 4.17.23
       mime-types: 2.1.35
       path: 0.12.7
       react-native: 0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0)
@@ -21008,6 +21038,7 @@ snapshots:
       react-native-reanimated: 4.1.3(@babel/core@7.28.4)(react-native-worklets@0.6.1(@babel/core@7.28.4)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
       react-native-safe-area-context: 5.6.2(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
       react-native-svg: 15.15.0(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      react-native-teleport: 1.1.3(react-dom@19.1.0(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
       react-native-url-polyfill: 2.0.0(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))
       stream-chat: 9.41.1
       use-sync-external-store: 1.6.0(react@19.1.0)
@@ -21022,9 +21053,9 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  stream-chat-react-native-core@8.10.1(9a861c8f151bc811c80d0a95074424f6):
+  stream-chat-react-native-core@9.0.1(ab3bbd62ecee17b0c67c709f2c0d3081):
     dependencies:
-      '@gorhom/bottom-sheet': 5.2.8(@types/react@19.2.7)(react-native-gesture-handler@2.29.0(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1))(react-native-reanimated@4.1.3(@babel/core@7.28.4)(react-native-worklets@0.6.1(@babel/core@7.28.4)(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1))(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1))(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
+      '@gorhom/bottom-sheet': 5.2.9(@types/react@19.2.7)(react-native-gesture-handler@2.29.0(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1))(react-native-reanimated@4.1.3(@babel/core@7.28.4)(react-native-worklets@0.6.1(@babel/core@7.28.4)(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1))(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1))(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
       '@react-native-community/netinfo': 11.4.1(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))
       '@ungap/structured-clone': 1.3.0
       dayjs: 1.11.13
@@ -21032,7 +21063,7 @@ snapshots:
       i18next: 25.6.3(typescript@5.9.3)
       intl-pluralrules: 2.0.1
       linkifyjs: 4.3.2
-      lodash-es: 4.17.21
+      lodash-es: 4.17.23
       mime-types: 2.1.35
       path: 0.12.7
       react-native: 0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1)
@@ -21041,6 +21072,7 @@ snapshots:
       react-native-reanimated: 4.1.3(@babel/core@7.28.4)(react-native-worklets@0.6.1(@babel/core@7.28.4)(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1))(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
       react-native-safe-area-context: 5.6.2(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
       react-native-svg: 15.15.0(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
+      react-native-teleport: 1.1.3(react-dom@19.2.5(react@19.1.1))(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
       react-native-url-polyfill: 2.0.0(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))
       stream-chat: 9.41.1
       use-sync-external-store: 1.6.0(react@19.1.1)
@@ -21055,12 +21087,12 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  stream-chat-react-native@8.10.1(65fd9abf282a4fc84d3adec34454b1cc):
+  stream-chat-react-native@9.0.1(c72f3443502df68a8fb76152a970a817):
     dependencies:
       es6-symbol: 3.1.4
       mime: 4.1.0
       react-native: 0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1)
-      stream-chat-react-native-core: 8.10.1(9a861c8f151bc811c80d0a95074424f6)
+      stream-chat-react-native-core: 9.0.1(ab3bbd62ecee17b0c67c709f2c0d3081)
     optionalDependencies:
       '@react-native-clipboard/clipboard': 1.16.3(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
       react-native-image-picker: 8.2.1(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
@@ -21076,9 +21108,11 @@ snapshots:
       - emoji-mart
       - react
       - react-native-gesture-handler
+      - react-native-keyboard-controller
       - react-native-reanimated
       - react-native-safe-area-context
       - react-native-svg
+      - react-native-teleport
       - typescript
       - utf-8-validate
 
@@ -21171,22 +21205,6 @@ snapshots:
       form-data: 4.0.4
       isomorphic-ws: 5.0.0(ws@8.18.3)
       jsonwebtoken: 9.0.2
-      linkifyjs: 4.3.2
-      ws: 8.18.3
-    transitivePeerDependencies:
-      - bufferutil
-      - debug
-      - utf-8-validate
-
-  stream-chat@9.26.1:
-    dependencies:
-      '@types/jsonwebtoken': 9.0.10
-      '@types/ws': 8.18.1
-      axios: 1.13.0
-      base64-js: 1.5.1
-      form-data: 4.0.4
-      isomorphic-ws: 5.0.0(ws@8.18.3)
-      jsonwebtoken: 9.0.3
       linkifyjs: 4.3.2
       ws: 8.18.3
     transitivePeerDependencies:

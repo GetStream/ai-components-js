@@ -9,6 +9,7 @@ import {
   Chat,
   OverlayProvider,
   useCreateChatClient,
+  WithComponents,
 } from 'stream-chat-react-native';
 import { AppProvider } from './contexts/AppContext.tsx';
 import {
@@ -18,9 +19,15 @@ import {
   chatUserToken,
 } from './chatConfig.ts';
 import { StreamTheme } from '@stream-io/chat-react-native-ai';
-import { MenuDrawer } from './screens/MenuDrawer.tsx';
+import { ChannelPreview, MenuDrawer } from './screens/MenuDrawer.tsx';
 import { LocalMessage } from 'stream-chat';
-import { ChatContent } from './screens/ChatContent.tsx';
+import {
+  ChatContent,
+  CustomMessage,
+  CustomStreamingMessageView,
+  EmptyStateIndicator,
+  RenderNull,
+} from './screens/ChatContent.tsx';
 
 const Drawer = createDrawerNavigator();
 
@@ -56,14 +63,26 @@ const App = () => {
         <StreamTheme>
           <GestureHandlerRootView style={styles.container}>
             <OverlayProvider>
-              <Chat
-                client={chatClient}
-                isMessageAIGenerated={isMessageAIGenerated}
+              <WithComponents
+                overrides={{
+                  StreamingMessageView: CustomStreamingMessageView,
+                  Message: CustomMessage,
+                  EmptyStateIndicator,
+                  NetworkDownIndicator: RenderNull,
+                  MessageAuthor: RenderNull,
+                  MessageFooter: RenderNull,
+                  ChannelPreview,
+                }}
               >
-                <NavigationContainer>
-                  <DrawerNavigator />
-                </NavigationContainer>
-              </Chat>
+                <Chat
+                  client={chatClient}
+                  isMessageAIGenerated={isMessageAIGenerated}
+                >
+                  <NavigationContainer>
+                    <DrawerNavigator />
+                  </NavigationContainer>
+                </Chat>
+              </WithComponents>
             </OverlayProvider>
           </GestureHandlerRootView>
         </StreamTheme>

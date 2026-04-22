@@ -1,7 +1,12 @@
 import { Drawer } from 'expo-router/drawer';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Chat, OverlayProvider, useCreateChatClient } from 'stream-chat-expo';
+import {
+  Chat,
+  OverlayProvider,
+  useCreateChatClient,
+  WithComponents,
+} from 'stream-chat-expo';
 import {
   chatApiKey,
   chatUserId,
@@ -13,7 +18,13 @@ import { AppProvider } from '../contexts/AppContext';
 import { StreamTheme } from '@stream-io/chat-react-native-ai';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import type { LocalMessage } from 'stream-chat';
-import { MenuDrawer } from '../screens/MenuDrawer';
+import { ChannelPreview, MenuDrawer } from '../screens/MenuDrawer';
+import {
+  CustomMessage,
+  CustomStreamingMessageView,
+  EmptyStateIndicator,
+  RenderNull,
+} from '../screens/ChatContent';
 
 const isMessageAIGenerated = (message: LocalMessage) => !!message.ai_generated;
 
@@ -33,17 +44,29 @@ export default function Layout() {
         <StreamTheme>
           <GestureHandlerRootView style={styles.container}>
             <OverlayProvider>
-              <Chat
-                client={chatClient}
-                isMessageAIGenerated={isMessageAIGenerated}
+              <WithComponents
+                overrides={{
+                  StreamingMessageView: CustomStreamingMessageView,
+                  Message: CustomMessage,
+                  EmptyStateIndicator,
+                  NetworkDownIndicator: RenderNull,
+                  MessageAuthor: RenderNull,
+                  MessageFooter: RenderNull,
+                  ChannelPreview,
+                }}
               >
-                <Drawer
-                  drawerContent={MenuDrawer}
-                  screenOptions={{ drawerStyle: { width: 300 } }}
+                <Chat
+                  client={chatClient}
+                  isMessageAIGenerated={isMessageAIGenerated}
                 >
-                  <Drawer.Screen name={'index'} />
-                </Drawer>
-              </Chat>
+                  <Drawer
+                    drawerContent={MenuDrawer}
+                    screenOptions={{ drawerStyle: { width: 300 } }}
+                  >
+                    <Drawer.Screen name={'index'} />
+                  </Drawer>
+                </Chat>
+              </WithComponents>
             </OverlayProvider>
           </GestureHandlerRootView>
         </StreamTheme>

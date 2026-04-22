@@ -1,10 +1,10 @@
 import { Alert } from 'react-native';
 import {
+  Archive,
   Copy,
-  DownloadArrow,
-  DownloadCloud,
-  Flag,
   Edit,
+  Flag,
+  Plus,
 } from 'stream-chat-react-native';
 
 export const bottomSheetOptions = [
@@ -12,7 +12,7 @@ export const bottomSheetOptions = [
     title: 'Create Image',
     subtitle: 'Visualize anything',
     action: () => Alert.alert('Pressed on Create Image !'),
-    Icon: DownloadArrow,
+    Icon: Plus,
   },
   {
     title: 'Thinking',
@@ -24,7 +24,7 @@ export const bottomSheetOptions = [
     title: 'Deep research',
     subtitle: 'Get a detailed report',
     action: () => Alert.alert('Pressed on Deep research !'),
-    Icon: DownloadCloud,
+    Icon: Archive,
   },
   {
     title: 'Web search',

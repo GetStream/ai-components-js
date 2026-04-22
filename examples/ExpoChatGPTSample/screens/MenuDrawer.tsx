@@ -1,6 +1,6 @@
 import { chatUserId } from '../chatConfig';
 import type { ChannelSort } from 'stream-chat';
-import type { ChannelPreviewMessengerProps } from 'stream-chat-expo';
+import type { ChannelPreviewViewProps } from 'stream-chat-expo';
 import {
   ChannelList,
   useChannelsContext,
@@ -23,7 +23,7 @@ const filters = {
 
 const sort: ChannelSort = { last_updated: -1 };
 
-const ChannelPreview = (props: ChannelPreviewMessengerProps) => {
+export const ChannelPreview = (props: ChannelPreviewViewProps) => {
   const channel = props.channel;
   const { onSelect } = useChannelsContext();
   const onPress = useStableCallback(() => {
@@ -67,12 +67,7 @@ export const MenuDrawer = ({ navigation }: DrawerContentComponentProps) => {
           <Copy />
         </Pressable>
       </View>
-      <ChannelList
-        filters={filters}
-        sort={sort}
-        onSelect={onSelect}
-        Preview={ChannelPreview}
-      />
+      <ChannelList filters={filters} sort={sort} onSelect={onSelect} />
     </SafeAreaView>
   );
 };
