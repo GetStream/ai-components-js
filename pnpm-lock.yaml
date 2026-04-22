@@ -454,11 +454,11 @@ importers:
         specifier: ^19.2.5
         version: 19.2.5(react@19.2.5)
       stream-chat:
-        specifier: ^9.38.0
-        version: 9.38.0
+        specifier: ^9.41.0
+        version: 9.41.1
       stream-chat-react:
-        specifier: ^13.14.3
-        version: 13.14.3(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(stream-chat@9.38.0)(typescript@5.9.3)
+        specifier: ^14.0.1
+        version: 14.0.1(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(stream-chat@9.41.1)(typescript@5.9.3)
     devDependencies:
       '@types/node':
         specifier: ^24.12.2
@@ -6878,6 +6878,10 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  modern-normalize@3.0.1:
+    resolution: {integrity: sha512-VqlMdYi59Uch6fnUPxnpijWUQe+TW6zeWCvyr6Mb7JibheHzSuAAoJi2c71ZwIaWKpECpGpYHoaaBp6rBRr+/g==}
+    engines: {node: '>=6'}
+
   mri@1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
     engines: {node: '>=4'}
@@ -8294,8 +8298,8 @@ packages:
       emoji-mart:
         optional: true
 
-  stream-chat-react@13.14.3:
-    resolution: {integrity: sha512-vCojVAfPFGXFO4CVeDNUcEHk+GAqbsL1CO2NYq4eHk6bpuRhTImA6dDJSXQ8xwmxh0oqo2skI9PIm48xD087cg==}
+  stream-chat-react@14.0.1:
+    resolution: {integrity: sha512-lRC17STbJF7TzTqqBI2X3kFYsWsTT2Ynu72zD/g8w9mpGee1pGWnsmbu7Y+fenFYWy5K8cokGxrM6jvJdkxTSg==}
     peerDependencies:
       '@breezystack/lamejs': ^1.2.7
       '@emoji-mart/data': ^1.1.0
@@ -8303,7 +8307,7 @@ packages:
       emoji-mart: ^5.4.0
       react: ^19.0.0 || ^18.0.0 || ^17.0.0
       react-dom: ^19.0.0 || ^18.0.0 || ^17.0.0
-      stream-chat: ^9.38.0
+      stream-chat: ^9.41.0
     peerDependenciesMeta:
       '@breezystack/lamejs':
         optional: true
@@ -8326,8 +8330,8 @@ packages:
     resolution: {integrity: sha512-Ssl6ZiS63dTP/i6G2/TC/QR9skwGbPb4zFxGoLivjX6wmVahVOB+KEyhwkvKG0SWAaAOXEWXEHRY75oLi692qA==}
     engines: {node: '>=18'}
 
-  stream-chat@9.38.0:
-    resolution: {integrity: sha512-nyTFKHnhGfk1Op/xuZzPKzM9uNTy4TBma69+ApwGj/UtrK2pT6rSaU0Qy/oAqub+Bh7jR2/5vlV/8FWJ2BObFg==}
+  stream-chat@9.41.1:
+    resolution: {integrity: sha512-W8zjfINYol2UtdRMz2t/NN2GyjDrvb4pJgKmhtuRYzCY1u0Cjezcsu5OCNgyAM0QsenlY6tRqnvAU8Qam5R49Q==}
     engines: {node: '>=18'}
 
   strict-uri-encode@2.0.0:
@@ -8574,6 +8578,9 @@ packages:
 
   ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
+
+  ts-pattern@5.9.0:
+    resolution: {integrity: sha512-6s5V71mX8qBUmlgbrfL33xDUwO0fq48rxAu2LBE11WBeGdpCPOsXksQbZJHvHwhrd3QjUusd3mAOM5Gg0mFBLg==}
 
   tsconfig-paths@3.15.0:
     resolution: {integrity: sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg==}
@@ -11362,7 +11369,7 @@ snapshots:
       postcss: 8.4.49
       resolve-from: 5.0.0
     optionalDependencies:
-      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -11454,7 +11461,7 @@ snapshots:
       '@expo/json-file': 10.0.7
       '@react-native/normalize-colors': 0.81.5
       debug: 4.4.3
-      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
       resolve-from: 5.0.0
       semver: 7.7.3
       xml2js: 0.6.0
@@ -13528,9 +13535,7 @@ snapshots:
       metro-runtime: 0.83.3
     transitivePeerDependencies:
       - '@babel/core'
-      - bufferutil
       - supports-color
-      - utf-8-validate
     optional: true
 
   '@react-native/normalize-colors@0.74.89': {}
@@ -15088,7 +15093,7 @@ snapshots:
       resolve-from: 5.0.0
     optionalDependencies:
       '@babel/runtime': 7.28.4
-      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
@@ -15966,7 +15971,7 @@ snapshots:
       '@next/eslint-plugin-next': 16.0.0
       eslint: 9.38.0(jiti@2.6.1)
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0)(eslint@9.38.0(jiti@2.6.1))
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.46.2(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.38.0(jiti@2.6.1)))(eslint@9.38.0(jiti@2.6.1))
       eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.46.2(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.38.0(jiti@2.6.1))
       eslint-plugin-jsx-a11y: 6.10.2(eslint@9.38.0(jiti@2.6.1))
       eslint-plugin-react: 7.37.5(eslint@9.38.0(jiti@2.6.1))
@@ -15993,7 +15998,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0)(eslint@9.38.0(jiti@2.6.1)):
+  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.46.2(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.38.0(jiti@2.6.1)))(eslint@9.38.0(jiti@2.6.1)):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
       debug: 4.4.3
@@ -16008,14 +16013,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.46.2(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@9.38.0(jiti@2.6.1)):
+  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.46.2(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.46.2(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.38.0(jiti@2.6.1)))(eslint@9.38.0(jiti@2.6.1)))(eslint@9.38.0(jiti@2.6.1)):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 8.46.2(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3)
       eslint: 9.38.0(jiti@2.6.1)
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0)(eslint@9.38.0(jiti@2.6.1))
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.46.2(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.38.0(jiti@2.6.1)))(eslint@9.38.0(jiti@2.6.1))
     transitivePeerDependencies:
       - supports-color
 
@@ -16043,7 +16048,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.38.0(jiti@2.6.1)
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.46.2(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@9.38.0(jiti@2.6.1))
+      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.46.2(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.46.2(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.38.0(jiti@2.6.1)))(eslint@9.38.0(jiti@2.6.1)))(eslint@9.38.0(jiti@2.6.1))
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
@@ -16526,7 +16531,7 @@ snapshots:
 
   expo-image-loader@6.0.0(expo@54.0.20):
     dependencies:
-      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
 
   expo-image-manipulator@14.0.8(expo@54.0.20):
     dependencies:
@@ -16535,7 +16540,7 @@ snapshots:
 
   expo-image-picker@17.0.8(expo@54.0.20):
     dependencies:
-      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
+      expo: 54.0.20(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.16)(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
       expo-image-loader: 6.0.0(expo@54.0.20)
 
   expo-keep-awake@15.0.7(expo@54.0.20)(react@19.1.0):
@@ -19035,6 +19040,8 @@ snapshots:
 
   mkdirp@1.0.4: {}
 
+  modern-normalize@3.0.1: {}
+
   mri@1.2.0: {}
 
   ms@2.0.0: {}
@@ -19597,10 +19604,6 @@ snapshots:
   react-image-gallery@1.2.12(react@19.2.3):
     dependencies:
       react: 19.2.3
-
-  react-image-gallery@1.2.12(react@19.2.5):
-    dependencies:
-      react: 19.2.5
 
   react-is@16.13.1: {}
 
@@ -21006,7 +21009,7 @@ snapshots:
       react-native-safe-area-context: 5.6.2(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
       react-native-svg: 15.15.0(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
       react-native-url-polyfill: 2.0.0(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))
-      stream-chat: 9.38.0
+      stream-chat: 9.41.1
       use-sync-external-store: 1.6.0(react@19.1.0)
     optionalDependencies:
       '@op-engineering/op-sqlite': 15.1.6(react-native@0.81.4(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
@@ -21039,7 +21042,7 @@ snapshots:
       react-native-safe-area-context: 5.6.2(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
       react-native-svg: 15.15.0(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
       react-native-url-polyfill: 2.0.0(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))
-      stream-chat: 9.38.0
+      stream-chat: 9.41.1
       use-sync-external-store: 1.6.0(react@19.1.1)
     optionalDependencies:
       '@op-engineering/op-sqlite': 15.1.6(react-native@0.82.1(@babel/core@7.28.4)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.82.1(@babel/core@7.28.4))(@types/react@19.2.7)(react@19.1.1))(react@19.1.1)
@@ -21119,7 +21122,7 @@ snapshots:
       - supports-color
       - typescript
 
-  stream-chat-react@13.14.3(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(stream-chat@9.38.0)(typescript@5.9.3):
+  stream-chat-react@14.0.1(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(stream-chat@9.41.1)(typescript@5.9.3):
     dependencies:
       '@braintree/sanitize-url': 6.0.4
       '@floating-ui/react': 0.27.16(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
@@ -21135,18 +21138,19 @@ snapshots:
       lodash.mergewith: 4.6.2
       lodash.throttle: 4.1.1
       lodash.uniqby: 4.7.0
+      modern-normalize: 3.0.1
       nanoid: 3.3.11
       react: 19.2.5
       react-dom: 19.2.5(react@19.2.5)
       react-dropzone: 14.3.8(react@19.2.5)
       react-fast-compare: 3.2.2
-      react-image-gallery: 1.2.12(react@19.2.5)
       react-markdown: 9.1.0(@types/react@19.2.14)(react@19.2.5)
       react-player: 2.10.1(react@19.2.5)
       react-textarea-autosize: 8.5.9(@types/react@19.2.14)(react@19.2.5)
       react-virtuoso: 2.19.1(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       remark-gfm: 4.0.1
-      stream-chat: 9.38.0
+      stream-chat: 9.41.1
+      ts-pattern: 5.9.0
       tslib: 2.8.1
       unist-builder: 4.0.0
       unist-util-visit: 5.0.0
@@ -21206,7 +21210,7 @@ snapshots:
       - debug
       - utf-8-validate
 
-  stream-chat@9.38.0:
+  stream-chat@9.41.1:
     dependencies:
       '@types/jsonwebtoken': 9.0.10
       '@types/ws': 8.18.1
@@ -21473,6 +21477,8 @@ snapshots:
       typescript: 5.9.3
 
   ts-interface-checker@0.1.13: {}
+
+  ts-pattern@5.9.0: {}
 
   tsconfig-paths@3.15.0:
     dependencies:
