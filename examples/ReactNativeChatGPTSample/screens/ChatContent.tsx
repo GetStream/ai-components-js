@@ -5,7 +5,6 @@ import {
   mergeThemes,
   Message,
   MessageList,
-  MessageProps,
   ThemeProvider,
   useAIState,
   useChannelContext,
@@ -14,7 +13,9 @@ import {
   useMessageInputContext,
   useStableCallback,
   useTheme,
+  WithComponents,
 } from 'stream-chat-react-native';
+import type { MessageProps } from 'stream-chat-react-native';
 import { useAppContext } from '../contexts/AppContext.tsx';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { startAI, summarize } from '../http/requests.ts';
@@ -27,7 +28,7 @@ import {
 } from '@stream-io/chat-react-native-ai';
 import { useCallback, useMemo } from 'react';
 import { bottomSheetOptions } from '../bottomSheetOptions.ts';
-import { LocalMessage } from 'stream-chat';
+import type { LocalMessage } from 'stream-chat';
 
 const CustomMessage = (props: MessageProps) => {
   const { theme } = useTheme();
@@ -48,7 +49,7 @@ const CustomMessage = (props: MessageProps) => {
       mergeThemes({
         theme,
         style: {
-          messageSimple: isFromBot
+          messageItemView: isFromBot
             ? {
                 content: {
                   containerInner: {
@@ -60,7 +61,7 @@ const CustomMessage = (props: MessageProps) => {
                 },
               }
             : {
-                wrapper: {
+                container: {
                   opacity: hasPendingAttachments ? 0.5 : 1,
                 },
               },
@@ -155,13 +156,15 @@ const CustomAITypingIndicatorView = () => {
     [AIStates.ExternalSources]: 'Checking external sources...',
   };
 
-  if (aiState === AIStates.Idle || aiState === AIStates.Error) {
+  const indicatorText = allowedStates[aiState as keyof typeof allowedStates];
+
+  if (!indicatorText) {
     return null;
   }
 
   return (
     <View style={styles.aiTypingIndicatorWrapper}>
-      <AITypingIndicatorView text={allowedStates[aiState]} />
+      <AITypingIndicatorView text={indicatorText} />
     </View>
   );
 };
@@ -218,23 +221,28 @@ export const ChatContent = () => {
       entering={FadeIn.duration(200)}
       exiting={FadeOut.duration(200)}
     >
-      <Channel
-        channel={channel}
-        initializeOnMount={false}
-        preSendMessageRequest={preSendMessageRequest}
-        StreamingMessageView={CustomStreamingMessageView}
-        Message={CustomMessage}
-        enableSwipeToReply={false}
-        EmptyStateIndicator={EmptyStateIndicator}
-        allowSendBeforeAttachmentsUpload={true}
-        NetworkDownIndicator={RenderNull}
-        MessageAvatar={RenderNull}
-        MessageFooter={RenderNull}
+      <WithComponents
+        overrides={{
+          EmptyStateIndicator,
+          Message: CustomMessage,
+          MessageAuthor: RenderNull,
+          MessageFooter: RenderNull,
+          NetworkDownIndicator: RenderNull,
+          StreamingMessageView: CustomStreamingMessageView,
+        }}
       >
-        <MessageList additionalFlatListProps={additionalFlatListProps} />
-        <CustomAITypingIndicatorView />
-        <CustomComposerView />
-      </Channel>
+        <Channel
+          channel={channel}
+          initializeOnMount={false}
+          preSendMessageRequest={preSendMessageRequest}
+          enableSwipeToReply={false}
+          allowSendBeforeAttachmentsUpload={true}
+        >
+          <MessageList additionalFlatListProps={additionalFlatListProps} />
+          <CustomAITypingIndicatorView />
+          <CustomComposerView />
+        </Channel>
+      </WithComponents>
     </Animated.View>
   );
 };

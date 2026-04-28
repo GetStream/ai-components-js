@@ -1,17 +1,17 @@
 import { chatUserId } from '../chatConfig.ts';
-import { ChannelSort } from 'stream-chat';
+import type { Channel as ChannelClass, ChannelSort } from 'stream-chat';
 import {
   ChannelList,
-  ChannelPreviewMessengerProps,
+  ChannelPreviewProps,
+  Plus,
   useChannelsContext,
-  useStableCallback,
-  Copy,
   useChatContext,
+  useStableCallback,
+  WithComponents,
 } from 'stream-chat-react-native';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { DrawerContentComponentProps } from '@react-navigation/drawer';
+import type { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { createChannel, useAppContext } from '../contexts/AppContext.tsx';
-import { Channel as ChannelClass } from 'stream-chat';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React from 'react';
 
@@ -23,7 +23,7 @@ const filters = {
 
 const sort: ChannelSort = { last_updated: -1 };
 
-const ChannelPreview = (props: ChannelPreviewMessengerProps) => {
+const ChannelPreview = (props: ChannelPreviewProps) => {
   const channel = props.channel;
   const { onSelect } = useChannelsContext();
   const onPress = useStableCallback(() => {
@@ -64,21 +64,18 @@ export const MenuDrawer = ({ navigation }: DrawerContentComponentProps) => {
       <View style={styles.container}>
         <Text style={styles.title}>Conversations</Text>
         <Pressable onPress={onCreateNewChat}>
-          <Copy />
+          <Plus size={24} stroke="#000000" />
         </Pressable>
       </View>
-      <ChannelList
-        filters={filters}
-        sort={sort}
-        onSelect={onSelect}
-        Preview={ChannelPreview}
-      />
+      <WithComponents overrides={{ ChannelPreview }}>
+        <ChannelList filters={filters} sort={sort} onSelect={onSelect} />
+      </WithComponents>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  wrapper: { flex: 1 },
+  wrapper: { flex: 1, backgroundColor: '#FFFFFF' },
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',

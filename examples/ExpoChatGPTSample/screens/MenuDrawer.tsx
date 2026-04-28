@@ -1,12 +1,13 @@
 import { chatUserId } from '../chatConfig';
 import type { ChannelSort } from 'stream-chat';
-import type { ChannelPreviewMessengerProps } from 'stream-chat-expo';
 import {
   ChannelList,
+  ChannelPreviewProps,
+  Plus,
   useChannelsContext,
-  useStableCallback,
-  Copy,
   useChatContext,
+  useStableCallback,
+  WithComponents,
 } from 'stream-chat-expo';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import type { DrawerContentComponentProps } from '@react-navigation/drawer';
@@ -23,7 +24,7 @@ const filters = {
 
 const sort: ChannelSort = { last_updated: -1 };
 
-const ChannelPreview = (props: ChannelPreviewMessengerProps) => {
+const ChannelPreview = (props: ChannelPreviewProps) => {
   const channel = props.channel;
   const { onSelect } = useChannelsContext();
   const onPress = useStableCallback(() => {
@@ -64,21 +65,18 @@ export const MenuDrawer = ({ navigation }: DrawerContentComponentProps) => {
       <View style={styles.container}>
         <Text style={styles.title}>Conversations</Text>
         <Pressable onPress={onCreateNewChat}>
-          <Copy />
+          <Plus size={24} stroke="#000000" />
         </Pressable>
       </View>
-      <ChannelList
-        filters={filters}
-        sort={sort}
-        onSelect={onSelect}
-        Preview={ChannelPreview}
-      />
+      <WithComponents overrides={{ ChannelPreview }}>
+        <ChannelList filters={filters} sort={sort} onSelect={onSelect} />
+      </WithComponents>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  wrapper: { flex: 1 },
+  wrapper: { flex: 1, backgroundColor: '#FFFFFF' },
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
