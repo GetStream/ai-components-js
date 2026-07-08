@@ -65,7 +65,7 @@
     "@khanacademy/simple-markdown": "^2.1.0",
     "@stream-io/state-store": "^1.1.6",
     "linkifyjs": "^4.3.2",
-    "lodash": "4.17.21",
+    "lodash": "4.18.1",
     "react-syntax-highlighter": "15.5.0",
     "zod": "^4.1.12"
   },
