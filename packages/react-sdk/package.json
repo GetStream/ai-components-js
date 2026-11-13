@@ -2,6 +2,11 @@
   "name": "@stream-io/chat-react-ai",
   "version": "0.2.0",
   "description": "React Chat SDK for AI Components",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GetStream/ai-components-js.git",
+    "directory": "packages/react-sdk"
+  },
   "main": "./dist/cjs/index.js",
   "types": "./dist/types/index.d.ts",
   "exports": {

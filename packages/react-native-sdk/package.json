@@ -2,6 +2,11 @@
   "name": "@stream-io/chat-react-native-ai",
   "version": "0.1.4",
   "description": "React Native SDK for Chat AI Components",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GetStream/ai-components-js.git",
+    "directory": "packages/react-native-sdk"
+  },
   "main": "./dist/commonjs/index.js",
   "types": "./dist/typescript/index.d.ts",
   "homepage": "https://github.com/GetStream/ai-components-js.git",
